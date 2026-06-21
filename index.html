@@ -6,7 +6,9 @@
     <title>Sugeng Kelulusan, Ilham!</title>
     
     <style>
-        /* CSS MURNI - TANPA DEPENDENCY LUAR */
+        /* ========================================================
+           CSS MURNI & RESPONSIF - AMAN DI HP MAUPUN LAPTOP
+           ======================================================== */
         html, body {
             overflow: hidden;
             height: 100%;
@@ -38,10 +40,10 @@
             padding: 40px 20px;
             text-align: center;
             box-sizing: border-box;
-            background-color: #F5F2EB; /* Warna kain kelir wayang */
+            background-color: #F5F2EB; /* Warna panggung kain kelir */
             color: #2D2A26;
             
-            /* Animasi geser layar */
+            /* Animasi geser layar mulus */
             transition: transform 0.8s cubic-bezier(0.77, 0, 0.175, 1);
             transform: translateX(100%);
             z-index: 1;
@@ -59,11 +61,11 @@
             z-index: 1;
         }
 
-        /* Pembungkus Konten Dalam */
+        /* Pembungkus Konten Utama */
         .content-wrap {
             width: 100%;
             max-width: 340px;
-            margin: auto 0; /* Biar posisi pas di tengah vertikal */
+            margin: auto 0; /* Otomatis di tengah vertikal */
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -76,7 +78,7 @@
             background: rgba(255, 255, 255, 0.2);
         }
 
-        /* Foto Frame */
+        /* Bingkai Foto Utama (Halaman 2-5) */
         .img-frame {
             width: 100%;
             max-width: 260px;
@@ -95,7 +97,7 @@
             filter: sepia(15%) contrast(95%);
         }
 
-        /* Teks */
+        /* Gaya Teks */
         .title-ethnic {
             font-size: 20px;
             letter-spacing: 2px;
@@ -114,7 +116,7 @@
             margin: 6px 0;
         }
 
-        /* Tombol - Dibuat Jelas & Pasti Muncul */
+        /* Tombol Utama Navigasi */
         .btn-wayang {
             background-color: #2D2A26;
             color: #C5A059;
@@ -136,7 +138,7 @@
             color: #2D2A26;
         }
 
-        /* Layout Pesan Utama (Halaman 7) */
+        /* Pembungkus Surat/Pesan (Halaman 7) */
         .pesan-box {
             text-align: left;
             border-left: 2px solid #C5A059;
@@ -152,30 +154,43 @@
             margin-bottom: 12px;
         }
 
-        /* Layout Gallery Akhir */
+        /* Grid Galeri Akhir (Halaman 9) - Perbaikan Utama */
         .gallery-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
+            grid-template-columns: 1fr; /* Default 1 kolom untuk layar HP */
+            gap: 20px;
             width: 100%;
             margin-top: 20px;
         }
+        
+        /* Otomatis berubah jadi 2 kolom jika dibuka di laptop/layar lebar */
+        @media (min-width: 768px) {
+            .gallery-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
         .gallery-item {
             background: white;
-            padding: 8px;
+            padding: 12px;
             border: 1px solid rgba(197, 160, 89, 0.2);
             border-radius: 4px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
         }
+
         .gallery-item img {
             width: 100%;
-            height: 140px;
-            object-fit: cover;
+            height: 250px; /* Tinggi dinaikkan agar tidak gepeng di laptop */
+            object-fit: cover; /* Foto dipotong rapi tanpa ketarik melebar */
             border-radius: 2px;
         }
+        
         .gallery-item p {
-            font-size: 11px;
+            font-size: 12px;
             color: #777;
-            margin: 6px 0 0 0;
+            margin: 10px 0 0 0;
             font-style: italic;
         }
     </style>
@@ -256,7 +271,7 @@
             </div>
         </section>
 
-        <!-- HALAMAN 6 (GELAP) -->
+        <!-- HALAMAN 6 (TRANSISI GELAP) -->
         <section id="page-6" class="lakon" style="background-color: #1A1816; color: #F5F2EB; justify-content: center;">
             <div class="content-wrap">
                 <div style="width: 50px; height: 1px; background: #C5A059; margin-bottom: 15px;"></div>
@@ -266,7 +281,7 @@
             </div>
         </section>
 
-        <!-- HALAMAN 7 (PESAN UTAMA - PASTI MUNCUL) -->
+        <!-- HALAMAN 7 (SURAT / PESAN UTAMA) -->
         <section id="page-7" class="lakon">
             <div class="content-wrap" style="max-w: 380px;">
                 <div class="pesan-box">
@@ -300,9 +315,9 @@
             </div>
         </section>
 
-        <!-- HALAMAN 9 (ARSIP MEMORI) -->
+        <!-- HALAMAN 9 (ARSIP MEMORI UTANPA EROR GEPENG) -->
         <section id="page-9" class="lakon" style="display: block;">
-            <div style="max-w: 400px; margin: 0 auto; padding-bottom: 40px;">
+            <div style="max-w: 680px; margin: 0 auto; padding-bottom: 60px;">
                 <div class="title-ethnic" style="text-align: center; margin-top: 20px;">Arsip Memori & Momen</div>
                 <div style="width: 40px; height: 1px; background: #C5A059; margin: 0 auto 25px auto;"></div>
                 
@@ -315,13 +330,13 @@
                         <img src="https://images.unsplash.com/photo-1515187029135-18ee286d815b?q=80&w=400" alt="Memori 2">
                         <p>Screenshot chat lucu</p>
                     </div>
-                    <div class="gallery-item" style="grid-column: span 2;">
-                        <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=400" style="height: 160px;" alt="Memori 3">
+                    <div class="gallery-item">
+                        <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=400" alt="Memori 3">
                         <p>Nugas sampai subuh</p>
                     </div>
                 </div>
 
-                <footer style="margin-top: 50px; text-align: center; font-size: 10px; color: #999; letter-spacing: 1px;">
+                <footer style="margin-top: 60px; text-align: center; font-size: 10px; color: #999; letter-spacing: 1px;">
                     MATUR NUWUN • DIBUAT KHUSUS UNTUK ILHAM.
                 </footer>
             </div>
@@ -329,7 +344,7 @@
 
     </div>
 
-    <!-- LOGIKA JAVASCRIPT MURNI -->
+    <!-- LOGIKA JAVASCRIPT ASLI - MANDIRI & BEBAS GEJALA REWEL -->
     <script>
         let currentPage = 1;
 
@@ -338,17 +353,12 @@
             const targetEl = document.getElementById('page-' + targetPage);
 
             if (targetEl) {
-                // Halaman lama keluar ke kiri
                 currentEl.classList.remove('active');
                 currentEl.classList.add('exit');
 
-                // Halaman baru masuk dari kanan
                 targetEl.classList.add('active');
+                targetEl.scrollTop = 0; // Kembalikan scroll ke atas saat ganti page
 
-                // Reset posisi scroll halaman baru ke paling atas
-                targetEl.scrollTop = 0;
-
-                // Update halaman saat ini
                 currentPage = targetPage;
             }
         }
