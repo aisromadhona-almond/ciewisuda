@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Selamat Kelulusan, Ilham!</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <!-- Google Fonts (Kombinasi klasik & hangat) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;1,400&family=Playfair+Display:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+    <!-- AOS Animation -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #F5F2EB; /* Warna kertas/kulit wayang klasik (Parchment) */
+            color: #2D2A26; /* Hitam arang lembut */
+        }
+        .serif-title {
+            font-family: 'Playfair Display', serif;
+        }
+        .ethnic-title {
+            font-family: 'Cinzel', serif;
+            letter-spacing: 0.15em;
+        }
+        .page {
+            display: none;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+            text-align: center;
+            position: relative;
+        }
+        .page.active {
+            display: flex;
+        }
+        /* Bingkai atau garis tipis bernuansa etnik klasik */
+        .ethnic-border {
+            border: 1px solid rgba(197, 160, 89, 0.3); /* Warna emas pudar */
+            padding: 2rem;
+            border-radius: 4px;
+            max-width: 500px;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(5px);
+        }
+        /* Style foto dengan filter hangat/sephia klasik */
+        .img-container {
+            width: 100%;
+            max-width: 300px;
+            height: 380px;
+            border-radius: 4px;
+            overflow: hidden;
+            border: 3px solid #C5A059; /* Bingkai emas prada */
+            box-shadow: 0 15px 30px -10px rgba(45, 42, 38, 0.15);
+            margin-bottom: 2rem;
+        }
+        .img-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: sepia(25%) contrast(90%) brightness(95%); /* Efek foto lawas natural */
+        }
+        /* Tombol bertema Emas Prada & Hitam Kelir */
+        .btn-ethnic-primary {
+            background-color: #2D2A26;
+            color: #C5A059;
+            border: 1px solid #C5A059;
+        }
+        .btn-ethnic-primary:hover {
+            background-color: #C5A059;
+            color: #2D2A26;
+        }
+        .btn-ethnic-secondary {
+            border: 1px solid rgba(45, 42, 38, 0.3);
+            color: #2D2A26;
+        }
+        .btn-ethnic-secondary:hover {
+            background-color: rgba(197, 160, 89, 0.1);
+            border-color: #C5A059;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- HALAMAN 1 -->
+    <section id="page-1" class="page px-6">
+        <div class="ethnic-border flex flex-col items-center">
+            <!-- Karakter / Simbol Wayang (Bisa diganti SVG Gunungan nantinya) -->
+            <div class="text-4xl mb-4 text-[#C5A059]" data-aos="fade-up">🪘</div>
+            <h1 class="ethnic-title text-2xl font-medium text-[#2D2A26] mb-2" data-aos="fade-up" data-aos-delay="200">SUGENG KELULUSAN</h1>
+            <p class="text-neutral-500 text-xs tracking-widest uppercase mb-8" data-aos="fade-up" data-aos-delay="400">Sebuah hadiah kecil untuk sebuah pencapaian besar.</p>
+            <button onclick="nextPage(2)" class="btn-ethnic-primary px-8 py-2.5 text-xs tracking-widest uppercase font-medium rounded transition duration-300 shadow-sm" data-aos="fade-up" data-aos-delay="600">Mulai →</button>
+        </div>
+    </section>
+
+    <!-- HALAMAN 2 -->
+    <section id="page-2" class="page px-6">
+        <div class="img-container">
+            <img src="https://images.unsplash.com/photo-1527891751199-7225231a68dd?q=80&w=600" alt="Foto Pertama">
+        </div>
+        <div class="max-w-md space-y-2 text-neutral-700 font-light text-sm leading-relaxed tracking-wide">
+            <p>Semua perjalanan selalu dimulai dari satu langkah kecil.</p>
+            <p>Kadang penuh semangat,</p>
+            <p>kadang penuh ragu,</p>
+            <p class="pb-6">tapi tetap dilangkahkan.</p>
+        </div>
+        <button onclick="nextPage(3)" class="btn-ethnic-secondary px-8 py-2 text-xs uppercase tracking-wider rounded transition duration-300">Lanjut →</button>
+    </section>
+
+    <!-- HALAMAN 3 -->
+    <section id="page-3" class="page px-6">
+        <div class="img-container">
+            <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=600" alt="Foto Kedua">
+        </div>
+        <div class="max-w-md space-y-2 text-neutral-700 font-light text-sm leading-relaxed tracking-wide">
+            <p>Tidak semua perjuangan terlihat.</p>
+            <p>Tidak semua lelah sempat diceritakan.</p>
+            <p class="pb-6">Namun semuanya ikut mengantarkanmu sampai hari ini.</p>
+        </div>
+        <button onclick="nextPage(4)" class="btn-ethnic-secondary px-8 py-2 text-xs uppercase tracking-wider rounded transition duration-300">Lanjut →</button>
+    </section>
+
+    <!-- HALAMAN 4 -->
+    <section id="page-4" class="page px-6">
+        <div class="img-container">
+            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=600" alt="Foto Ketiga">
+        </div>
+        <div class="max-w-md space-y-2 text-neutral-700 font-light text-sm leading-relaxed tracking-wide">
+            <p>Ada banyak hari yang berat.</p>
+            <p>Ada banyak hal yang harus diselesaikan.</p>
+            <p class="pb-6">Tapi kamu berhasil melewatinya satu per satu.</p>
+        </div>
+        <button onclick="nextPage(5)" class="btn-ethnic-secondary px-8 py-2 text-xs uppercase tracking-wider rounded transition duration-300">Lanjut →</button>
+    </section>
+
+    <!-- HALAMAN 5 -->
+    <section id="page-5" class="page px-6">
+        <div class="img-container">
+            <img src="https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?q=80&w=600" alt="Foto Terbaik">
+        </div>
+        <div class="max-w-md space-y-2 text-neutral-700 font-light text-sm leading-relaxed tracking-wide">
+            <p>Dan hari ini,</p>
+            <p class="pb-6">semua usaha itu sampai pada tujuannya.</p>
+        </div>
+        <button onclick="nextPage(6)" class="btn-ethnic-secondary px-8 py-2 text-xs uppercase tracking-wider rounded transition duration-300">Lanjut →</button>
+    </section>
+
+    <!-- HALAMAN 6 (BACKGROUND GELAP / KELIR WAYANG) -->
+    <section id="page-6" class="page px-6 !bg-[#1A1816] !text-[#F5F2EB]">
+        <!-- Aksen garis emas tipis atas-bawah ala panggung wayang -->
+        <div class="w-12 h-[1px] bg-[#C5A059] mb-4"></div>
+        <h2 class="serif-title text-xl font-light tracking-widest mb-8 text-[#C5A059] opacity-90">Ada satu pesan lagi.</h2>
+        <div class="w-12 h-[1px] bg-[#C5A059] mb-8"></div>
+        <button onclick="nextPage(7)" class="px-8 py-2 bg-[#C5A059] text-[#1A1816] text-xs uppercase tracking-widest font-medium rounded hover:bg-opacity-90 transition duration-300">Buka →</button>
+    </section>
+
+    <!-- HALAMAN 7 (PESAN UTAMA) -->
+    <section id="page-7" class="page px-8 py-16 bg-[#F5F2EB]">
+        <div class="max-w-lg mx-auto text-left space-y-4 text-neutral-700 font-light text-sm leading-relaxed tracking-wide border-l-2 border-[#C5A059]/30 pl-4">
+            <p class="serif-title text-2xl font-medium text-neutral-900 mb-6">Selamat atas kelulusanmu.</p>
+            <p data-aos="fade-up">Mungkin banyak orang akan mengucapkan selamat hari ini.</p>
+            <p data-aos="fade-up">Mereka melihat hasil akhirnya. Melihat senyummu di hari kelulusan. Melihat pencapaian yang berhasil diraih.</p>
+            <p data-aos="fade-up">Namun tidak semua orang melihat proses panjang yang telah kamu lalui.</p>
+            <p data-aos="fade-up" class="font-medium text-neutral-900">Terima kasih karena sudah bertahan.</p>
+            <p data-aos="fade-up">Terima kasih karena sudah terus melangkah meskipun tidak selalu mudah.</p>
+            <p data-aos="fade-up">Semoga ilmu yang kamu miliki membawa manfaat bagi banyak orang.</p>
+            <p data-aos="fade-up">Semoga langkah-langkah berikutnya dipenuhi keberkahan, kebahagiaan, dan hal-hal baik yang pantas kamu dapatkan.</p>
+            
+            <!-- Kalimat tambahan yang diselipkan -->
+            <p data-aos="fade-up" class="italic text-neutral-500 pt-2 border-t border-[#C5A059]/20 mt-4">"Semesta akhirnya mengembalikan semua lelahmu dalam bentuk kebahagiaan hari ini." 🌾</p>
+            
+            <p data-aos="fade-up" class="pt-4">Selamat atas pencapaian ini.</p>
+            <p data-aos="fade-up" class="font-medium text-neutral-900">Aku ikut bahagia melihatmu sampai di titik ini. 🎓</p>
+        </div>
+        <button onclick="nextPage(8)" class="mt-12 btn-ethnic-primary px-8 py-2.5 text-xs uppercase tracking-wider rounded transition duration-300">Selesai →</button>
+    </section>
+
+    <!-- HALAMAN 8 (TRANSISI KE SCROLL) -->
+    <section id="page-8" class="page px-6">
+        <div class="text-3xl mb-4 text-[#C5A059]">✨🎭✨</div>
+        <h2 class="ethnic-title text-xl font-medium mb-2 text-neutral-900">Selamat Menempuh Babak Baru Kehidupan</h2>
+        <p class="text-neutral-500 text-xs font-light mb-8">Terima kasih sudah membuka hadiah sederhana ini.</p>
+        <button onclick="enableScrollMode()" class="btn-ethnic-primary px-8 py-3 text-xs uppercase tracking-widest font-medium rounded transition duration-300 shadow-sm">Lihat Kenangan →</button>
+    </section>
+
+    <!-- HALAMAN 9 (ARSIP / MODE SCROLL) -->
+    <section id="page-9" class="hidden w-full max-w-4xl mx-auto px-6 py-16 text-center">
+        <h2 class="ethnic-title text-xl font-medium mb-2 text-neutral-900">Arsip Memori & Momen</h2>
+        <div class="w-16 h-[2px] bg-[#C5A059] mx-auto mb-12"></div>
+        
+        <!-- Grid Gallery -->
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+            <!-- Foto 1 -->
+            <div class="bg-white p-2 rounded border border-[#C5A059]/20 shadow-sm" data-aos="fade-up">
+                <img src="https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?q=80&w=400" class="w-full h-48 object-cover rounded-sm filter sepia-[15%]" alt="Memori 1">
+                <p class="text-xs text-neutral-500 mt-2 italic">Momen random pertama</p>
+            </div>
+            <!-- Foto 2 -->
+            <div class="bg-white p-2 rounded border border-[#C5A059]/20 shadow-sm" data-aos="fade-up" data-aos-delay="100">
+                <img src="https://images.unsplash.com/photo-1515187029135-18ee286d815b?q=80&w=400" class="w-full h-48 object-cover rounded-sm filter sepia-[15%]" alt="Memori 2">
+                <p class="text-xs text-neutral-500 mt-2 italic">Screenshot chat lucu</p>
+            </div>
+            <!-- Foto 3 -->
+            <div class="bg-white p-2 rounded border border-[#C5A059]/20 shadow-sm" data-aos="fade-up" data-aos-delay="200">
+                <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=400" class="w-full h-48 object-cover rounded-sm filter sepia-[15%]" alt="Memori 3">
+                <p class="text-xs text-neutral-500 mt-2 italic">Nugas sampai subuh</p>
+            </div>
+        </div>
+
+        <footer class="mt-24 text-xs text-neutral-400 tracking-widest uppercase">
+            Matur Nuwun • Dibuat khusus untuk hari bahagianya Ilham.
+        </footer>
+    </section>
+
+    <!-- AOS JS & Logika Transisi -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({
+            duration: 1200,
+            once: true
+        });
+
+        function nextPage(pageNum) {
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            const nextPageEl = document.getElementById(`page-${pageNum}`);
+            nextPageEl.classList.add('active');
+            window.scrollTo(0, 0);
+            AOS.refresh();
+        }
+
+        function enableScrollMode() {
+            document.getElementById('page-8').classList.remove('active');
+            const page9 = document.getElementById('page-9');
+            page9.classList.remove('hidden');
+            page9.scrollIntoView({ behavior: 'smooth' });
+            AOS.refresh();
+        }
+    </script>
+</body>
+</html>
