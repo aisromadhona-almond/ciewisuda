@@ -43,11 +43,27 @@
             background-color: #F5F2EB; 
             color: #2D2A26;
             
+            /* ========================================================
+               EFEK BACKGROUND SILUET WAYANG 
+               (Pastikan filenya bernama wayang-bg.png dan satu folder)
+               ======================================================== */
+            background-image: url('wayang-bg.png');
+            background-repeat: no-repeat;
+            background-position: center 60%; /* Posisinya agak ke bawah bingkai foto */
+            background-size: 85% auto; /* Ukuran siluet pas proporsional di layar */
+            
             transition: transform 0.8s cubic-bezier(0.77, 0, 0.175, 1);
             transform: translateX(100%);
             z-index: 1;
             overflow-y: auto; 
             -webkit-overflow-scrolling: touch;
+        }
+
+        /* Setelan khusus layar laptop agar siluet wayang tidak terlalu raksasa */
+        @media (min-width: 768px) {
+            .lakon {
+                background-size: 550px auto;
+            }
         }
 
         .lakon.active {
@@ -67,16 +83,18 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            z-index: 3; /* Memastikan teks dan tombol berada di atas siluet background */
         }
 
         .border-box {
             border: 1px solid rgba(197, 160, 89, 0.4);
             padding: 30px 20px;
             border-radius: 4px;
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(245, 242, 235, 0.85); /* Diberi background tipis agar tulisan terbaca jelas */
+            backdrop-filter: blur(2px);
         }
 
-        /* Bingkai Foto Utama + Kursor Khas Bisa Diklik */
+        /* Bingkai Foto Utama */
         .img-frame {
             width: 100%;
             max-width: 260px;
@@ -87,11 +105,11 @@
             box-shadow: 0 15px 30px rgba(0,0,0,0.15);
             margin-bottom: 20px;
             flex-shrink: 0;
-            cursor: pointer; /* Indikator bisa diklik */
+            cursor: pointer; 
             transition: transform 0.3s ease;
         }
         .img-frame:hover {
-            transform: scale(1.02); /* Sedikit membesar pas disentuh */
+            transform: scale(1.02); 
         }
         .img-frame img {
             width: 100%;
@@ -111,9 +129,11 @@
         .text-story {
             font-size: 14px;
             line-height: 1.6;
-            font-weight: 300;
-            color: #4A4640;
+            font-weight: 400;
+            color: #2D2A26;
             margin-bottom: 25px;
+            /* Memberikan bayangan teks tipis agar tetap terbaca jika bertubrukan dengan siluet */
+            text-shadow: 0 0 10px rgba(245, 242, 235, 1), 0 0 5px rgba(245, 242, 235, 1);
         }
         .text-story p {
             margin: 6px 0;
@@ -135,6 +155,7 @@
             transition: all 0.3s ease;
             flex-shrink: 0;
             margin-top: 5px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
         .btn-wayang:hover {
             background-color: #C5A059;
@@ -152,6 +173,9 @@
             max-height: 60vh;
             overflow-y: auto;
             margin-bottom: 20px;
+            background: rgba(245, 242, 235, 0.9);
+            padding: 15px;
+            border-radius: 0 4px 4px 0;
         }
         .pesan-box p {
             margin-bottom: 12px;
@@ -206,7 +230,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(26, 24, 22, 0.95); /* Latar gelap pekat */
+            background-color: rgba(26, 24, 22, 0.95); 
             z-index: 9999;
             display: flex;
             justify-content: center;
@@ -255,7 +279,7 @@
 
     <div class="stage-container">
 
-        <section id="page-1" class="lakon active" style="justify-content: center;">
+        <section id="page-1" class="lakon active" style="justify-content: center; background-image: none;">
             <div class="content-wrap">
                 <div class="border-box">
                     <div style="font-size: 35px; margin-bottom: 10px; color: #C5A059;">🎭</div>
@@ -322,7 +346,7 @@
             </div>
         </section>
 
-        <section id="page-6" class="lakon" style="background-color: #1A1816; color: #F5F2EB; justify-content: center;">
+        <section id="page-6" class="lakon" style="background-color: #1A1816; color: #F5F2EB; justify-content: center; background-image: none;">
             <div class="content-wrap">
                 <div style="width: 50px; height: 1px; background: #C5A059; margin-bottom: 15px;"></div>
                 <div style="font-size: 18px; letter-spacing: 3px; color: #C5A059; margin-bottom: 30px; font-weight: 300;">ADA SATU PESAN LAGI.</div>
@@ -421,13 +445,13 @@
             const overlay = document.getElementById('popOverlay');
             const targetImg = document.getElementById('popImg');
             
-            targetImg.src = srcGambar; // Pasang target gambar yang mau dibuka
-            overlay.classList.add('show'); // Tampilkan pop-up dengan transisi halus
+            targetImg.src = srcGambar; 
+            overlay.classList.add('show'); 
         }
 
         function tutupPop() {
             const overlay = document.getElementById('popOverlay');
-            overlay.classList.remove('show'); // Sembunyikan pop-up kembali
+            overlay.classList.remove('show'); 
         }
     </script>
 </body>
