@@ -14,15 +14,17 @@
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     
     <style>
+        /* Mengunci scroll layar utama agar fokus pada transisi geser */
         html, body {
             overflow: hidden;
             height: 100%;
             margin: 0;
             padding: 0;
-            background-color: #1A1816;
+            background-color: #1A1816; /* Latar panggung gelap */
             font-family: 'Plus Jakarta Sans', sans-serif;
         }
 
+        /* Wadah panggung utama (Kelir) */
         .stage-container {
             position: relative;
             width: 100%;
@@ -30,6 +32,7 @@
             overflow: hidden;
         }
 
+        /* Pengaturan setiap halaman (Lakon) */
         .lakon {
             position: absolute;
             top: 0;
@@ -38,23 +41,31 @@
             height: 100%;
             display: flex;
             flex-direction: column;
-            justify-content: center;
+            justify-content: flex-start; /* Mengalir dari atas */
             align-items: center;
-            padding: 2rem;
+            padding: 3rem 2rem;
             text-align: center;
             box-sizing: border-box;
-            background-color: #F5F2EB; 
+            background-color: #F5F2EB; /* Warna kain kelir wayang */
             color: #2D2A26;
+            
+            /* Efek transisi geser layar */
             transition: transform 1s cubic-bezier(0.77, 0, 0.175, 1);
-            transform: translateX(100%); 
+            transform: translateX(100%); /* Sembunyi di kanan */
             z-index: 1;
+            
+            /* Fitur krusial: Jika konten melebihi tinggi HP, halaman ini bisa di-scroll internal */
+            overflow-y: auto; 
+            -webkit-overflow-scrolling: touch;
         }
 
+        /* Halaman aktif berada tepat di tengah */
         .lakon.active {
             transform: translateX(0);
             z-index: 2;
         }
 
+        /* Halaman yang sudah lewat bergeser ke kiri */
         .lakon.exit {
             transform: translateX(-100%);
             z-index: 1;
@@ -68,36 +79,41 @@
             letter-spacing: 0.15em;
         }
 
+        /* Bingkai Foto Majalah / Poster Etnik */
         .img-frame {
             width: 100%;
-            max-width: 290px;
-            height: 370px;
+            max-width: 280px;
+            height: 360px;
             border-radius: 2px;
             overflow: hidden;
-            border: 3px solid #C5A059; 
+            border: 3px solid #C5A059; /* Bingkai emas prada */
             box-shadow: 0 20px 40px -15px rgba(0,0,0,0.2);
-            margin-bottom: 2rem;
+            margin-bottom: 1.5rem;
+            flex-shrink: 0; /* Mencegah gambar gepeng di layar kecil */
         }
         .img-frame img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            filter: sepia(20%) contrast(95%);
+            filter: sepia(15%) contrast(95%);
         }
 
+        /* Tombol Emas-Hitam Kelir */
         .btn-wayang {
             background-color: #2D2A26;
             color: #C5A059;
             border: 1px solid #C5A059;
             transition: all 0.4s ease;
+            flex-shrink: 0;
+            cursor: pointer;
         }
         .btn-wayang:hover {
             background-color: #C5A059;
             color: #2D2A26;
         }
 
+        /* Khusus halaman arsip paling akhir, biarkan murni scroll natural */
         #page-9 {
-            overflow-y: auto;
             display: block; 
         }
     </style>
@@ -107,7 +123,7 @@
     <div class="stage-container">
 
         <!-- LAKON 1 -->
-        <section id="page-1" class="lakon active px-6">
+        <section id="page-1" class="lakon active justify-center">
             <div class="border border-[#C5A059]/30 p-8 rounded bg-white/10 backdrop-blur-xs max-w-sm" data-aos="fade-up">
                 <div class="text-4xl mb-4 text-[#C5A059]">🪘</div>
                 <h1 class="ethnic-title text-xl font-semibold text-[#2D2A26] mb-2">SUGENG KELULUSAN</h1>
@@ -117,85 +133,84 @@
         </section>
 
         <!-- LAKON 2 -->
-        <section id="page-2" class="lakon px-6">
+        <section id="page-2" class="lakon">
             <div class="img-frame" data-aos="zoom-out-up" data-aos-duration="1200">
                 <img src="https://images.unsplash.com/photo-1527891751199-7225231a68dd?q=80&w=600" alt="Foto Pertama">
             </div>
-            <div class="max-w-sm space-y-2 text-neutral-700 font-light text-sm leading-relaxed tracking-wide mb-6 animate-text">
-                <p data-aos="fade-up" data-aos-delay="400">Semua perjalanan selalu dimulai dari satu langkah kecil.</p>
-                <p data-aos="fade-up" data-aos-delay="600">Kadang penuh semangat,</p>
-                <p data-aos="fade-up" data-aos-delay="800">kadang penuh ragu,</p>
-                <p data-aos="fade-up" data-aos-delay="1000">tapi tetap dilangkahkan.</p>
+            <div class="max-w-sm space-y-2 text-neutral-700 font-light text-sm leading-relaxed tracking-wide mb-6">
+                <p data-aos="fade-up" data-aos-delay="300">Semua perjalanan selalu dimulai dari satu langkah kecil.</p>
+                <p data-aos="fade-up" data-aos-delay="500">Kadang penuh semangat,</p>
+                <p data-aos="fade-up" data-aos-delay="700">kadang penuh ragu,</p>
+                <p data-aos="fade-up" data-aos-delay="900">tapi tetap dilangkahkan.</p>
             </div>
-            <button onclick="nextPage(3)" class="btn-wayang px-8 py-2 text-xs uppercase tracking-wider rounded" data-aos="fade-up" data-aos-delay="1200">Lanjut →</button>
+            <button onclick="nextPage(3)" class="btn-wayang px-8 py-2 text-xs uppercase tracking-wider rounded" data-aos="fade-up" data-aos-delay="1100">Lanjut →</button>
         </section>
 
         <!-- LAKON 3 -->
-        <section id="page-3" class="lakon px-6">
+        <section id="page-3" class="lakon">
             <div class="img-frame" data-aos="zoom-out-up" data-aos-duration="1200">
                 <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=600" alt="Foto Kedua">
             </div>
             <div class="max-w-sm space-y-2 text-neutral-700 font-light text-sm leading-relaxed tracking-wide mb-6">
-                <p data-aos="fade-up" data-aos-delay="400">Tidak semua perjuangan terlihat.</p>
-                <p data-aos="fade-up" data-aos-delay="600">Tidak semua lelah sempat diceritakan.</p>
-                <p data-aos="fade-up" data-aos-delay="800">Namun semuanya ikut mengantarkanmu sampai hari ini.</p>
+                <p data-aos="fade-up" data-aos-delay="300">Tidak semua perjuangan terlihat.</p>
+                <p data-aos="fade-up" data-aos-delay="500">Tidak semua lelah sempat diceritakan.</p>
+                <p data-aos="fade-up" data-aos-delay="700">Namun semuanya ikut mengantarkanmu sampai hari ini.</p>
             </div>
-            <button onclick="nextPage(4)" class="btn-wayang px-8 py-2 text-xs uppercase tracking-wider rounded" data-aos="fade-up" data-aos-delay="1000">Lanjut →</button>
+            <button onclick="nextPage(4)" class="btn-wayang px-8 py-2 text-xs uppercase tracking-wider rounded" data-aos="fade-up" data-aos-delay="900">Lanjut →</button>
         </section>
 
         <!-- LAKON 4 -->
-        <section id="page-4" class="lakon px-6">
+        <section id="page-4" class="lakon">
             <div class="img-frame" data-aos="zoom-out-up" data-aos-duration="1200">
                 <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=600" alt="Foto Ketiga">
             </div>
             <div class="max-w-sm space-y-2 text-neutral-700 font-light text-sm leading-relaxed tracking-wide mb-6">
-                <p data-aos="fade-up" data-aos-delay="400">Ada banyak hari yang berat.</p>
-                <p data-aos="fade-up" data-aos-delay="600">Ada banyak hal yang harus diselesaikan.</p>
-                <p data-aos="fade-up" data-aos-delay="800">Tapi kamu berhasil melewatinya satu per satu.</p>
+                <p data-aos="fade-up" data-aos-delay="300">Ada banyak hari yang berat.</p>
+                <p data-aos="fade-up" data-aos-delay="500">Ada banyak hal yang harus diselesaikan.</p>
+                <p data-aos="fade-up" data-aos-delay="700">Tapi kamu berhasil melewatinya satu per satu.</p>
             </div>
-            <button onclick="nextPage(5)" class="btn-wayang px-8 py-2 text-xs uppercase tracking-wider rounded" data-aos="fade-up" data-aos-delay="1000">Lanjut →</button>
+            <button onclick="nextPage(5)" class="btn-wayang px-8 py-2 text-xs uppercase tracking-wider rounded" data-aos="fade-up" data-aos-delay="900">Lanjut →</button>
         </section>
 
         <!-- LAKON 5 -->
-        <section id="page-5" class="lakon px-6">
+        <section id="page-5" class="lakon">
             <div class="img-frame" data-aos="zoom-out-up" data-aos-duration="1200">
+                <!-- SINI TEMPAT FOTO EDITAN MAJALAH / POSTER TERBAIKNYA -->
                 <img src="https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?q=80&w=600" alt="Foto Terbaik">
             </div>
             <div class="max-w-sm space-y-2 text-neutral-700 font-light text-sm leading-relaxed tracking-wide mb-6">
-                <p data-aos="fade-up" data-aos-delay="400">Dan hari ini,</p>
-                <p data-aos="fade-up" data-aos-delay="600">semua usaha itu sampai pada tujuannya.</p>
+                <p data-aos="fade-up" data-aos-delay="300">Dan hari ini,</p>
+                <p data-aos="fade-up" data-aos-delay="500">semua usaha itu sampai pada tujuannya.</p>
             </div>
-            <button onclick="nextPage(6)" class="btn-wayang px-8 py-2 text-xs uppercase tracking-wider rounded" data-aos="fade-up" data-aos-delay="800">Lanjut →</button>
+            <button onclick="nextPage(6)" class="btn-wayang px-8 py-2 text-xs uppercase tracking-wider rounded" data-aos="fade-up" data-aos-delay="700">Lanjut →</button>
         </section>
 
-        <!-- LAKON 6 (BACKGROUND GELAP) -->
-        <section id="page-6" class="lakon px-6 !bg-[#1A1816] !text-[#F5F2EB]">
+        <!-- LAKON 6 (GELAP) -->
+        <section id="page-6" class="lakon !bg-[#1A1816] !text-[#F5F2EB] justify-center">
             <div class="w-12 h-[1px] bg-[#C5A059] mb-4" data-aos="zoom-in"></div>
             <h2 class="serif-title text-xl font-light tracking-widest mb-8 text-[#C5A059] opacity-90" data-aos="fade-up">Ada satu pesan lagi.</h2>
             <div class="w-12 h-[1px] bg-[#C5A059] mb-8" data-aos="zoom-in"></div>
             <button onclick="nextPage(7)" class="px-8 py-2 bg-[#C5A059] text-[#1A1816] text-xs uppercase tracking-widest font-medium rounded hover:bg-opacity-90 transition duration-300" data-aos="fade-up" data-aos-delay="300">Buka →</button>
         </section>
 
-        <!-- LAKON 7 (PESAN UTAMA - EFEK KETIKAN TYPEWRITER) -->
-        <section id="page-7" class="lakon px-8 py-12">
-            <div class="max-w-md text-left space-y-4 text-neutral-700 font-light text-sm leading-relaxed tracking-wide border-l border-[#C5A059]/40 pl-4 my-auto overflow-y-auto max-h-[70vh]">
-                <!-- Target Element untuk Typewriter -->
+        <!-- LAKON 7 (PESAN UTAMA) -->
+        <section id="page-7" class="lakon justify-center">
+            <div class="max-w-md text-left space-y-4 text-neutral-700 font-light text-sm leading-relaxed tracking-wide border-l border-[#C5A059]/40 pl-4 my-4 max-h-[60vh] overflow-y-auto">
                 <div id="pesan-text"></div>
             </div>
-            <!-- Tombol disembunyikan dulu, muncul setelah ketikan selesai lewat JS -->
-            <button id="btn-selesai" onclick="nextPage(8)" class="mt-6 btn-wayang px-8 py-2.5 text-xs uppercase tracking-wider rounded opacity-0 transition-opacity duration-700">Selesai →</button>
+            <button id="btn-selesai" onclick="nextPage(8)" class="mt-4 btn-wayang px-8 py-2.5 text-xs uppercase tracking-wider rounded opacity-0 transition-opacity duration-700">Selesai →</button>
         </section>
 
         <!-- LAKON 8 -->
-        <section id="page-8" class="lakon px-6">
+        <section id="page-8" class="lakon justify-center">
             <div class="text-3xl mb-4 text-[#C5A059]" data-aos="zoom-in">✨🎭</div>
             <h2 class="ethnic-title text-lg font-medium mb-1 text-neutral-900" data-aos="fade-up">Selamat Menempuh Babak Baru Kehidupan</h2>
             <p class="text-neutral-500 text-xs font-light mb-8" data-aos="fade-up" data-aos-delay="200">Terima kasih sudah membuka hadiah sederhana ini.</p>
             <button onclick="nextPage(9)" class="btn-wayang px-8 py-3 text-xs uppercase tracking-widest font-medium rounded shadow-md" data-aos="fade-up" data-aos-delay="400">Lihat Kenangan →</button>
         </section>
 
-        <!-- LAKON 9 (ARSIP) -->
-        <section id="page-9" class="lakon px-6 py-12">
+        <!-- LAKON 9 (ARSIP MEMORI) -->
+        <section id="page-9" class="lakon">
             <div class="max-w-xl mx-auto w-full">
                 <h2 class="ethnic-title text-lg font-medium text-center text-neutral-900 mb-2" data-aos="fade-down">Arsip Memori & Momen</h2>
                 <div class="w-12 h-[1px] bg-[#C5A059] mx-auto mb-10" data-aos="zoom-in"></div>
@@ -215,7 +230,7 @@
                     </div>
                 </div>
 
-                <footer class="mt-16 pb-6 text-[10px] text-neutral-400 tracking-widest uppercase text-center">
+                <footer class="mt-16 pb-12 text-[10px] text-neutral-400 tracking-widest uppercase text-center">
                     Matur Nuwun • Dibuat khusus untuk hari bahagianya Ilham.
                 </footer>
             </div>
@@ -223,15 +238,13 @@
 
     </div>
 
-    <!-- Script Animasi -->
+    <!-- Script Pengatur Animasi -->
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    <!-- Library untuk animasi ketikan -->
     <script src="https://unpkg.com/typeit@8.7.1/dist/index.umd.js"></script>
     <script>
-        // Inisialisasi library animasi bawaan
         AOS.init({
             duration: 1000,
-            once: false // Biar animasi jalan berulang setiap layarnya digeser kembali
+            once: false
         });
 
         let currentPage = 1;
@@ -245,30 +258,29 @@
                 currentEl.classList.add('exit');
                 targetEl.classList.add('active');
 
+                // Otomatis kembalikan scroll ke paling atas di halaman baru
+                targetEl.scrollTop = 0;
+
                 currentPage = targetPage;
 
-                // Trigger ulang efek AOS setelah layar bergeser
                 setTimeout(() => {
                     AOS.refreshHard();
                 }, 100);
 
-                // Khusus jalankan animasi mesin tik kalau masuk ke Halaman 7 (Pesan Utama)
                 if (targetPage === 7) {
                     mulaiAnimasiPesan();
                 }
             }
         }
 
-        // Fungsi khusus pengatur teks berjalan di Pesan Utama
         function mulaiAnimasiPesan() {
-            // Bersihkan tempat teks dulu sebelum mulai mengetik
             document.getElementById("pesan-text").innerHTML = "";
+            document.getElementById("btn-selesai").classList.add("opacity-0");
             
             new TypeIt("#pesan-text", {
                 speed: 35,
                 cursor: false,
-                afterComplete: function (instance) {
-                    // Munculkan tombol selesai setelah teks beres diketik
+                afterComplete: function () {
                     document.getElementById("btn-selesai").classList.remove("opacity-0");
                 }
             })
