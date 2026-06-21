@@ -7,7 +7,7 @@
     
     <style>
         /* ========================================================
-           CSS MURNI & RESPONSIF - AMAN DI HP MAUPUN LAPTOP
+           CSS MURNI, RESPONSIF, & AMAN 100%
            ======================================================== */
         html, body {
             overflow: hidden;
@@ -40,10 +40,9 @@
             padding: 40px 20px;
             text-align: center;
             box-sizing: border-box;
-            background-color: #F5F2EB; /* Warna panggung kain kelir */
+            background-color: #F5F2EB; 
             color: #2D2A26;
             
-            /* Animasi geser layar mulus */
             transition: transform 0.8s cubic-bezier(0.77, 0, 0.175, 1);
             transform: translateX(100%);
             z-index: 1;
@@ -61,11 +60,10 @@
             z-index: 1;
         }
 
-        /* Pembungkus Konten Utama */
         .content-wrap {
             width: 100%;
             max-width: 340px;
-            margin: auto 0; /* Otomatis di tengah vertikal */
+            margin: auto 0; 
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -78,17 +76,22 @@
             background: rgba(255, 255, 255, 0.2);
         }
 
-        /* Bingkai Foto Utama (Halaman 2-5) */
+        /* Bingkai Foto Utama + Kursor Khas Bisa Diklik */
         .img-frame {
             width: 100%;
             max-width: 260px;
             height: 340px;
             border-radius: 2px;
             overflow: hidden;
-            border: 3px solid #C5A059; /* Emas Prada */
+            border: 3px solid #C5A059; 
             box-shadow: 0 15px 30px rgba(0,0,0,0.15);
             margin-bottom: 20px;
             flex-shrink: 0;
+            cursor: pointer; /* Indikator bisa diklik */
+            transition: transform 0.3s ease;
+        }
+        .img-frame:hover {
+            transform: scale(1.02); /* Sedikit membesar pas disentuh */
         }
         .img-frame img {
             width: 100%;
@@ -116,7 +119,7 @@
             margin: 6px 0;
         }
 
-        /* Tombol Utama Navigasi */
+        /* Tombol Utama */
         .btn-wayang {
             background-color: #2D2A26;
             color: #C5A059;
@@ -138,7 +141,7 @@
             color: #2D2A26;
         }
 
-        /* Pembungkus Surat/Pesan (Halaman 7) */
+        /* Kotak Pesan */
         .pesan-box {
             text-align: left;
             border-left: 2px solid #C5A059;
@@ -154,22 +157,19 @@
             margin-bottom: 12px;
         }
 
-        /* Grid Galeri Akhir (Halaman 9) - Perbaikan Utama */
+        /* Grid Galeri Akhir */
         .gallery-grid {
             display: grid;
-            grid-template-columns: 1fr; /* Default 1 kolom untuk layar HP */
+            grid-template-columns: 1fr;
             gap: 20px;
             width: 100%;
             margin-top: 20px;
         }
-        
-        /* Otomatis berubah jadi 2 kolom jika dibuka di laptop/layar lebar */
         @media (min-width: 768px) {
             .gallery-grid {
                 grid-template-columns: 1fr 1fr;
             }
         }
-
         .gallery-item {
             background: white;
             padding: 12px;
@@ -178,20 +178,76 @@
             box-shadow: 0 4px 10px rgba(0,0,0,0.05);
             display: flex;
             flex-direction: column;
+            cursor: pointer;
+            transition: transform 0.3s ease;
         }
-
+        .gallery-item:hover {
+            transform: translateY(-5px);
+        }
         .gallery-item img {
             width: 100%;
-            height: 250px; /* Tinggi dinaikkan agar tidak gepeng di laptop */
-            object-fit: cover; /* Foto dipotong rapi tanpa ketarik melebar */
+            height: 250px;
+            object-fit: cover;
             border-radius: 2px;
         }
-        
         .gallery-item p {
             font-size: 12px;
             color: #777;
             margin: 10px 0 0 0;
             font-style: italic;
+        }
+
+        /* ========================================================
+           SISTEM POP-UP PRATINJAU FOTO (LIGHTBOX)
+           ======================================================== */
+        .pop-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(26, 24, 22, 0.95); /* Latar gelap pekat */
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s ease;
+        }
+        .pop-overlay.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .pop-content {
+            position: relative;
+            max-width: 90%;
+            max-height: 85vh;
+            transform: scale(0.7);
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .pop-overlay.show .pop-content {
+            transform: scale(1);
+        }
+        .pop-content img {
+            max-width: 100%;
+            max-height: 85vh;
+            border: 4px solid #C5A059;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+            border-radius: 2px;
+            object-fit: contain;
+        }
+        .pop-close {
+            position: absolute;
+            top: -45px;
+            right: 0;
+            color: #F5F2EB;
+            font-size: 30px;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 5px;
+            user-select: none;
         }
     </style>
 </head>
@@ -199,7 +255,6 @@
 
     <div class="stage-container">
 
-        <!-- HALAMAN 1 -->
         <section id="page-1" class="lakon active" style="justify-content: center;">
             <div class="content-wrap">
                 <div class="border-box">
@@ -211,11 +266,10 @@
             </div>
         </section>
 
-        <!-- HALAMAN 2 -->
         <section id="page-2" class="lakon">
             <div class="content-wrap">
-                <div class="img-frame">
-                    <img src="https://images.unsplash.com/photo-1527891751199-7225231a68dd?q=80&w=600" alt="Foto Pertama">
+                <div class="img-frame" onclick="bukaPop('slide2.jpg')">
+                    <img src="slide2.jpg" alt="Foto Pertama">
                 </div>
                 <div class="text-story">
                     <p>Semua perjalanan selalu dimulai dari satu langkah kecil.</p>
@@ -227,11 +281,10 @@
             </div>
         </section>
 
-        <!-- HALAMAN 3 -->
         <section id="page-3" class="lakon">
             <div class="content-wrap">
-                <div class="img-frame">
-                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=600" alt="Foto Kedua">
+                <div class="img-frame" onclick="bukaPop('slide3.jpg')">
+                    <img src="slide3.jpg" alt="Foto Kedua">
                 </div>
                 <div class="text-story">
                     <p>Tidak semua perjuangan terlihat.</p>
@@ -242,11 +295,10 @@
             </div>
         </section>
 
-        <!-- HALAMAN 4 -->
         <section id="page-4" class="lakon">
             <div class="content-wrap">
-                <div class="img-frame">
-                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=600" alt="Foto Ketiga">
+                <div class="img-frame" onclick="bukaPop('slide4.jpg')">
+                    <img src="slide4.jpg" alt="Foto Ketiga">
                 </div>
                 <div class="text-story">
                     <p>Ada banyak hari yang berat.</p>
@@ -257,11 +309,10 @@
             </div>
         </section>
 
-        <!-- HALAMAN 5 -->
         <section id="page-5" class="lakon">
             <div class="content-wrap">
-                <div class="img-frame">
-                    <img src="https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?q=80&w=600" alt="Foto Terbaik">
+                <div class="img-frame" onclick="bukaPop('slide5.jpg')">
+                    <img src="slide5.jpg" alt="Foto Terbaik">
                 </div>
                 <div class="text-story">
                     <p>Dan hari ini,</p>
@@ -271,7 +322,6 @@
             </div>
         </section>
 
-        <!-- HALAMAN 6 (TRANSISI GELAP) -->
         <section id="page-6" class="lakon" style="background-color: #1A1816; color: #F5F2EB; justify-content: center;">
             <div class="content-wrap">
                 <div style="width: 50px; height: 1px; background: #C5A059; margin-bottom: 15px;"></div>
@@ -281,7 +331,6 @@
             </div>
         </section>
 
-        <!-- HALAMAN 7 (SURAT / PESAN UTAMA) -->
         <section id="page-7" class="lakon">
             <div class="content-wrap" style="max-w: 380px;">
                 <div class="pesan-box">
@@ -305,7 +354,6 @@
             </div>
         </section>
 
-        <!-- HALAMAN 8 -->
         <section id="page-8" class="lakon" style="justify-content: center;">
             <div class="content-wrap">
                 <div style="font-size: 30px; margin-bottom: 10px; color: #C5A059;">✨🎭</div>
@@ -315,23 +363,22 @@
             </div>
         </section>
 
-        <!-- HALAMAN 9 (ARSIP MEMORI UTANPA EROR GEPENG) -->
         <section id="page-9" class="lakon" style="display: block;">
             <div style="max-w: 680px; margin: 0 auto; padding-bottom: 60px;">
                 <div class="title-ethnic" style="text-align: center; margin-top: 20px;">Arsip Memori & Momen</div>
                 <div style="width: 40px; height: 1px; background: #C5A059; margin: 0 auto 25px auto;"></div>
                 
                 <div class="gallery-grid">
-                    <div class="gallery-item">
-                        <img src="https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?q=80&w=400" alt="Memori 1">
+                    <div class="gallery-item" onclick="bukaPop('arsip1.jpg')">
+                        <img src="arsip1.jpg" alt="Memori 1">
                         <p>Momen random pertama</p>
                     </div>
-                    <div class="gallery-item">
-                        <img src="https://images.unsplash.com/photo-1515187029135-18ee286d815b?q=80&w=400" alt="Memori 2">
+                    <div class="gallery-item" onclick="bukaPop('arsip2.jpg')">
+                        <img src="arsip2.jpg" alt="Memori 2">
                         <p>Screenshot chat lucu</p>
                     </div>
-                    <div class="gallery-item">
-                        <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=400" alt="Memori 3">
+                    <div class="gallery-item" onclick="bukaPop('arsip3.jpg')">
+                        <img src="arsip3.jpg" alt="Memori 3">
                         <p>Nugas sampai subuh</p>
                     </div>
                 </div>
@@ -344,7 +391,13 @@
 
     </div>
 
-    <!-- LOGIKA JAVASCRIPT ASLI - MANDIRI & BEBAS GEJALA REWEL -->
+    <div id="popOverlay" class="pop-overlay" onclick="tutupPop()">
+        <div class="pop-content" onclick="event.stopPropagation()">
+            <button class="pop-close" onclick="tutupPop()">&times;</button>
+            <img id="popImg" src="" alt="Pratinjau Foto Besar">
+        </div>
+    </div>
+
     <script>
         let currentPage = 1;
 
@@ -357,10 +410,24 @@
                 currentEl.classList.add('exit');
 
                 targetEl.classList.add('active');
-                targetEl.scrollTop = 0; // Kembalikan scroll ke atas saat ganti page
+                targetEl.scrollTop = 0; 
 
                 currentPage = targetPage;
             }
+        }
+
+        /* LOGIKA POP-UP INTERAKTIF */
+        function bukaPop(srcGambar) {
+            const overlay = document.getElementById('popOverlay');
+            const targetImg = document.getElementById('popImg');
+            
+            targetImg.src = srcGambar; // Pasang target gambar yang mau dibuka
+            overlay.classList.add('show'); // Tampilkan pop-up dengan transisi halus
+        }
+
+        function tutupPop() {
+            const overlay = document.getElementById('popOverlay');
+            overlay.classList.remove('show'); // Sembunyikan pop-up kembali
         }
     </script>
 </body>
