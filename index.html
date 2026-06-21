@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Sugeng Kelulusan, Ilham 🎓</title>
+<title>Sugeng Kelulusan 🎓</title>
 
 <style>
 
@@ -12,21 +12,24 @@
 margin:0;
 padding:0;
 box-sizing:border-box;
-font-family: "Segoe UI", sans-serif;
+font-family:'Segoe UI',sans-serif;
 }
 
 body{
+background:#faf8f3;
 overflow:hidden;
-background:#0f172a;
-color:white;
+color:#2d2a26;
 }
 
+/* HALAMAN */
+
 .page{
-width:100vw;
-height:100vh;
 position:absolute;
 top:0;
 left:0;
+
+width:100%;
+height:100vh;
 
 display:flex;
 flex-direction:column;
@@ -34,12 +37,13 @@ justify-content:center;
 align-items:center;
 
 padding:30px;
+
 text-align:center;
 
 opacity:0;
 pointer-events:none;
 
-transition:1s;
+transition:0.8s;
 }
 
 .page.active{
@@ -47,150 +51,308 @@ opacity:1;
 pointer-events:auto;
 }
 
-.page img{
-max-width:80%;
-max-height:55vh;
-border-radius:20px;
-box-shadow:0 0 30px rgba(255,255,255,0.1);
-margin-bottom:25px;
+/* KARTU */
+
+.card{
+background:white;
+
+padding:35px;
+
+border-radius:24px;
+
+max-width:900px;
+width:90%;
+
+box-shadow:
+0 10px 30px rgba(0,0,0,.08);
 }
 
+/* JUDUL */
+
 h1{
-font-size:3rem;
+font-size:2.5rem;
 margin-bottom:20px;
+color:#c5a059;
 }
 
 p{
-max-width:800px;
-line-height:1.8;
-font-size:1.1rem;
+line-height:1.9;
+font-size:1.05rem;
 }
 
-button{
-margin-top:30px;
-padding:14px 35px;
+/* FOTO */
 
-border:none;
-border-radius:50px;
+.slide-img{
 
-background:#d4af37;
-color:black;
+width:320px;
+max-width:80vw;
 
-font-weight:bold;
-font-size:1rem;
+border-radius:20px;
 
 cursor:pointer;
+
+box-shadow:
+0 8px 25px rgba(0,0,0,.15);
+
+transition:.3s;
+
+margin-bottom:20px;
 }
 
+.slide-img:hover{
+transform:scale(1.03);
+}
+
+/* TOMBOL */
+
+button{
+
+margin-top:25px;
+
+padding:14px 32px;
+
+border:none;
+border-radius:999px;
+
+background:#c5a059;
+color:white;
+
+font-weight:600;
+
+cursor:pointer;
+
+transition:.3s;
+}
+
+button:hover{
+transform:translateY(-2px);
+}
+
+/* POPUP */
+
+#popOverlay{
+
+position:fixed;
+inset:0;
+
+background:rgba(0,0,0,.65);
+
+display:flex;
+justify-content:center;
+align-items:center;
+
+opacity:0;
+visibility:hidden;
+
+transition:.3s;
+
+z-index:9999;
+}
+
+#popOverlay.show{
+
+opacity:1;
+visibility:visible;
+
+}
+
+#popImg{
+
+max-width:70vw;
+max-height:70vh;
+
+border-radius:20px;
+
+box-shadow:
+0 15px 50px rgba(0,0,0,.4);
+}
+
+/* ARSIP */
+
 .archive{
+
 overflow-y:auto;
-padding-top:80px;
-padding-bottom:80px;
+padding-top:100px;
+padding-bottom:100px;
 }
 
 .archive img{
-width:80%;
-margin:20px auto;
+
+width:300px;
+max-width:80vw;
+
 display:block;
+
+margin:20px auto;
+
+border-radius:16px;
+
+cursor:pointer;
+
+box-shadow:
+0 8px 20px rgba(0,0,0,.12);
 }
-
-
 
 </style>
 </head>
 
 <body>
 
-<!-- HALAMAN 1 -->
+<!-- PAGE 1 -->
 
-<section class="page active bg-wayang">
+<section class="page active">
 
-<h1>🎓 Selamat atas Kelulusanmu</h1>
+<div class="card">
+
+<h1>🎓 Sugeng Kelulusan</h1>
 
 <p>
+
 Sebuah hadiah kecil untuk sebuah pencapaian besar.
+
+<br><br>
+
+Selamat atas kelulusanmu.
+
+Mari membuka satu per satu kenangan yang mengantarkanmu sampai hari ini.
+
 </p>
 
-<button onclick="nextPage()">Mulai</button>
+<button onclick="nextPage()">
+Mulai →
+</button>
+
+</div>
 
 </section>
 
-<!-- HALAMAN 2 -->
+<!-- PAGE 2 -->
 
 <section class="page">
 
-<img src="slide2.png">
+<div class="card">
+
+<img
+src="slide2.png"
+class="slide-img"
+onclick="bukaPop('slide2.png')">
 
 <p>
-Semua perjalanan selalu dimulai dari satu langkah kecil.
-Kadang penuh semangat, kadang penuh ragu,
-tetapi tetap dilangkahkan.
+
+Setiap perjalanan besar selalu dimulai dari langkah kecil.
+
 </p>
 
-<button onclick="nextPage()">Lanjut</button>
+<button onclick="nextPage()">
+Lanjut →
+</button>
+
+</div>
 
 </section>
 
-<!-- HALAMAN 3 -->
+<!-- PAGE 3 -->
 
 <section class="page">
 
-<img src="slide3.png">
+<div class="card">
+
+<img
+src="slide3.png"
+class="slide-img"
+onclick="bukaPop('slide3.png')">
 
 <p>
-Tidak semua perjuangan terlihat.
-Tidak semua lelah sempat diceritakan.
-Namun semuanya ikut mengantarkanmu sampai hari ini.
+
+Tidak semua perjuangan terlihat oleh orang lain.
+
 </p>
 
-<button onclick="nextPage()">Lanjut</button>
+<button onclick="nextPage()">
+Lanjut →
+</button>
+
+</div>
 
 </section>
 
-<!-- HALAMAN 4 -->
+<!-- PAGE 4 -->
 
 <section class="page">
 
-<img src="slide4.png">
+<div class="card">
+
+<img
+src="slide4.png"
+class="slide-img"
+onclick="bukaPop('slide4.png')">
 
 <p>
-Ada banyak hari yang berat.
-Ada banyak hal yang harus diselesaikan.
-Tapi kamu berhasil melewatinya satu per satu.
+
+Namun semuanya membawa langkahmu sampai di titik ini.
+
 </p>
 
-<button onclick="nextPage()">Lanjut</button>
+<button onclick="nextPage()">
+Lanjut →
+</button>
+
+</div>
 
 </section>
 
-<!-- HALAMAN 5 -->
+<!-- PAGE 5 -->
 
 <section class="page">
 
-<img src="slide5.png">
+<div class="card">
+
+<img
+src="slide5.png"
+class="slide-img"
+onclick="bukaPop('slide5.png')">
 
 <p>
-Dan hari ini,
-semua usaha itu sampai pada tujuannya.
+
+Dan hari ini adalah salah satu hasil dari semua usaha itu.
+
 </p>
 
-<button onclick="nextPage()">Lanjut</button>
+<button onclick="nextPage()">
+Lanjut →
+</button>
+
+</div>
 
 </section>
 
-<!-- HALAMAN 6 -->
-
-<section class="page bg-wayang">
-
-<h1>Ada Satu Pesan Lagi</h1>
-
-<button onclick="nextPage()">Buka Pesan</button>
-
-</section>
-
-<!-- HALAMAN 7 -->
+<!-- PAGE 6 -->
 
 <section class="page">
+
+<div class="card">
+
+<h1>✨</h1>
+
+<p>
+
+Ada satu pesan lagi untukmu.
+
+</p>
+
+<button onclick="nextPage()">
+Buka Pesan
+</button>
+
+</div>
+
+</section>
+
+<!-- PAGE 7 -->
+
+<section class="page">
+
+<div class="card">
 
 <h1>🎓</h1>
 
@@ -200,52 +362,59 @@ Selamat atas kelulusanmu.
 
 <br><br>
 
-Mungkin banyak orang akan melihat hasil akhirnya.
+Mungkin banyak orang melihat hasil akhirnya.
 
-Mereka melihat gelar yang berhasil diraih.
+Melihat gelarnya.
 
-Mereka melihat senyum di hari kelulusan.
+Melihat senyumnya.
 
-Namun tidak semua orang melihat proses panjang yang telah mengantarkanmu sampai di titik ini.
+Namun tidak semua orang melihat proses panjang yang telah kamu lalui.
 
 <br><br>
 
 Terima kasih karena sudah bertahan.
 
-Terima kasih karena sudah terus melangkah meskipun tidak selalu mudah.
+Terima kasih karena sudah terus melangkah.
 
 <br><br>
 
 Semoga ilmu yang kamu miliki membawa manfaat bagi banyak orang.
 
-Semoga langkah berikutnya dipenuhi keberkahan, kebahagiaan, dan hal-hal baik yang pantas kamu dapatkan.
+Semoga langkah berikutnya dipenuhi keberkahan dan kebahagiaan.
 
 <br><br>
-
-Selamat atas pencapaian ini.
 
 Aku ikut bahagia melihatmu sampai di titik ini.
 
 </p>
 
-<button onclick="nextPage()">Selesai</button>
+<button onclick="nextPage()">
+Selesai
+</button>
+
+</div>
 
 </section>
 
-<!-- HALAMAN 8 -->
+<!-- PAGE 8 -->
 
 <section class="page">
 
-<h1>✨ Selamat ✨</h1>
+<div class="card">
+
+<h1>📸 Arsip Kenangan</h1>
 
 <p>
 
-Semesta akhirnya mengembalikan semua lelahmu
-dalam bentuk kebahagiaan hari ini.
+Masih ada beberapa kenangan yang tersimpan.
 
 </p>
 
-<button onclick="showArchive()">Lihat Kenangan</button>
+<button onclick="showArchive()">
+Lihat Arsip
+</button>
+
+</div>
 
 </section>
 
@@ -253,39 +422,65 @@ dalam bentuk kebahagiaan hari ini.
 
 <section class="page archive" id="archive">
 
-<h1 style="margin-bottom:40px;">📸 Arsip Kenangan</h1>
-
-<img src="arsip1.png">
-<img src="arsip2.png">
-<img src="arsip3.png">
-<img src="arsip4.png">
-<img src="arsip5.png">
-<img src="arsip6.png">
+<img src="arsip1.png" onclick="bukaPop('arsip1.png')">
+<img src="arsip2.png" onclick="bukaPop('arsip2.png')">
+<img src="arsip3.png" onclick="bukaPop('arsip3.png')">
+<img src="arsip4.png" onclick="bukaPop('arsip4.png')">
+<img src="arsip5.png" onclick="bukaPop('arsip5.png')">
+<img src="arsip6.png" onclick="bukaPop('arsip6.png')">
 
 </section>
 
+<!-- POPUP -->
+
+<div id="popOverlay" onclick="tutupPop()">
+
+<img id="popImg">
+
+</div>
+
 <script>
 
-let current = 0;
-const pages = document.querySelectorAll(".page");
+let current=0;
+
+const pages=document.querySelectorAll('.page');
 
 function nextPage(){
 
-pages[current].classList.remove("active");
+pages[current].classList.remove('active');
 
 current++;
 
-pages[current].classList.add("active");
+pages[current].classList.add('active');
 
 }
 
 function showArchive(){
 
-pages[current].classList.remove("active");
+pages[current].classList.remove('active');
 
-document.body.style.overflow="auto";
+document.body.style.overflow='auto';
 
-document.getElementById("archive").classList.add("active");
+document.getElementById('archive')
+.classList.add('active');
+
+}
+
+function bukaPop(src){
+
+document.getElementById('popImg').src=src;
+
+document
+.getElementById('popOverlay')
+.classList.add('show');
+
+}
+
+function tutupPop(){
+
+document
+.getElementById('popOverlay')
+.classList.remove('show');
 
 }
 
