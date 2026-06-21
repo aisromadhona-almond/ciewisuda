@@ -1,470 +1,302 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sugeng Kelulusan, Ilham!</title>
-    
-    <style>
-        /* ========================================================
-           CSS MURNI, RESPONSIF, & AMAN 100%
-           ======================================================== */
-        html, body {
-            overflow: hidden;
-            height: 100%;
-            margin: 0;
-            padding: 0;
-            background-color: #1A1816;
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            -webkit-font-smoothing: antialiased;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        .stage-container {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-        }
+<title>Sugeng Kelulusan, Ilham 🎓</title>
 
-        /* Setelan Halaman (Lakon) */
-        .lakon {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-start;
-            align-items: center;
-            padding: 40px 20px;
-            text-align: center;
-            box-sizing: border-box;
-            background-color: #F5F2EB; 
-            color: #2D2A26;
-            
-            /* ========================================================
-               EFEK BACKGROUND SILUET WAYANG 
-               (Pastikan filenya bernama wayang-bg.png dan satu folder)
-               ======================================================== */
-            background-image: url('wayang-bg.png');
-            background-repeat: no-repeat;
-            background-position: center 60%; /* Posisinya agak ke bawah bingkai foto */
-            background-size: 85% auto; /* Ukuran siluet pas proporsional di layar */
-            
-            transition: transform 0.8s cubic-bezier(0.77, 0, 0.175, 1);
-            transform: translateX(100%);
-            z-index: 1;
-            overflow-y: auto; 
-            -webkit-overflow-scrolling: touch;
-        }
+<style>
 
-        /* Setelan khusus layar laptop agar siluet wayang tidak terlalu raksasa */
-        @media (min-width: 768px) {
-            .lakon {
-                background-size: 550px auto;
-            }
-        }
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family: "Segoe UI", sans-serif;
+}
 
-        .lakon.active {
-            transform: translateX(0);
-            z-index: 2;
-        }
+body{
+overflow:hidden;
+background:#0f172a;
+color:white;
+}
 
-        .lakon.exit {
-            transform: translateX(-100%);
-            z-index: 1;
-        }
+.page{
+width:100vw;
+height:100vh;
+position:absolute;
+top:0;
+left:0;
 
-        .content-wrap {
-            width: 100%;
-            max-width: 340px;
-            margin: auto 0; 
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            z-index: 3; /* Memastikan teks dan tombol berada di atas siluet background */
-        }
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
 
-        .border-box {
-            border: 1px solid rgba(197, 160, 89, 0.4);
-            padding: 30px 20px;
-            border-radius: 4px;
-            background: rgba(245, 242, 235, 0.85); /* Diberi background tipis agar tulisan terbaca jelas */
-            backdrop-filter: blur(2px);
-        }
+padding:30px;
+text-align:center;
 
-        /* Bingkai Foto Utama */
-        .img-frame {
-            width: 100%;
-            max-width: 260px;
-            height: 340px;
-            border-radius: 2px;
-            overflow: hidden;
-            border: 3px solid #C5A059; 
-            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
-            margin-bottom: 20px;
-            flex-shrink: 0;
-            cursor: pointer; 
-            transition: transform 0.3s ease;
-        }
-        .img-frame:hover {
-            transform: scale(1.02); 
-        }
-        .img-frame img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            filter: sepia(15%) contrast(95%);
-        }
+opacity:0;
+pointer-events:none;
 
-        /* Gaya Teks */
-        .title-ethnic {
-            font-size: 20px;
-            letter-spacing: 2px;
-            font-weight: 600;
-            margin-bottom: 10px;
-            color: #2D2A26;
-        }
-        .text-story {
-            font-size: 14px;
-            line-height: 1.6;
-            font-weight: 400;
-            color: #2D2A26;
-            margin-bottom: 25px;
-            /* Memberikan bayangan teks tipis agar tetap terbaca jika bertubrukan dengan siluet */
-            text-shadow: 0 0 10px rgba(245, 242, 235, 1), 0 0 5px rgba(245, 242, 235, 1);
-        }
-        .text-story p {
-            margin: 6px 0;
-        }
+transition:1s;
+}
 
-        /* Tombol Utama */
-        .btn-wayang {
-            background-color: #2D2A26;
-            color: #C5A059;
-            border: 1px solid #C5A059;
-            padding: 12px 35px;
-            font-size: 12px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            font-weight: 500;
-            border-radius: 4px;
-            cursor: pointer;
-            display: inline-block;
-            transition: all 0.3s ease;
-            flex-shrink: 0;
-            margin-top: 5px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-        }
-        .btn-wayang:hover {
-            background-color: #C5A059;
-            color: #2D2A26;
-        }
+.page.active{
+opacity:1;
+pointer-events:auto;
+}
 
-        /* Kotak Pesan */
-        .pesan-box {
-            text-align: left;
-            border-left: 2px solid #C5A059;
-            padding-left: 15px;
-            font-size: 14px;
-            line-height: 1.7;
-            color: #333;
-            max-height: 60vh;
-            overflow-y: auto;
-            margin-bottom: 20px;
-            background: rgba(245, 242, 235, 0.9);
-            padding: 15px;
-            border-radius: 0 4px 4px 0;
-        }
-        .pesan-box p {
-            margin-bottom: 12px;
-        }
+.page img{
+max-width:80%;
+max-height:55vh;
+border-radius:20px;
+box-shadow:0 0 30px rgba(255,255,255,0.1);
+margin-bottom:25px;
+}
 
-        /* Grid Galeri Akhir */
-        .gallery-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 20px;
-            width: 100%;
-            margin-top: 20px;
-        }
-        @media (min-width: 768px) {
-            .gallery-grid {
-                grid-template-columns: 1fr 1fr;
-            }
-        }
-        .gallery-item {
-            background: white;
-            padding: 12px;
-            border: 1px solid rgba(197, 160, 89, 0.2);
-            border-radius: 4px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-            display: flex;
-            flex-direction: column;
-            cursor: pointer;
-            transition: transform 0.3s ease;
-        }
-        .gallery-item:hover {
-            transform: translateY(-5px);
-        }
-        .gallery-item img {
-            width: 100%;
-            height: 250px;
-            object-fit: cover;
-            border-radius: 2px;
-        }
-        .gallery-item p {
-            font-size: 12px;
-            color: #777;
-            margin: 10px 0 0 0;
-            font-style: italic;
-        }
+h1{
+font-size:3rem;
+margin-bottom:20px;
+}
 
-        /* ========================================================
-           SISTEM POP-UP PRATINJAU FOTO (LIGHTBOX)
-           ======================================================== */
-        .pop-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(26, 24, 22, 0.95); 
-            z-index: 9999;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.4s ease;
-        }
-        .pop-overlay.show {
-            opacity: 1;
-            pointer-events: auto;
-        }
-        .pop-content {
-            position: relative;
-            max-width: 90%;
-            max-height: 85vh;
-            transform: scale(0.7);
-            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-        .pop-overlay.show .pop-content {
-            transform: scale(1);
-        }
-        .pop-content img {
-            max-width: 100%;
-            max-height: 85vh;
-            border: 4px solid #C5A059;
-            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
-            border-radius: 2px;
-            object-fit: contain;
-        }
-        .pop-close {
-            position: absolute;
-            top: -45px;
-            right: 0;
-            color: #F5F2EB;
-            font-size: 30px;
-            cursor: pointer;
-            background: none;
-            border: none;
-            padding: 5px;
-            user-select: none;
-        }
-    </style>
+p{
+max-width:800px;
+line-height:1.8;
+font-size:1.1rem;
+}
+
+button{
+margin-top:30px;
+padding:14px 35px;
+
+border:none;
+border-radius:50px;
+
+background:#d4af37;
+color:black;
+
+font-weight:bold;
+font-size:1rem;
+
+cursor:pointer;
+}
+
+.archive{
+overflow-y:auto;
+padding-top:80px;
+padding-bottom:80px;
+}
+
+.archive img{
+width:80%;
+margin:20px auto;
+display:block;
+}
+
+.bg-wayang{
+background:
+linear-gradient(rgba(15,23,42,0.75),rgba(15,23,42,0.9)),
+url('wayang-bg.png');
+
+background-size:cover;
+background-position:center;
+}
+
+</style>
 </head>
+
 <body>
 
-    <div class="stage-container">
+<!-- HALAMAN 1 -->
 
-        <section id="page-1" class="lakon active" style="justify-content: center; background-image: none;">
-            <div class="content-wrap">
-                <div class="border-box">
-                    <div style="font-size: 35px; margin-bottom: 10px; color: #C5A059;">🎭</div>
-                    <div class="title-ethnic">SUGENG KELULUSAN</div>
-                    <p style="font-size: 11px; color: #777; letter-spacing: 1px; margin-bottom: 30px;">SEBUAH HADIAH KECIL UNTUK SEBUAH PENCAPAIAN BESAR.</p>
-                    <button onclick="nextPage(2)" class="btn-wayang">Mulai →</button>
-                </div>
-            </div>
-        </section>
+<section class="page active bg-wayang">
 
-        <section id="page-2" class="lakon">
-            <div class="content-wrap">
-                <div class="img-frame" onclick="bukaPop('slide2.png')">
-                    <img src="slide2.png" alt="Foto Pertama">
-                </div>
-                <div class="text-story">
-                    <p>Semua perjalanan selalu dimulai dari satu langkah kecil.</p>
-                    <p>Kadang penuh semangat,</p>
-                    <p>kadang penuh ragu,</p>
-                    <p>tapi tetap dilangkahkan.</p>
-                </div>
-                <button onclick="nextPage(3)" class="btn-wayang">Lanjut →</button>
-            </div>
-        </section>
+<h1>🎓 Selamat atas Kelulusanmu</h1>
 
-        <section id="page-3" class="lakon">
-            <div class="content-wrap">
-                <div class="img-frame" onclick="bukaPop('slide3.png')">
-                    <img src="slide3.png" alt="Foto Kedua">
-                </div>
-                <div class="text-story">
-                    <p>Tidak semua perjuangan terlihat.</p>
-                    <p>Tidak semua lelah sempat diceritakan.</p>
-                    <p>Namun semuanya ikut mengantarkanmu sampai hari ini.</p>
-                </div>
-                <button onclick="nextPage(4)" class="btn-wayang">Lanjut →</button>
-            </div>
-        </section>
+<p>
+Sebuah hadiah kecil untuk sebuah pencapaian besar.
+</p>
 
-        <section id="page-4" class="lakon">
-            <div class="content-wrap">
-                <div class="img-frame" onclick="bukaPop('slide4.png')">
-                    <img src="slide4.png" alt="Foto Ketiga">
-                </div>
-                <div class="text-story">
-                    <p>Ada banyak hari yang berat.</p>
-                    <p>Ada banyak hal yang harus diselesaikan.</p>
-                    <p>Tapi kamu berhasil melewatinya satu per satu.</p>
-                </div>
-                <button onclick="nextPage(5)" class="btn-wayang">Lanjut →</button>
-            </div>
-        </section>
+<button onclick="nextPage()">Mulai</button>
 
-        <section id="page-5" class="lakon">
-            <div class="content-wrap">
-                <div class="img-frame" onclick="bukaPop('slide5.png')">
-                    <img src="slide5.png" alt="Foto Terbaik">
-                </div>
-                <div class="text-story">
-                    <p>Dan hari ini,</p>
-                    <p>semua usaha itu sampai pada tujuannya.</p>
-                </div>
-                <button onclick="nextPage(6)" class="btn-wayang">Lanjut →</button>
-            </div>
-        </section>
+</section>
 
-        <section id="page-6" class="lakon" style="background-color: #1A1816; color: #F5F2EB; justify-content: center; background-image: none;">
-            <div class="content-wrap">
-                <div style="width: 50px; height: 1px; background: #C5A059; margin-bottom: 15px;"></div>
-                <div style="font-size: 18px; letter-spacing: 3px; color: #C5A059; margin-bottom: 30px; font-weight: 300;">ADA SATU PESAN LAGI.</div>
-                <div style="width: 50px; height: 1px; background: #C5A059; margin-bottom: 30px;"></div>
-                <button onclick="nextPage(7)" class="btn-wayang" style="background: #C5A059; color: #1A1816;">Buka →</button>
-            </div>
-        </section>
+<!-- HALAMAN 2 -->
 
-        <section id="page-7" class="lakon">
-            <div class="content-wrap" style="max-w: 380px;">
-                <div class="pesan-box">
-                    <p style="font-size: 18px; font-weight: 600; color: #2D2A26; margin-bottom: 15px;">Selamat atas kelulusanmu.</p>
-                    <p>Mungkin banyak orang akan mengucapkan selamat hari ini.</p>
-                    <p>Mereka melihat hasil akhirnya. Melihat senyummu di hari kelulusan. Melihat pencapaian yang berhasil diraih.</p>
-                    <p>Namun tidak semua orang melihat proses panjang yang telah kamu lalui.</p>
-                    <p style="font-weight: 600; color: #2D2A26;">Terima kasih karena sudah bertahan.</p>
-                    <p>Terima kasih karena sudah terus melangkah meskipun tidak selalu mudah.</p>
-                    <p>Semoga ilmu yang kamu miliki membawa manfaat bagi banyak orang.</p>
-                    <p>Semoga langkah-langkah berikutnya dipenuhi keberkahan, kebahagiaan, dan hal-hal baik yang pantas kamu dapatkan.</p>
-                    
-                    <p style="font-style: italic; color: #666; border-top: 1px solid rgba(197,160,89,0.2); padding-top: 10px; margin-top: 15px;">
-                        "Semesta akhirnya mengembalikan semua lelahmu dalam bentuk kebahagiaan hari ini." 🌾
-                    </p>
-                    
-                    <p style="margin-top: 15px;">Selamat atas pencapaian ini.</p>
-                    <p style="font-weight: 600; color: #2D2A26;">Aku ikut bahagia melihatmu sampai di titik ini. 🎓</p>
-                </div>
-                <button onclick="nextPage(8)" class="btn-wayang">Selesai →</button>
-            </div>
-        </section>
+<section class="page">
 
-        <section id="page-8" class="lakon" style="justify-content: center;">
-            <div class="content-wrap">
-                <div style="font-size: 30px; margin-bottom: 10px; color: #C5A059;">✨🎭</div>
-                <div class="title-ethnic" style="font-size: 16px;">Selamat Menempuh Babak Baru Kehidupan</div>
-                <p style="font-size: 12px; color: #777; margin-bottom: 30px;">Terima kasih sudah membuka hadiah sederhana ini.</p>
-                <button onclick="nextPage(9)" class="btn-wayang">Lihat Kenangan →</button>
-            </div>
-        </section>
+<img src="slide2.png">
 
-        <section id="page-9" class="lakon" style="display: block;">
-            <div style="max-w: 680px; margin: 0 auto; padding-bottom: 60px;">
-                <div class="title-ethnic" style="text-align: center; margin-top: 20px;">Arsip Memori & Momen</div>
-                <div style="width: 40px; height: 1px; background: #C5A059; margin: 0 auto 25px auto;"></div>
-                
-                <div class="gallery-grid">
-                    <div class="gallery-item" onclick="bukaPop('arsip1.png')">
-                        <img src="arsip1.png" alt="Memori 1">
-                        <p>nikahan pak zul yaaa</p>
-                    </div>
-                    <div class="gallery-item" onclick="bukaPop('arsip2.png')">
-                        <img src="arsip2.png" alt="Memori 2">
-                        <p>kpi 22</p>
-                    </div>
-                    <div class="gallery-item" onclick="bukaPop('arsip3.png')">
-                        <img src="arsip3.png" alt="Memori 3">
-                        <p>ijen dulu kuuuyy</p>
-                    </div>
-                    <div class="gallery-item" onclick="bukaPop('arsip4.png')">
-                        <img src="arsip4.png" alt="Memori 4">
-                        <p>masih talamidz niihh haha</p>
-                    </div>
-                    <div class="gallery-item" onclick="bukaPop('arsip5.png')">
-                        <img src="arsip5.png" alt="Memori 5">
-                        <p>graduate tp bukan ilham</p>
-                    </div>
-                    <div class="gallery-item" onclick="bukaPop('arsip6.png')">
-                        <img src="arsip6.png" alt="Memori 6">
-                        <p>at-tahqiq cieee</p>
-                    </div>
-                </div>
+<p>
+Semua perjalanan selalu dimulai dari satu langkah kecil.
+Kadang penuh semangat, kadang penuh ragu,
+tetapi tetap dilangkahkan.
+</p>
 
-                <footer style="margin-top: 60px; text-align: center; font-size: 10px; color: #999; letter-spacing: 1px;">
-                    MATUR NUWUN • DIBUAT KHUSUS UNTUK ILHAM.
-                </footer>
-            </div>
-        </section>
+<button onclick="nextPage()">Lanjut</button>
 
-    </div>
+</section>
 
-    <div id="popOverlay" class="pop-overlay" onclick="tutupPop()">
-        <div class="pop-content" onclick="event.stopPropagation()">
-            <button class="pop-close" onclick="tutupPop()">&times;</button>
-            <img id="popImg" src="" alt="Pratinjau Foto Besar">
-        </div>
-    </div>
+<!-- HALAMAN 3 -->
 
-    <script>
-        let currentPage = 1;
+<section class="page">
 
-        function nextPage(targetPage) {
-            const currentEl = document.getElementById('page-' + currentPage);
-            const targetEl = document.getElementById('page-' + targetPage);
+<img src="slide3.png">
 
-            if (targetEl) {
-                currentEl.classList.remove('active');
-                currentEl.classList.add('exit');
+<p>
+Tidak semua perjuangan terlihat.
+Tidak semua lelah sempat diceritakan.
+Namun semuanya ikut mengantarkanmu sampai hari ini.
+</p>
 
-                targetEl.classList.add('active');
-                targetEl.scrollTop = 0; 
+<button onclick="nextPage()">Lanjut</button>
 
-                currentPage = targetPage;
-            }
-        }
+</section>
 
-        /* LOGIKA POP-UP INTERAKTIF */
-        function bukaPop(srcGambar) {
-            const overlay = document.getElementById('popOverlay');
-            const targetImg = document.getElementById('popImg');
-            
-            targetImg.src = srcGambar; 
-            overlay.classList.add('show'); 
-        }
+<!-- HALAMAN 4 -->
 
-        function tutupPop() {
-            const overlay = document.getElementById('popOverlay');
-            overlay.classList.remove('show'); 
-        }
-    </script>
+<section class="page">
+
+<img src="slide4.png">
+
+<p>
+Ada banyak hari yang berat.
+Ada banyak hal yang harus diselesaikan.
+Tapi kamu berhasil melewatinya satu per satu.
+</p>
+
+<button onclick="nextPage()">Lanjut</button>
+
+</section>
+
+<!-- HALAMAN 5 -->
+
+<section class="page">
+
+<img src="slide5.png">
+
+<p>
+Dan hari ini,
+semua usaha itu sampai pada tujuannya.
+</p>
+
+<button onclick="nextPage()">Lanjut</button>
+
+</section>
+
+<!-- HALAMAN 6 -->
+
+<section class="page bg-wayang">
+
+<h1>Ada Satu Pesan Lagi</h1>
+
+<button onclick="nextPage()">Buka Pesan</button>
+
+</section>
+
+<!-- HALAMAN 7 -->
+
+<section class="page">
+
+<h1>🎓</h1>
+
+<p>
+
+Selamat atas kelulusanmu.
+
+<br><br>
+
+Mungkin banyak orang akan melihat hasil akhirnya.
+
+Mereka melihat gelar yang berhasil diraih.
+
+Mereka melihat senyum di hari kelulusan.
+
+Namun tidak semua orang melihat proses panjang yang telah mengantarkanmu sampai di titik ini.
+
+<br><br>
+
+Terima kasih karena sudah bertahan.
+
+Terima kasih karena sudah terus melangkah meskipun tidak selalu mudah.
+
+<br><br>
+
+Semoga ilmu yang kamu miliki membawa manfaat bagi banyak orang.
+
+Semoga langkah berikutnya dipenuhi keberkahan, kebahagiaan, dan hal-hal baik yang pantas kamu dapatkan.
+
+<br><br>
+
+Selamat atas pencapaian ini.
+
+Aku ikut bahagia melihatmu sampai di titik ini.
+
+</p>
+
+<button onclick="nextPage()">Selesai</button>
+
+</section>
+
+<!-- HALAMAN 8 -->
+
+<section class="page">
+
+<h1>✨ Selamat ✨</h1>
+
+<p>
+
+Semesta akhirnya mengembalikan semua lelahmu
+dalam bentuk kebahagiaan hari ini.
+
+</p>
+
+<button onclick="showArchive()">Lihat Kenangan</button>
+
+</section>
+
+<!-- ARSIP -->
+
+<section class="page archive" id="archive">
+
+<h1 style="margin-bottom:40px;">📸 Arsip Kenangan</h1>
+
+<img src="arsip1.png">
+<img src="arsip2.png">
+<img src="arsip3.png">
+<img src="arsip4.png">
+<img src="arsip5.png">
+<img src="arsip6.png">
+
+</section>
+
+<script>
+
+let current = 0;
+const pages = document.querySelectorAll(".page");
+
+function nextPage(){
+
+pages[current].classList.remove("active");
+
+current++;
+
+pages[current].classList.add("active");
+
+}
+
+function showArchive(){
+
+pages[current].classList.remove("active");
+
+document.body.style.overflow="auto";
+
+document.getElementById("archive").classList.add("active");
+
+}
+
+</script>
+
 </body>
 </html>
