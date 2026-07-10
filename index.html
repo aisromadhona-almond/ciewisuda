@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ilham S.Sos - Warrior's Journey 3D</title>
+    <!-- Library Grafis 3D Modern, Confetti, & Google Fonts -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
@@ -82,7 +83,6 @@
             cursor: pointer; user-select: none; transition: 0.1s;
         }
         .dpad-btn:active { background: var(--accent-blue); transform: scale(0.95); }
-        .dpad-btn.disabled { opacity: 0.3; cursor: not-allowed; background: #1e293b; }
 
         /* --- SCREEN POP-UP GALERI FOTO KENANGAN --- */
         .memory-screen {
@@ -121,17 +121,21 @@
 
     <div id="game-wrapper">
         
+        <!-- HEADER PETUNJUK -->
         <div class="stage-banner">
             <h1 id="mission-tag">EXPLORATION MODE</h1>
-            <p>Jalankan Ilham gagah mendekati Pos Zona</p>
+            <p>Klik tombol di bawah untuk memunculkan map</p>
         </div>
 
+        <!-- 1. AREA 3D HERO DISPLAY (THREE.JS) -->
         <div id="hero-display-area">
             <canvas id="canvas-3d"></canvas>
         </div>
 
+        <!-- 2. AREA INTERAKSI & KONTROL (BAWAH) -->
         <div id="interaction-panel">
-            <div class="dialog-box">
+            <!-- Sisi Kiri: Balon Dialog / Soal Kuis -->
+            <div class="dialog-box" id="dialog-box">
                 <div>
                     <div class="speaker-tag" id="speaker-title">👦 Ilham (Warrior)</div>
                     <div class="dialog-text" id="story-text">
@@ -139,6 +143,7 @@
                     </div>
                 </div>
 
+                <!-- Opsi Kuis Ujian -->
                 <div class="quiz-wrapper" id="quiz-box">
                     <p style="font-size:0.8rem; font-weight:600; color:var(--accent-gold); margin-bottom:5px;">Ujian Pembuka Semester:</p>
                     <div id="quiz-options"></div>
@@ -147,6 +152,7 @@
                 <button class="action-btn" id="main-action-btn" onclick="nextStep()">MULAI PERJALANAN 🚀</button>
             </div>
 
+            <!-- Sisi Kanan: D-Pad Pergerakan -->
             <div class="dpad-grid">
                 <div></div>
                 <button class="dpad-btn" id="kp-up" onmousedown="setMove('up', true)" onmouseup="setMove('up', false)" ontouchstart="setMove('up', true)" ontouchend="setMove('up', false)">▲</button>
@@ -161,6 +167,7 @@
         </div>
     </div>
 
+    <!-- POP-UP ALBUM FOTO KENANGAN -->
     <div class="memory-screen" id="album-screen">
         <h2 style="color:var(--accent-gold); margin-bottom:5px; font-size:1.1rem;">KENANGAN UNLOCKED ✨</h2>
         <p style="color:#94a3b8; font-size:0.75rem; margin-bottom:15px;">Arsip Memori Digital Ilham</p>
@@ -171,6 +178,7 @@
         <button class="action-btn" style="padding:10px 25px; border-radius:20px;" onclick="resumeExploration()">KEMBALI KE PETA JALAN 🗺️</button>
     </div>
 
+    <!-- POP-UP KELULUSAN WISUDA AKHIR -->
     <div class="ending-screen" id="ending-screen">
         <div style="font-size:3.5rem; margin-bottom:10px;">🎓🤵</div>
         <h2 style="color:var(--accent-gold); font-size:1.4rem; font-weight:700; margin-bottom:15px; letter-spacing:1px;">HAPPY GRADUATION</h2>
@@ -195,7 +203,7 @@
         const semesterContent = {
             1: {
                 title: "💬 Ilham - Masa Perkenalan Maba",
-                talk: "Wah, nggak nyangka aku udah resmi kuliah! Semester 1 tantangannya masih aman dan lancar jaya lah yaaa. Tapi tugas-tugas dasar KPI KPI sudah mulai menanti. Selesaikan mini kuis ini yuk!",
+                talk: "Wah, nggak nyangka aku udah resmi kuliah! Semester 1 tantangannya masih aman dan lancar jaya lah yaaa. Tapi tugas-tugas dasar KPI sudah mulai menanti. Selesaikan mini kuis ini yuk!",
                 q: "Apa fokus utama jurusan KPI Universitas KH. Mukhtar Syafaat?",
                 opts: ["Komunikasi dan Penyiaran Islam", "Kolega Pemuda Indonesia"], ans: 0,
                 desc: "Kenangan Semester 1: Langkah pertama Ilham memakai jas almamater tempur dengan bangga.",
@@ -245,7 +253,7 @@
 
             // Lantai Lapangan Universitas
             const floorGeo = new THREE.PlaneGeometry(80, 80);
-            const floorMat = new THREE.MeshStandardMaterial({ color: #1e293b, roughness: 0.8 });
+            const floorMat = new THREE.MeshStandardMaterial({ color: 0x1e293b, roughness: 0.8 });
             const floor = new THREE.Mesh(floorGeo, floorMat);
             floor.rotation.x = -Math.PI / 2;
             scene.add(floor);
@@ -276,14 +284,14 @@
             rightShoulder.position.x = 0.6;
             playerGroup.add(leftShoulder, rightShoulder);
 
-            // 2. Kepala Tampan
+            // 2. Kepala
             const headGeo = new THREE.SphereGeometry(0.42, 32, 32);
             const skinMat = new THREE.MeshStandardMaterial({ color: 0xfbcfe8, roughness: 0.6 });
             const head = new THREE.Mesh(headGeo, skinMat);
             head.position.y = 2.45;
             playerGroup.add(head);
 
-            // 3. Rambut Wavy Curtain Hitam (Tampan)
+            // 3. Rambut Wavy Curtain Hitam
             const hairGroup = new THREE.Group();
             const hairTopGeo = new THREE.SphereGeometry(0.46, 16, 16, 0, Math.PI*2, 0, Math.PI/2);
             const hairMat = new THREE.MeshStandardMaterial({ color: 0x0f172a, roughness: 0.9 });
@@ -301,7 +309,7 @@
             hairGroup.add(leftStrand, rightStrand);
             playerGroup.add(hairGroup);
 
-            // 4. Dasi Hitam Elegan (Penyempurna Jas)
+            // 4. Dasi Hitam Elegan
             const tieGeo = new THREE.ConeGeometry(0.07, 0.45, 4);
             const tieMat = new THREE.MeshStandardMaterial({ color: 0x000000 });
             const tie = new THREE.Mesh(tieGeo, tieMat);
@@ -355,14 +363,16 @@
             }
 
             // Animasi Mengambang & Berputar Pos Zona
-            checkpointMesh.rotation.y += 0.01;
+            if (checkpointMesh) checkpointMesh.rotation.y += 0.01;
 
-            // Kamera Mengikuti Pergerakan Ilham (Sakura School Style)
-            camera.position.set(playerGroup.position.x, playerGroup.position.y + 6, playerGroup.position.z + 8);
-            camera.lookAt(playerGroup.position.x, playerGroup.position.y + 1.2, playerGroup.position.z);
+            // Kamera Mengikuti Pergerakan Ilham
+            if (playerGroup) {
+                camera.position.set(playerGroup.position.x, playerGroup.position.y + 6, playerGroup.position.z + 8);
+                camera.lookAt(playerGroup.position.x, playerGroup.position.y + 1.2, playerGroup.position.z);
+            }
 
             // Deteksi Tabrakan (Masuk ke Zona)
-            if (storyStep === 1) {
+            if (storyStep === 1 && playerGroup && checkpointMesh) {
                 let distance = playerGroup.position.distanceTo(checkpointMesh.position);
                 if (distance < 1.5) {
                     stop(); // Hentikan gerakan saat masuk zona
@@ -383,7 +393,9 @@
         // --- SISTEM GERAK & KONTROLER D-PAD ---
         function setMove(direction, isMoving) {
             playBgmOnce();
-            moveState[direction] = isMoving;
+            if (storyStep === 1) {
+                moveState[direction] = isMoving;
+            }
         }
 
         function stop() { moveState = { up: false, down: false, left: false, right: false }; }
@@ -399,6 +411,7 @@
                 storyStep = 1; // Masuk mode eksplorasi
                 document.getElementById('dialog-box').style.display = 'none';
                 document.getElementById('mission-tag').innerText = "EXPLORATION MODE";
+                document.getElementById('main-action-btn').style.display = 'none';
                 init3D();
                 playBgmOnce();
             }
@@ -411,14 +424,13 @@
             let data = semesterContent[currentActiveSemester];
             document.getElementById('story-text').innerText = data.talk;
 
-            let optionsHtml = "";
+            let optionsHtml = `<p style="font-size:0.85rem; font-weight:700; color:var(--accent-gold); margin-bottom:8px;">${data.q}</p>`;
             data.opts.forEach((opt, idx) => {
                 optionsHtml += `<button class="quiz-btn" onclick="checkAnswer(${idx})">${opt}</button>`;
             });
 
             document.getElementById('quiz-options').innerHTML = optionsHtml;
             document.getElementById('quiz-box').style.display = 'flex';
-            document.getElementById('btn-dialog-action').style.display = 'none';
             document.getElementById('dialog-box').style.display = 'flex';
         }
 
@@ -444,8 +456,8 @@
                 currentActiveSemester++;
                 storyStep = 1; // Aktifkan jalan kaki kembali
                 setCheckpointPosition();
-                // Mundurkan sedikit posisi karakter biar nggak langsung tabrakan ulang
-                playerGroup.position.y += 20; 
+                // Majukan posisi agar keluar dari radius deteksi zona lama
+                playerGroup.position.z -= 2.0; 
                 document.getElementById('mission-tag').innerText = "EXPLORATION MODE";
             } else {
                 document.getElementById('interaction-panel').style.display = 'none';
