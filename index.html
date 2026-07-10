@@ -1,490 +1,296 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Sugeng Kelulusan 🎓</title>
-
-<style>
-
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:'Segoe UI',sans-serif;
-}
-
-body{
-background:#faf8f3;
-overflow:hidden;
-color:#2d2a26;
-}
-
-/* HALAMAN */
-
-.page{
-position:absolute;
-top:0;
-left:0;
-
-width:100%;
-height:100vh;
-
-display:flex;
-flex-direction:column;
-justify-content:center;
-align-items:center;
-
-padding:30px;
-
-text-align:center;
-
-opacity:0;
-pointer-events:none;
-
-transition:0.8s;
-}
-
-.page.active{
-opacity:1;
-pointer-events:auto;
-}
-
-/* KARTU */
-
-.card{
-background:white;
-
-padding:35px;
-
-border-radius:24px;
-
-max-width:900px;
-width:90%;
-
-box-shadow:
-0 10px 30px rgba(0,0,0,.08);
-}
-
-/* JUDUL */
-
-h1{
-font-size:2.5rem;
-margin-bottom:20px;
-color:#c5a059;
-}
-
-p{
-line-height:1.9;
-font-size:1.05rem;
-}
-
-/* FOTO */
-
-.slide-img{
-
-width:320px;
-max-width:80vw;
-
-border-radius:20px;
-
-cursor:pointer;
-
-box-shadow:
-0 8px 25px rgba(0,0,0,.15);
-
-transition:.3s;
-
-margin-bottom:20px;
-}
-
-.slide-img:hover{
-transform:scale(1.03);
-}
-
-/* TOMBOL */
-
-button{
-
-margin-top:25px;
-
-padding:14px 32px;
-
-border:none;
-border-radius:999px;
-
-background:#c5a059;
-color:white;
-
-font-weight:600;
-
-cursor:pointer;
-
-transition:.3s;
-}
-
-button:hover{
-transform:translateY(-2px);
-}
-
-/* POPUP */
-
-#popOverlay{
-
-position:fixed;
-inset:0;
-
-background:rgba(0,0,0,.65);
-
-display:flex;
-justify-content:center;
-align-items:center;
-
-opacity:0;
-visibility:hidden;
-
-transition:.3s;
-
-z-index:9999;
-}
-
-#popOverlay.show{
-
-opacity:1;
-visibility:visible;
-
-}
-
-#popImg{
-
-max-width:70vw;
-max-height:70vh;
-
-border-radius:20px;
-
-box-shadow:
-0 15px 50px rgba(0,0,0,.4);
-}
-
-/* ARSIP */
-
-.archive{
-
-overflow-y:auto;
-padding-top:100px;
-padding-bottom:100px;
-}
-
-.archive img{
-
-width:300px;
-max-width:80vw;
-
-display:block;
-
-margin:20px auto;
-
-border-radius:16px;
-
-cursor:pointer;
-
-box-shadow:
-0 8px 20px rgba(0,0,0,.12);
-}
-
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memory Journey: Every Graduation Has a Story</title>
+    <!-- Canvas Confetti untuk Efek Wisuda Megah -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Inter:wght@300;400;600;700&display=swap');
+
+        :root {
+            --bg-dark: #0a0a0c;
+            --text-light: #f7fafc;
+            --accent-green: #39ff14;
+            --accent-pink: #ff007f;
+            --card-bg: rgba(255, 255, 255, 0.05);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            overflow-x: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* --- CONTAINER GAME UTAMA --- */
+        #game-container {
+            width: 100%;
+            max-width: 650px;
+            min-height: 85vh;
+            background: #111216;
+            border: 3px solid #2d3748;
+            border-radius: 20px;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+        }
+
+        .screen { display: none; width: 100%; animation: fadeIn 0.8s ease forwards; }
+        .screen.active { display: flex; flex-direction: column; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* --- GAYA RETRO GAMING --- */
+        .pixel-text { font-family: 'Press Start 2P', monospace; line-height: 1.8; font-size: 0.85rem; text-align: center; color: var(--text-light); }
+        .pixel-btn {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.75rem;
+            padding: 15px 25px;
+            background: transparent;
+            color: var(--accent-green);
+            border: 2px solid var(--accent-green);
+            cursor: pointer;
+            margin-top: 30px;
+            transition: all 0.2s;
+            text-transform: uppercase;
+            align-self: center;
+        }
+        .pixel-btn:hover { background: var(--accent-green); color: black; box-shadow: 0 0 15px var(--accent-green); }
+
+        /* --- LAYAR 2: START CONFIRMATION --- */
+        .avatar-display { font-size: 4rem; text-align: center; margin: 20px 0; animation: bounce 1s infinite alternate; }
+        @keyframes bounce { from { transform: translateY(0); } to { transform: translateY(-10px); } }
+
+        /* --- LAYAR 3: MAP / TIMELINE PROGRESS --- */
+        .map-grid { display: flex; flex-direction: column; gap: 10px; align-items: center; margin: 20px 0; }
+        .map-node { width: 180px; padding: 10px; background: #2d3748; text-align: center; font-size: 0.65rem; font-family: 'Press Start 2P', monospace; border-radius: 6px; color: #a0aec0; }
+        .map-node.active { background: var(--accent-pink); color: white; box-shadow: 0 0 10px var(--accent-pink); }
+        .map-node.passed { background: #1a202c; color: #4a5568; border: 1px dashed #4a5568; }
+        .map-arrow { font-size: 1rem; color: #4a5568; }
+
+        /* --- LAYAR LEVEL / MINI GAMES --- */
+        .achievement-box { background: rgba(57, 255, 20, 0.1); border: 2px dashed var(--accent-green); padding: 15px; border-radius: 10px; margin-bottom: 20px; text-align: center; }
+        .game-box { background: #1a1b23; border: 1px solid #2d3748; padding: 20px; border-radius: 12px; margin: 20px 0; text-align: center; }
+        .game-options { display: flex; flex-direction: column; gap: 10px; margin-top: 15px; }
+        .opt-btn { background: #2d3748; border: none; color: white; padding: 12px; text-align: left; border-radius: 8px; cursor: pointer; font-size: 0.9rem; transition: background 0.2s; }
+        .opt-btn:hover { background: #4a5568; }
+
+        /* --- LAYAR CREDIT & ENDING --- */
+        .credit-list { display: flex; flex-direction: column; gap: 15px; margin: 30px 0; text-align: center; }
+        .credit-title { font-size: 0.65rem; font-family: 'Press Start 2P', monospace; color: var(--accent-pink); }
+        .credit-val { font-size: 1.2rem; font-weight: bold; color: white; }
+
+        audio { display: none; }
+    </style>
 </head>
-
 <body>
 
-<!-- PAGE 1 -->
-
-<section class="page active">
-
-<div class="card">
-
-<h1>🎓 Sugeng Kelulusan</h1>
-
-<p>
-
-Sebuah hadiah kecil untuk sebuah pencapaian besar.
-
-<br><br>
-
-Selamat atas kelulusanmu.
-
-Mari membuka satu per satu kenangan yang mengantarkanmu sampai hari ini.
-
-</p>
-
-<button onclick="nextPage()">
-Mulai →
-</button>
-
-</div>
-
-</section>
-
-<!-- PAGE 2 -->
-
-<section class="page">
-
-<div class="card">
-
-<img
-src="slide2.png"
-class="slide-img"
-onclick="bukaPop('slide2.png')">
-
-<p>
-
-Setiap perjalanan besar selalu dimulai dari langkah kecil.
-
-</p>
-
-<button onclick="nextPage()">
-Lanjut →
-</button>
-
-</div>
-
-</section>
-
-<!-- PAGE 3 -->
-
-<section class="page">
-
-<div class="card">
-
-<img
-src="slide3.png"
-class="slide-img"
-onclick="bukaPop('slide3.png')">
-
-<p>
-
-Tidak semua perjuangan terlihat oleh orang lain.
-
-</p>
-
-<button onclick="nextPage()">
-Lanjut →
-</button>
-
-</div>
-
-</section>
-
-<!-- PAGE 4 -->
-
-<section class="page">
-
-<div class="card">
-
-<img
-src="slide4.png"
-class="slide-img"
-onclick="bukaPop('slide4.png')">
-
-<p>
-
-Namun semuanya membawa langkahmu sampai di titik ini.
-
-</p>
-
-<button onclick="nextPage()">
-Lanjut →
-</button>
-
-</div>
-
-</section>
-
-<!-- PAGE 5 -->
-
-<section class="page">
-
-<div class="card">
-
-<img
-src="slide5.png"
-class="slide-img"
-onclick="bukaPop('slide5.png')">
-
-<p>
-
-Dan hari ini adalah salah satu hasil dari semua usaha itu.
-
-</p>
-
-<button onclick="nextPage()">
-Lanjut →
-</button>
-
-</div>
-
-</section>
-
-<!-- PAGE 6 -->
-
-<section class="page">
-
-<div class="card">
-
-<h1>✨</h1>
-
-<p>
-
-Ada satu pesan lagi untukmu.
-
-</p>
-
-<button onclick="nextPage()">
-Buka Pesan
-</button>
-
-</div>
-
-</section>
-
-<!-- PAGE 7 -->
-
-<section class="page">
-
-<div class="card">
-
-<h1>🎓</h1>
-
-<p>
-
-Selamat atas kelulusanmu.
-
-<br><br>
-
-Mungkin banyak orang melihat hasil akhirnya.
-
-Melihat gelarnya.
-
-Melihat senyumnya.
-
-Namun tidak semua orang melihat proses panjang yang telah kamu lalui.
-
-<br><br>
-
-Terima kasih karena sudah bertahan.
-
-Terima kasih karena sudah terus melangkah.
-
-<br><br>
-
-Semoga ilmu yang kamu miliki membawa manfaat bagi banyak orang.
-
-Semoga langkah berikutnya dipenuhi keberkahan dan kebahagiaan.
-
-<br><br>
-
-Aku ikut bahagia melihatmu sampai di titik ini.
-
-</p>
-
-<button onclick="nextPage()">
-Selesai
-</button>
-
-</div>
-
-</section>
-
-<!-- PAGE 8 -->
-
-<section class="page">
-
-<div class="card">
-
-<h1>📸 Arsip Kenangan</h1>
-
-<p>
-
-Masih ada beberapa kenangan yang tersimpan.
-
-</p>
-
-<button onclick="showArchive()">
-Lihat Arsip
-</button>
-
-</div>
-
-</section>
-
-<!-- ARSIP -->
-
-<section class="page archive" id="archive">
-
-<img src="arsip1.png" onclick="bukaPop('arsip1.png')">
-<img src="arsip2.png" onclick="bukaPop('arsip2.png')">
-<img src="arsip3.png" onclick="bukaPop('arsip3.png')">
-<img src="arsip4.png" onclick="bukaPop('arsip4.png')">
-<img src="arsip5.png" onclick="bukaPop('arsip5.png')">
-<img src="arsip6.png" onclick="bukaPop('arsip6.png')">
-
-</section>
-
-<!-- POPUP -->
-
-<div id="popOverlay" onclick="tutupPop()">
-
-<img id="popImg">
-
-</div>
-
-<script>
-
-let current=0;
-
-const pages=document.querySelectorAll('.page');
-
-function nextPage(){
-
-pages[current].classList.remove('active');
-
-current++;
-
-pages[current].classList.add('active');
-
-}
-
-function showArchive(){
-
-pages[current].classList.remove('active');
-
-document.body.style.overflow='auto';
-
-document.getElementById('archive')
-.classList.add('active');
-
-}
-
-function bukaPop(src){
-
-document.getElementById('popImg').src=src;
-
-document
-.getElementById('popOverlay')
-.classList.add('show');
-
-}
-
-function tutupPop(){
-
-document
-.getElementById('popOverlay')
-.classList.remove('show');
-
-}
-
-</script>
-
+    <!-- PEMUTAR TRACK SUASANA KAMPUS / ANIME INSTRUMEN -->
+    <audio id="bgm" loop src="https://assets.mixkit.co/music/preview/mixkit-beautiful-dream-493.mp3"></audio>
+
+    <div id="game-container">
+
+        <!-- SCREEN 1: OPENING -->
+        <div id="scr-opening" class="screen active">
+            <p class="pixel-text" style="color: #a0aec0; margin-bottom: 20px;">Welcome.</p>
+            <p class="pixel-text" style="font-size: 1.1rem; line-height: 2;">This is not just a graduation.<br><span style="color: var(--accent-pink);">This is your journey.</span></p>
+            <button class="pixel-btn" onclick="nextScreen('scr-intro')">START</button>
+        </div>
+
+        <!-- SCREEN 2: CHARACTER READY (LOCKED TO ILHAM) -->
+        <div id="scr-intro" class="screen">
+            <p class="pixel-text">Mari kita melihat kembali setiap langkah yang telah membawamu sampai hari ini.</p>
+            
+            <div class="avatar-display">👨</div>
+            <h2 class="pixel-text" style="color: var(--accent-green); font-size: 1.2rem; margin-bottom: 10px;">CHARACTER READY</h2>
+            <p class="pixel-text" style="font-size: 0.9rem; margin-bottom: 20px;">NAME: <span style="color: var(--accent-pink);">ILHAM</span></p>
+            
+            <button class="pixel-btn" onclick="showMapTransition()">MULAI PERJALANAN</button>
+        </div>
+
+        <!-- SCREEN 3: MAP TRANSITION -->
+        <div id="scr-map" class="screen">
+            <p class="pixel-text" style="color: var(--accent-green); margin-bottom: 20px;">LOADING MAP JOURNEY...</p>
+            <div class="map-grid" id="map-nodes-container"></div>
+            <button class="pixel-btn" id="map-next-btn" onclick="startLevelGame()">MASUK LEVEL</button>
+        </div>
+
+        <!-- SCREEN 4: LEVEL GAMEPLAY INTERAKTIF -->
+        <div id="scr-level" class="screen">
+            <div class="achievement-box">
+                <p class="pixel-text" style="font-size: 0.6rem; color: var(--accent-green);" id="level-achievement-title">ACHIEVEMENT UNLOCKED</p>
+                <p class="pixel-text" style="font-size: 0.8rem; margin-top: 5px;" id="level-achievement-name">Mahasiswa Baru</p>
+            </div>
+            
+            <p class="pixel-text" id="level-title" style="color: var(--accent-pink); font-size: 0.75rem; margin-bottom: 10px;">SEMESTER 1</p>
+            
+            <div class="game-box">
+                <p id="game-narrative" style="line-height: 1.6; text-align: left; font-size: 1rem;"></p>
+                <div class="game-options" id="game-options-container"></div>
+            </div>
+
+            <div style="background: rgba(255,255,255,0.02); padding: 15px; border-left: 3px solid var(--accent-pink); font-style: italic; font-size: 0.9rem;" id="level-memo">
+                "Aku masih takut. Aku masih bingung. Tapi aku bertahan."
+            </div>
+
+            <button class="pixel-btn" id="level-next-btn" style="display: none;" onclick="showMapTransition()">LANJUT JALAN</button>
+        </div>
+
+        <!-- SCREEN 5: ENDING CEREMONY (WISUDA) -->
+        <div id="scr-ending" class="screen">
+            <p class="pixel-text" style="color: var(--accent-green); font-size: 1.2rem; margin-bottom: 20px;">AULA WISUDA UNIVERSITAS</p>
+            <p style="font-size: 4rem; text-align: center; margin-bottom: 20px; animation: bounce 1s infinite alternate;">👨</p>
+            <p class="pixel-text" style="font-size: 0.7rem; line-height: 2; margin-bottom: 20px;" id="ending-speech">
+                Karaktermu berjalan masuk ke aula...<br>
+                Semua NPC, Dosen, dan Orang Tua berdiri sambil bertepuk tangan riuh! 👏✨<br><br>
+                Toga dipindahkan ke kanan... Ijazah diberikan.
+            </p>
+            <button class="pixel-btn" onclick="triggerConfettiEpic()">TERIMA IJAZAH (S.Sos)</button>
+        </div>
+
+        <!-- SCREEN 6: LEVEL COMPLETE SCREEN -->
+        <div id="scr-level-complete" class="screen">
+            <p class="pixel-text" style="font-size: 1.5rem; color: var(--accent-pink); margin-bottom: 30px;">CONGRATULATIONS.</p>
+            <h1 class="pixel-text" style="font-size: 2.5rem; color: var(--accent-green); margin-bottom: 30px;">ILHAM, S.Sos</h1>
+            <p class="pixel-text" style="font-size: 0.75rem; line-height: 2; color: #a0aec0;">
+                S.Sos is not the end.<br>It's only...<br><br>
+                <span style="color: white; font-size: 1.1rem;">[ LEVEL COMPLETE ]</span>
+            </p>
+            <button class="pixel-btn" onclick="nextScreen('scr-credits')">SEE ROLL CREDITS</button>
+        </div>
+
+        <!-- SCREEN 7: ROLL CREDITS -->
+        <div id="scr-credits" class="screen">
+            <p class="pixel-text" style="color: var(--accent-pink); margin-bottom: 20px;">ROLL CREDITS</p>
+            <div class="credit-list">
+                <div>
+                    <p class="credit-title">MAIN PLAYER</p>
+                    <p class="credit-val">Ilham</p>
+                </div>
+                <div>
+                    <p class="credit-title">SPECIAL THANKS</p>
+                    <p class="credit-val">Parents</p>
+                </div>
+                <div>
+                    <p class="credit-title">SUPPORT SYSTEM</p>
+                    <p class="credit-val">Friends & Besties</p>
+                </div>
+                <div>
+                    <p class="credit-title">FINAL BOSSES</p>
+                    <p class="credit-val">Lecturers (Dosen)</p>
+                </div>
+                <div>
+                    <p class="credit-title">THE STRONGEST HERO</p>
+                    <p class="credit-val" style="color: var(--accent-green);">Yourself (Dirimu Sendiri)</p>
+                </div>
+            </div>
+            <button class="pixel-btn" onclick="nextScreen('scr-final-sun')">NEXT</button>
+        </div>
+
+        <!-- SCREEN 8: FINAL LOOK UP SUNSET -->
+        <div id="scr-final-sun" class="screen">
+            <p style="font-size: 4rem; text-align: center; margin-bottom: 20px;">🌅</p>
+            <p class="pixel-text" style="font-size: 0.75rem; line-height: 2; text-align: justify; margin-bottom: 30px;">
+                "Empat tahun berlalu begitu cepat untukmu, Ilham. Namun ingatlah, setiap langkah kecil, setiap malam begadang, dan kegagalan yang pernah terjadi telah membentuk siapa dirimu hari ini."
+            </p>
+            <button class="pixel-btn" style="border-color: var(--accent-pink); color: var(--accent-pink);" onclick="alert('Selamat menempuh permainan berikutnya di dunia nyata! Kamu hebat.'); location.reload();">CONTINUE YOUR JOURNEY →</button>
+        </div>
+
+    </div>
+
+    <script>
+        let currentLevelIndex = 0;
+
+        const levelsData = [
+            { name: "PKKMB & Maba", code: "📝", achievement: "🏆 Unlocked: Mahasiswa Baru", narrative: "Hari pertama ospek universitas. Kamu memakai pita atribut aneh, membawa kardus, dan bingung mencari barisan gugusmu. Apa tindakan pertamamu?", options: ["Pura-pura baca denah padahal nyasar", "Beranikan diri nanya orang sebelah (auto jadi bestie)", "Pasrah nunggu digiring komdis"], memo: "Semester 1: Aku masih takut. Aku masih bingung. Tapi aku bertahan." },
+            { name: "Semester 1 & 2", code: "📚", achievement: "🏆 Unlocked: First Presentation", narrative: "Masuk perkuliahan reguler. Dosen meminta kamu maju melakukan presentasi kelompok makalah Sosiologi pertama kalinya. Tanganmu gemetar memegang proyektor.", options: ["Maju dengan modal nekat & slide copas Wikipedia", "Membaca teks secepat kilat biar cepet kelar", "Menyerahkan sesi tanya jawab sepenuhnya ke ketua kelompok"], memo: "Semester 2: Mulai kenal ritme ruang kelas, tawa teman, dan herannya tugas-tugas jurnal." },
+            { name: "UTS & Semester 3", code: "😵", achievement: "🏆 Unlocked: Survived UTS", narrative: "Musim ujian tiba. Tugas analisis fenomena sosial menumpuk bersamaan dengan kuis dosen killer. Laptopmu mendadak nge-hang jam 11 malam pas H-1 deadline.", options: ["Nangis 5 menit, lalu lanjut ngetik ulang lewat HP", "Pasrah tidur dan berniat chat dosen pake template 'mohon maaf izin susulan'", "Begadang di warung kopi bareng temen senasib"], memo: "Semester 3: SKS makin berat, secangkir kopi mulai terasa seperti ramuan penyembuh stamina." },
+            { name: "Quiz & Semester 4", code: "☕", achievement: "🏆 Unlocked: Mid-Journey Survivor", narrative: "Berapa kali kamu merasa hampir menyerah dan ingin pulang saja selama melewati pertengahan fase kuliah ini?", options: ["Nggak terhitung, tiap minggu pengen nikah/ternak lele aja 😂", "Beberapa kali saat nilai IPK keluar tidak sesuai ekspektasi", "Bertahan demi senyum bangga orang tua di rumah"], memo: "Semester 4: Bertahan bukan lagi tentang ambisi nilai, tapi komitmen pada janji awal." },
+            { name: "Semester 5 (Memory)", code: "📖", achievement: "🏆 Unlocked: First A Grade", narrative: "Fase ini adalah tentang sela-sela waktu kumpul di koridor kampus, makan mie instan di kantin, gosip tipis, dan berfoto bersama sahabat sebelum semua sibuk masing-masing.", options: ["Mengingat kembali momen tertawa paling keras", "Menyadari waktu berjalan makin tidak terasa cepat", "Tersenyum bersyukur atas kehadiran teman di sekitar"], memo: "Semester 5: Memorinya membekas dalam, menjadi penguat untuk level-level tersulit di depan." },
+            { name: "Kuliah Kerja Nyata", code: "💻", achievement: "🏆 Unlocked: KKN Done", narrative: "Kamu diterjunkan ke desa terpencil untuk program KKN bersama tim lintas fakultas. Masalah utamanya: Proker belum kelar, sinyal susah, dan cinta lokasi mulai merebak.", options: ["Fokus garap plang nama desa sampai larut malam", "Bagian masak di posko biar aman dari panas", "Jadi mediator tim yang mulai berselisih paham akibat capek"], memo: "Semester 6: Mengabdi pada masyarakat, belajar arti hidup yang sesungguhnya di luar buku teori." },
+            { name: "Skripsi (Final Boss)", code: "📄", achievement: "🏆 Unlocked: Survived Skripsi", narrative: "LEVEL TERKUTUK: SKRIPSI! Kamu terjebak dalam siklus: Kejar deadline, revisi bolak-balik coretan merah, laptop panas, kopi habis, dan berburu tanda tangan ACC dosen.", options: ["Menunggu berjam-jam di depan ruang dosen demi tanda tangan", "Ketik bab 4 revisi maraton sampai subuh menyapa", "Revisi ulang metodologi penelitian sosial yang salah total"], memo: "Semester 7: Bab demi bab, coretan demi coretan, air mata yang luruh bertransformasi jadi mahkota kematangan." },
+            { name: "Yudisium", code: "🎓", achievement: "🏆 Unlocked: Graduation Candidate", narrative: "Sidang komprehensif selesai. Namamu dipanggil dalam rapat pleno Yudisium dan dinyatakan LULUS dengan gelar Sarjana Sosial (S.Sos) di belakang namamu!", options: ["Sujud syukur spontan di koridor lantai dua", "Langsung telpon ibu/ayah sambil berkaca-kaca", "Nafas lega, akhirnya lepas dari belenggu portal kampus"], memo: "Semester 8: Perjuanganampat tahun lunas dalam selembar berita acara kelulusan." }
+        ];
+
+        function nextScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(screenId).classList.add('active');
+            if (screenId === 'scr-intro') {
+                document.getElementById('bgm').play();
+            }
+        }
+
+        function showMapTransition() {
+            nextScreen('scr-map');
+            const container = document.getElementById('map-nodes-container');
+            container.innerHTML = "";
+
+            levelsData.forEach((lvl, idx) => {
+                let statusClass = "map-node";
+                if (idx === currentLevelIndex) statusClass += " active";
+                else if (idx < currentLevelIndex) statusClass += " passed";
+
+                container.innerHTML += `<div class="${statusClass}">${lvl.code} ${lvl.name}</div>`;
+                if (idx < levelsData.length - 1) {
+                    container.innerHTML += `<div class="map-arrow">↓</div>`;
+                }
+            });
+
+            const nextBtn = document.getElementById('map-next-btn');
+            if (currentLevelIndex >= levelsData.length) {
+                nextBtn.innerText = "MENUJU REPROWISUDA";
+                nextBtn.onclick = () => nextScreen('scr-ending');
+            } else {
+                nextBtn.innerText = `MASUK SEMESTER ${currentLevelIndex + 1}`;
+                nextBtn.onclick = () => startLevelGame();
+            }
+        }
+
+        function startLevelGame() {
+            nextScreen('scr-level');
+            let data = levelsData[currentLevelIndex];
+
+            document.getElementById('level-title').innerText = data.name.toUpperCase();
+            document.getElementById('level-achievement-name').innerText = data.achievement;
+            document.getElementById('game-narrative').innerText = data.narrative;
+            document.getElementById('level-memo').innerText = data.memo;
+
+            const optContainer = document.getElementById('game-options-container');
+            optContainer.innerHTML = "";
+            document.getElementById('level-next-btn').style.display = 'none';
+
+            data.options.forEach(opt => {
+                optContainer.innerHTML += `<button class="opt-btn" onclick="selectGameOption()">${opt}</button>`;
+            });
+        }
+
+        function selectGameOption() {
+            document.getElementById('game-narrative').innerHTML = "<strong>Keputusan diambil!</strong> Langkah kecil ini berhasil membawamu melewati rintangan semester ini dengan gemilang. Stamina +10, Kesabaran +50.";
+            document.getElementById('game-options-container').innerHTML = "";
+            document.getElementById('level-next-btn').style.display = 'block';
+            currentLevelIndex++;
+        }
+
+        function triggerConfettiEpic() {
+            canvasConfetti({ particleCount: 150, spread: 80, origin: { y: 0.6 } });
+            document.getElementById('ending-speech').innerHTML = `Toga resmi dipindahkan! Selamat <strong>Ilham, S.Sos</strong>!<br><br>Kamu telah menyelesaikan seluruh quest akademik dengan ketulusan, kerja keras, dan air mata beneran. 🎓🎉`;
+            
+            const container = document.getElementById('scr-ending');
+            const oldBtn = container.querySelector('.pixel-btn');
+            oldBtn.innerText = "LIHAT LEVEL COMPLETE";
+            oldBtn.onclick = () => nextScreen('scr-level-complete');
+        }
+    </script>
 </body>
 </html>
