@@ -3,225 +3,174 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Memory Journey - Ilham, S.Sos</title>
-    <!-- Canvas Confetti Efek Kelulusan -->
+    <title>Memory Journey: Ilham, S.Sos</title>
+    <!-- Canvas Confetti untuk Efek Wisuda -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Inter:wght@400;600;700&display=swap');
 
         :root {
-            --bg-main: #1e1e24;
-            --bg-card: #2d2d38;
-            --bg-darker: #15151a;
-            --text-color: #e2e8f0;
-            --accent-gold: #f6ad55;
-            --accent-green: #68d391;
-            --accent-pink: #fc8181;
-            --border-pixel: #4a4a5a;
+            --bg-game: #1a1a24;
+            --island-sky: #2b6cb0;
+            --accent-gold: #ecc94b;
+            --accent-green: #48bb78;
+            --accent-pink: #f687b3;
+            --box-bg: #2d3748;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Inter', sans-serif;
-            background-color: var(--bg-main);
-            color: var(--text-color);
-            padding: 20px;
+            background-color: var(--bg-game);
+            color: #fff;
             display: flex;
             justify-content: center;
-        }
-
-        /* --- LAYOUT UTAMA SEPERTI GAMBAR --- */
-        .game-wrapper {
-            width: 100%;
-            max-width: 900px;
-            background: var(--bg-darker);
-            border: 4px solid var(--border-pixel);
-            border-radius: 12px;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 25px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.6);
-        }
-
-        /* --- JUDUL UTAMA --- */
-        .header-banner {
-            text-align: center;
-            border-bottom: 2px dashed var(--border-pixel);
-            padding-bottom: 15px;
-        }
-        .retro-title {
-            font-family: 'Press Start 2P', monospace;
-            font-size: 1.6rem;
-            color: var(--accent-gold);
-            text-shadow: 3px 3px 0px #000;
-            margin-bottom: 5px;
-        }
-        .retro-subtitle {
-            font-family: 'Press Start 2P', monospace;
-            font-size: 0.65rem;
-            color: #a0aec0;
-        }
-
-        /* --- SECTION ATAS: HERO, MAP, & LEVELS --- */
-        .top-section {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 15px;
-        }
-        @media (max-width: 768px) { .top-section { grid-template-columns: 1fr; } }
-
-        .panel-box {
-            background: var(--bg-card);
-            border: 3px solid var(--border-pixel);
-            border-radius: 8px;
-            padding: 15px;
-            display: flex;
-            flex-direction: column;
-        }
-        .panel-title {
-            font-family: 'Press Start 2P', monospace;
-            font-size: 0.75rem;
-            text-align: center;
-            color: var(--accent-gold);
-            margin-bottom: 15px;
-            text-transform: uppercase;
-        }
-
-        /* --- PANEL 1: HERO START --- */
-        .hero-display {
-            text-align: center;
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
             align-items: center;
-        }
-        .avatar-pixel-large {
-            font-size: 4.5rem;
-            margin: 20px 0;
-            filter: drop-shadow(0px 4px 0px #000);
-        }
-        .dialog-box {
-            background: #000;
-            border: 2px solid #fff;
-            padding: 10px;
-            border-radius: 4px;
-            font-size: 0.85rem;
-            line-height: 1.4;
-            text-align: left;
-            width: 100%;
-        }
-
-        /* --- PANEL 2: MAP PATH --- */
-        .map-path {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 8px;
-        }
-        .map-step {
-            background: var(--bg-darker);
-            border: 2px solid var(--border-pixel);
-            padding: 6px 12px;
-            font-size: 0.7rem;
-            font-family: 'Press Start 2P', monospace;
-            border-radius: 4px;
-            width: 80%;
-            text-align: center;
-        }
-        .map-step.current { border-color: var(--accent-pink); color: var(--accent-pink); }
-        .map-dots { color: var(--border-pixel); font-weight: bold; }
-
-        /* --- PANEL 3: LEVELS STATUS --- */
-        .level-list { display: flex; flex-direction: column; gap: 8px; }
-        .level-item {
-            background: var(--bg-darker);
-            border-left: 4px solid var(--accent-green);
-            padding: 8px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 0.85rem;
-        }
-        .level-item.locked { border-left-color: #4a5568; opacity: 0.5; }
-
-        /* --- SECTION TENGAH: MINI GAMES INTERAKTIF --- */
-        .section-header-inside {
-            font-family: 'Press Start 2P', monospace;
-            font-size: 0.9rem;
-            text-align: center;
-            color: var(--accent-pink);
-            margin: 10px 0;
-        }
-        .games-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-        }
-        @media (max-width: 600px) { .games-grid { grid-template-columns: 1fr; } }
-
-        .game-card {
-            background: var(--bg-card);
-            border: 3px solid var(--border-pixel);
-            border-radius: 8px;
+            min-height: 100vh;
             padding: 15px;
         }
-        .btn-option {
+
+        #game-container {
             width: 100%;
-            background: var(--bg-darker);
-            color: #fff;
-            border: 1px solid var(--border-pixel);
-            padding: 10px;
-            margin-top: 8px;
-            border-radius: 4px;
-            cursor: pointer;
-            text-align: left;
-            font-size: 0.85rem;
-            transition: 0.2s;
-        }
-        .btn-option:hover { background: var(--border-pixel); color: var(--accent-gold); }
-
-        /* --- SECTION BAWAH: REWARDS & ENDING --- */
-        .rewards-row {
-            display: flex;
-            justify-content: space-around;
-            flex-wrap: wrap;
-            gap: 10px;
-            background: var(--bg-card);
-            padding: 15px;
-            border: 2px dashed var(--border-pixel);
-        }
-        .reward-badge {
-            text-align: center;
-            font-size: 0.7rem;
-            font-family: 'Press Start 2P', monospace;
-            background: var(--bg-darker);
-            padding: 10px;
-            border-radius: 4px;
-            min-width: 100px;
+            max-width: 500px;
+            height: 750px;
+            background: #111;
+            border: 4px solid #4a5568;
+            border-radius: 16px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.7);
         }
 
-        /* --- FOOTER / CREDIT --- */
-        .credit-box {
-            background: #111115;
-            border: 3px solid var(--accent-gold);
-            padding: 20px;
-            border-radius: 8px;
-            text-align: center;
+        .screen {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            display: none;
+            flex-direction: column;
+            padding: 25px;
         }
-        .btn-action {
+        .screen.active { display: flex; }
+
+        /* --- BUTTONS --- */
+        .btn-retro {
             font-family: 'Press Start 2P', monospace;
+            font-size: 0.8rem;
+            padding: 15px 20px;
             background: var(--accent-green);
             color: #000;
-            border: none;
-            padding: 12px 24px;
+            border: 3px solid #fff;
+            border-radius: 8px;
+            cursor: pointer;
+            text-align: center;
+            text-transform: uppercase;
+            box-shadow: 0 4px 0px #22543d;
+            transition: 0.1s;
+        }
+        .btn-retro:hover { transform: translateY(2px); box-shadow: 0 2px 0px #22543d; }
+
+        /* --- SCREEN 1: INTRO --- */
+        #scr-intro {
+            background: linear-gradient(to bottom, #1a202c, #2d3748);
+            justify-content: space-between;
+            align-items: center;
+            text-align: center;
+        }
+        .character-box { position: relative; margin-top: 40px; }
+        .avatar-live { font-size: 6rem; animation: float 2s ease-in-out infinite alternate; }
+        @keyframes float { from { transform: translateY(0); } to { transform: translateY(-15px); } }
+        
+        .dialog-bubble {
+            background: #fff;
+            color: #000;
+            border: 3px solid var(--accent-gold);
+            padding: 15px;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            position: relative;
+            margin-top: 20px;
+            text-align: left;
+        }
+
+        /* --- SCREEN 2: INTERACTIVE MAP --- */
+        #scr-map {
+            background: linear-gradient(to bottom, #63b3ed, #3182ce); /* Efek warna laut & langit pulau */
+            padding: 15px;
+        }
+        .island-map {
+            width: 100%;
+            height: 100%;
+            background: #48bb78; /* Pulau Hijau */
+            border: 8px solid #ecc94b; /* Pantai Pasir Kuning */
+            border-radius: 30px;
+            position: relative;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.3);
+        }
+        .map-title {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.75rem;
+            background: rgba(0,0,0,0.6);
+            padding: 8px;
+            text-align: center;
+            border-radius: 8px;
+            margin: 10px;
+        }
+        .map-node {
+            position: absolute;
+            width: 55px;
+            height: 55px;
+            background: #fff;
+            color: #000;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
             font-size: 0.8rem;
             cursor: pointer;
-            margin-top: 15px;
-            border-radius: 4px;
+            border: 3px solid var(--box-bg);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            transition: 0.2s;
         }
-        .btn-action:hover { background: #fff; box-shadow: 0 0 12px var(--accent-green); }
+        .map-node:hover { transform: scale(1.15); }
+        .map-node.locked { background: #718096; color: #a0aec0; cursor: not-allowed; opacity: 0.7; }
+        
+        /* Koordinat posisi rute pulau (meliuk-liuk) */
+        #node-1 { bottom: 50px; left: 40px; background: #fc8181; }
+        #node-2 { bottom: 150px; right: 50px; }
+        #node-3 { top: 250px; left: 60px; }
+        #node-4 { top: 120px; right: 60px; background: #ecc94b; font-size: 1.2rem; }
+
+        /* Path jalur garis antar level */
+        .svg-path { position: absolute; width: 100%; height: 100%; top: 0; left: 0; pointer-events: none; }
+
+        /* --- SCREEN 3: GAMEPLAY / DIALOG SEMESTER --- */
+        #scr-gameplay { background: var(--bg-game); justify-content: space-between; }
+        .mini-game-box { background: var(--box-bg); padding: 15px; border-radius: 8px; border: 2px solid #4a5568; margin-top: 15px; }
+        .quiz-option {
+            width: 100%; background: #1a202c; color: #fff; border: 1px solid #4a5568;
+            padding: 12px; margin-top: 8px; border-radius: 6px; cursor: pointer; text-align: left;
+        }
+        .quiz-option:hover { background: #4a5568; }
+
+        /* --- SCREEN 4: PHOTO MEMORIES --- */
+        #scr-memories { background: #111; justify-content: space-between; align-items: center; }
+        .photo-frame {
+            width: 100%; height: 350px; background: #2d3748; border: 10px solid #fff;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5); display: flex; justify-content: center;
+            align-items: center; position: relative; overflow: hidden;
+        }
+        .photo-placeholder { text-align: center; color: #a0aec0; padding: 20px; font-size: 0.9rem; }
+        /* Kamu nanti bisa ganti src img ini dengan link foto asli kamu di github */
+        .photo-frame img { width: 100%; height: 100%; object-fit: cover; display: none; }
+
+        /* --- SCREEN 5: ENDING LETTER --- */
+        #scr-ending { background: #2d3748; overflow-y: auto; display: none; padding: 20px; }
+        #scr-ending.active { display: block; }
+        .letter-paper { background: #fff; color: #333; padding: 20px; border-radius: 8px; box-shadow: 0 10px 20px rgba(0,0,0,0.3); line-height: 1.6; }
 
         audio { display: none; }
     </style>
@@ -231,124 +180,203 @@
     <!-- Musik Latar Otomatis -->
     <audio id="bgm" loop src="https://assets.mixkit.co/music/preview/mixkit-beautiful-dream-493.mp3"></audio>
 
-    <div class="game-wrapper">
+    <div id="game-container">
         
-        <!-- HEADER -->
-        <div class="header-banner">
-            <h1 class="retro-title">MEMORY JOURNEY</h1>
-            <p class="retro-subtitle">~ the game of ilham's memories ~</p>
+        <!-- SCREEN 1: INTRO PERKENALAN -->
+        <div id="scr-intro" class="screen active">
+            <div class="character-box">
+                <div class="avatar-live">👨‍🎓</div>
+                <div class="dialog-bubble">
+                    <strong>Hai! Aku Ilham.</strong><br>
+                    Aku mahasiswa baru jurusan Komunikasi dan Penyiaran Islam di Universitas KH. Mukhtar Syafaat. Ayo ikuti perjalananku sampai sarjana!
+                </div>
+            </div>
+            <button class="btn-retro" style="width: 80%;" onclick="goToMap()">LET'S GO! 🚀</button>
         </div>
 
-        <!-- TOP LAYOUT TRIPLE PANEL -->
-        <div class="top-section">
+        <!-- SCREEN 2: MAP PULAU INTERAKTIF -->
+        <div id="scr-map" class="screen">
+            <div class="island-map">
+                <div class="map-title">MAP PERJALANAN ILHAM</div>
+                
+                <!-- SVG Jalur Garis meliuk antar pulau -->
+                <svg class="svg-path">
+                    <path d="M 95 620 Q 250 500 395 520 T 115 280 T 385 150" fill="none" stroke="#fff" stroke-width="4" stroke-dasharray="10"/>
+                </svg>
+
+                <!-- Tombol Level Lingkaran -->
+                <div class="map-node" id="node-1" onclick="openSemester(1)">Smt 1</div>
+                <div class="map-node locked" id="node-2" onclick="openSemester(2)">Smt 2</div>
+                <div class="map-node locked" id="node-3" onclick="openSemester(3)">Smt 3</div>
+                <div class="map-node locked" id="node-4" onclick="openSemester(4)">🎓</div>
+            </div>
+        </div>
+
+        <!-- SCREEN 3: GAMEPLAY & MINI QUEST -->
+        <div id="scr-gameplay" class="screen">
+            <div>
+                <div style="font-size: 3.5rem; text-align: center; margin: 15px 0;">👨‍💻</div>
+                <div class="dialog-bubble" style="background:#1a202c; color:#fff; border-color:var(--accent-pink);" id="game-talk">
+                    <!-- Text diisi dinamis oleh JS -->
+                </div>
+
+                <!-- BOX MINI GAME TEBAK-TEBAKAN -->
+                <div class="mini-game-box" id="game-box">
+                    <p style="font-weight: bold; margin-bottom: 10px; color: var(--accent-gold);" id="game-question">Misi Teka-teki:</p>
+                    <div id="game-options"></div>
+                </div>
+            </div>
+            <button class="btn-retro" id="btn-continue-game" style="display:none;">LANJUTKAN ➔</button>
+        </div>
+
+        <!-- SCREEN 4: GALERI FOTO KENANGAN -->
+        <div id="scr-memories" class="screen">
+            <h2 style="font-family:'Press Start 2P'; font-size:0.8rem; color:var(--accent-gold); text-align:center;">FOTO KENANGAN UNLOCKED</h2>
             
-            <!-- PANEL 1: HERO DISPLAY -->
-            <div class="panel-box">
-                <div class="panel-title">MAIN HERO</div>
-                <div class="hero-display">
-                    <div class="avatar-pixel-large">👨‍🎓</div>
-                    <div class="dialog-box">
-                        <span style="color:var(--accent-gold); font-weight:bold;">Ilham:</span><br>
-                        "Hai, perjalananku dimulai dari sini. Mari kita lihat sejauh mana melangkah."
-                    </div>
-                </div>
+            <div class="photo-frame">
+                <!-- Ganti src di bawah ini dengan link foto asli kamu di GitHub nanti -->
+                <img id="memory-img" src="" alt="Foto Kenangan">
+                <div class="photo-placeholder" id="photo-text">Menyiapkan album foto semester...</div>
             </div>
 
-            <!-- PANEL 2: MAP JOURNEY -->
-            <div class="panel-box">
-                <div class="panel-title">MAP PATH</div>
-                <div class="map-path">
-                    <div class="map-step">🏠 Rumah</div>
-                    <div class="map-dots">⋮</div>
-                    <div class="map-step">📝 PKKMB</div>
-                    <div class="map-dots">⋮</div>
-                    <div class="map-step current">📚 Kuliah</div>
-                    <div class="map-dots">⋮</div>
-                    <div class="map-step">📄 Skripsi</div>
-                    <div class="map-dots">⋮</div>
-                    <div class="map-step">🎓 Graduation</div>
-                </div>
-            </div>
-
-            <!-- PANEL 3: LEVELS -->
-            <div class="panel-box">
-                <div class="panel-title">LEVELS STATUS</div>
-                <div class="level-list">
-                    <div class="level-item">✅ Smt 1: Maba Camp</div>
-                    <div class="level-item">✅ Smt 3: UTS Crisis</div>
-                    <div class="level-item">✅ Smt 6: KKN Village</div>
-                    <div class="level-item current" style="color: var(--accent-pink);">⏳ Smt 7: Final Boss</div>
-                    <div class="level-item locked">🔒 Smt 8: S.Sos Title</div>
-                </div>
-            </div>
-
+            <p style="text-align: center; font-style: italic; font-size: 0.9rem;" id="memory-desc"></p>
+            <button class="btn-retro" style="width:100%;" id="btn-next-memory">BUKA LEVEL SELANJUTNYA 🔓</button>
         </div>
 
-        <!-- INNER SECTION: MINI GAMES -->
-        <h2 class="section-header-inside">🎮 MAIN QUEST INTERAKTIF 🎮</h2>
-        <div class="games-grid">
+        <!-- SCREEN 5: ENDING WISUDA & SURAT KELULUSAN -->
+        <div id="scr-ending" class="screen">
+            <div style="text-align: center; font-size: 4rem; margin-bottom: 15px;">🎓✨</div>
+            <h2 style="font-family:'Press Start 2P'; font-size:1.1rem; text-align:center; color:var(--accent-gold); margin-bottom: 20px;">CONGRATULATIONS!</h2>
             
-            <!-- GAME CARD 1 -->
-            <div class="game-card">
-                <h3 style="font-size:0.9rem; color:var(--accent-gold); margin-bottom:10px;">Quest 1: Ujian Metodologi</h3>
-                <p style="font-size:0.85rem;">Dosen menanyakan definisi pendekatan kualitatif saat seminar. Respon Ilham:</p>
-                <button class="btn-option" onclick="playCorrect()">A. Menjelaskan secara teoritis dan lugas</button>
-                <button class="btn-option" onclick="playCorrect()">B. Jawab sebisanya sambil tersenyum tenang</button>
+            <div class="letter-paper">
+                <h3 style="text-align: center; margin-bottom: 15px; color: #2d3748;">Letter For Ilham, S.Sos</h3>
+                <p style="font-size: 0.95rem; margin-bottom: 15px;">
+                    Selamat atas kelulusannya! Gelar Sarjana Sosial (S.Sos) ini adalah bukti nyata dari setiap tetes keringat, malam-malam tanpa tidur, dan keteguhan hati kamu melewati setiap semester di Universitas KH. Mukhtar Syafaat.
+                </p>
+                <p style="font-size: 0.95rem; margin-bottom: 15px;">
+                    Perjalanan di kampus mungkin telah selesai, namun petualangan sesungguhnya di peta kehidupan yang baru saja dimulai. Tetaplah bersinar dan melangkah dengan bangga!
+                </p>
+                <p style="text-align: right; font-weight: bold; margin-top: 20px; color:#4a5568;">With Pride & Joy, ✨</p>
             </div>
-
-            <!-- GAME CARD 2 -->
-            <div class="game-card">
-                <h3 style="font-size:0.9rem; color:var(--accent-gold); margin-bottom:10px;">Quest 2: Dilema Deadline</h3>
-                <p style="font-size:0.85rem;">Revisi bab 4 menumpuk bersamaan dengan jadwal nongkrong malam. Solusi Ilham:</p>
-                <button class="btn-option" onclick="playCorrect()">A. Begadang ngopi sambil ngetik maraton</button>
-                <button class="btn-option" onclick="playCorrect()">B. Cicil revisi subuh demi ACC secepatnya</button>
-            </div>
-
-        </div>
-
-        <!-- REWARDS -->
-        <h2 class="section-header-inside">🏆 MEMORY CARD REWARDS 🏆</h2>
-        <div class="rewards-row">
-            <div class="reward-badge" style="color: var(--accent-green);">🏅 MABA SURVIVOR</div>
-            <div class="reward-badge" style="color: var(--accent-green);">🏅 UTS PASSED</div>
-            <div class="reward-badge" style="color: var(--accent-green);">🏅 KKN HERO</div>
-            <div class="reward-badge" style="color: var(--accent-pink);">⏳ SKRIPSI ACC</div>
-        </div>
-
-        <!-- ENDING CEREMONY & CREDIT -->
-        <div class="credit-box">
-            <h2 style="font-family: 'Press Start 2P', monospace; font-size: 1rem; color: var(--accent-gold); margin-bottom: 10px;">THE GRADUATION STAGE</h2>
-            <p style="font-size: 0.9rem; line-height: 1.6;">
-                Empat tahun penuh perjuangan terbayar lunas di lembar akhir. Toga dipindahkan, selamat melangkah di level petualangan hidup yang berikutnya, <strong>Ilham, S.Sos!</strong>
-            </p>
-            <button class="btn-action" onclick="claimGraduation()">TERIMA IJASAH & MERCON 🎉</button>
+            
+            <button class="btn-retro" style="width:100%; margin-top: 25px; background:var(--accent-pink);" onclick="location.reload()">MAIN LAGI 🔄</button>
         </div>
 
     </div>
 
     <script>
-        // Memutar musik saat interaksi pertama
-        document.body.addEventListener('click', function() {
-            const audio = document.getElementById('bgm');
-            if(audio.paused) audio.play();
-        });
+        let currentActiveSemester = 1;
 
-        function playCorrect() {
-            alert("Quest Berhasil! Stamina Ilham bertambah +20! 🌟");
+        // DATA MATERI TIAP SEMESTER
+        const semesterData = {
+            1: {
+                talk: "Wah, nggak nyangka aku udah kuliah aja! Semester 1 tantangannya masih aman lah yaaa. Tapi denger-denger tugas KPI mulai bikin pusing. Selesaikan teka-teki ini dulu yuk buat unlock Semester 2!",
+                question: "Apa singkatan dari KPI dalam program studi Ilham?",
+                options: ["Komunikasi dan Penyiaran Islam", "Kreativitas Penyiaran Indonesia", "Komunitas Pemuda Islam"],
+                correct: 0,
+                photoDesc: "Kenangan Semester 1: Masa-masa adaptasi jadi maba murni yang masih polos dan rajin mencatat semua info dosen.",
+                imgUrl: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=500" // Contoh gambar wisuda/kuliah umum
+            },
+            2: {
+                talk: "Masuk Semester 2 nih! Mulai dapet materi teknik siaran dan komunikasi massa. Seru tapi mulai ngerasa overload tugas kelompok. Bantuin jawab kuis ini!",
+                question: "Alat utama yang sangat penting untuk siaran podcast atau radio adalah...",
+                options: ["Kamera Drone", "Microphone", "Mesin Tik"],
+                correct: 1,
+                photoDesc: "Kenangan Semester 2: Sesi kerja kelompok makrab dan begadang bikin skrip siaran pertama.",
+                imgUrl: "https://images.unsplash.com/photo-1517842645767-c639042777db?w=500"
+            },
+            3: {
+                talk: "Semester 3 & Seterusnya! Wah, ini level final boss-nya tugas analisis sosial dan persiapan magang/KKN. Ujian di depan mata, pilih respon terbaik!",
+                question: "Metode penelitian yang fokus pada pemahaman fenomena sosial secara mendalam disebut metode...",
+                options: ["Kuantitatif (Angka)", "Kualitatif (Deskriptif)", "Metode Sulap"],
+                correct: 1,
+                photoDesc: "Kenangan Perjuangan: Lembar revisi, kejar tanda tangan dosen, hingga momen yudisium kelulusan.",
+                imgUrl: "https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=500"
+            }
+        };
+
+        function goToMap() {
+            document.getElementById('bgm').play();
+            changeScreen('scr-map');
         }
 
-        function claimGraduation() {
-            // Efek selebrasi kembang api melimpah
-            var duration = 4 * 1000;
-            var end = Date.now() + duration;
+        function changeScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(screenId).classList.add('active');
+        }
 
-            (function frame() {
-                window.confetti({ particleCount: 3, angle: 60, spread: 55, origin: { x: 0 } });
-                window.confetti({ particleCount: 3, angle: 120, spread: 55, origin: { x: 1 } });
+        function openSemester(num) {
+            if (num > currentActiveSemester) {
+                alert("Eitss! Selesaikan level/semester sebelumnya dulu ya untuk membuka jalur pulau ini! 🔒");
+                return;
+            }
+            if (num === 4) {
+                triggerEndingWisuda();
+                return;
+            }
 
-                if (Date.now() < end) {
-                    requestAnimationFrame(frame);
+            // Setup gameplay semester
+            changeScreen('scr-gameplay');
+            let data = semesterData[num];
+            document.getElementById('game-talk').innerHTML = `<strong>Ilham:</strong><br>"${data.talk}"`;
+            document.getElementById('game-question').innerText = data.question;
+            
+            let optionsHtml = "";
+            data.options.forEach((opt, idx) => {
+                optionsHtml += `<button class="quiz-option" onclick="checkAnswer(${num}, ${idx})">${opt}</button>`;
+            });
+            document.getElementById('game-options').innerHTML = optionsHtml;
+            document.getElementById('btn-continue-game').style.display = 'none';
+        }
+
+        function checkAnswer(semNum, chosenIdx) {
+            let data = semesterData[semNum];
+            if (chosenIdx === data.correct) {
+                alert("JAWABAN BENAR! 🎉 Kamu berhasil membuka memori semester ini.");
+                document.getElementById('game-options').innerHTML = "<p style='color:var(--accent-green); font-weight:bold;'>Quest Complete! Memori siap dibuka.</p>";
+                
+                let nextBtn = document.getElementById('btn-continue-game');
+                nextBtn.style.display = 'block';
+                nextBtn.onclick = () => showMemories(semNum);
+            } else {
+                alert("Jawaban salah, Ilham gagal fokus! Coba ingat-ingat lagi materi kuliahnya. 🤔");
+            }
+        }
+
+        function showMemories(semNum) {
+            changeScreen('scr-memories');
+            let data = semesterData[semNum];
+            
+            // Set foto dan teks deskripsi kenangan
+            let imgEl = document.getElementById('memory-img');
+            imgEl.src = data.imgUrl;
+            imgEl.style.display = 'block';
+            document.getElementById('photo-text').style.display = 'none';
+            document.getElementById('memory-desc').innerText = data.photoDesc;
+
+            // Atur tombol pembuka level berikutnya di Map
+            document.getElementById('btn-next-memory').onclick = () => {
+                currentActiveSemester = semNum + 1;
+                // Buka gembok node berikutnya di peta
+                let nextNode = document.getElementById(`node-${currentActiveSemester}`);
+                if (nextNode) {
+                    nextNode.classList.remove('locked');
+                    if(currentActiveSemester === 4) nextNode.style.background = '#48bb78';
                 }
+                changeScreen('scr-map');
+            };
+        }
+
+        function triggerEndingWisuda() {
+            changeScreen('scr-ending');
+            
+            // Ledakan Confetti Bertubi-tubi
+            var duration = 5 * 1000;
+            var end = Date.now() + duration;
+            (function frame() {
+                window.confetti({ particleCount: 4, angle: 60, spread: 55, origin: { x: 0 } });
+                window.confetti({ particleCount: 4, angle: 120, spread: 55, origin: { x: 1 } });
+                if (Date.now() < end) { requestAnimationFrame(frame); }
             }());
         }
     </script>
