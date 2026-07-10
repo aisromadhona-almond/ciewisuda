@@ -20,8 +20,9 @@
             background: rgba(15, 23, 42, 0.75); backdrop-filter: blur(8px);
             padding: 12px 24px; border-radius: 30px; border: 1px solid rgba(255,255,255,0.15);
             text-align: center; pointer-events: none; box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            z-index: 10; width: 90%; max-width: 400px;
         }
-        .game-header h1 { font-size: 1.1rem; letter-spacing: 1px; color: #6366f1; font-weight: 700; }
+        .game-header h1 { font-size: 1rem; letter-spacing: 1px; color: #6366f1; font-weight: 700; }
         .game-header p { font-size: 0.75rem; color: #94a3b8; margin-top: 2px; }
 
         /* --- BALON DIALOG GAYA SAKURA SIMULATOR --- */
@@ -31,6 +32,7 @@
             border: 2px solid #6366f1; border-radius: 16px; padding: 18px;
             box-shadow: 0 15px 35px rgba(0,0,0,0.6); backdrop-filter: blur(10px);
             display: flex; flex-direction: column; gap: 12px; transition: all 0.3s ease;
+            z-index: 10;
         }
         .speaker-name { font-weight: 700; color: #6366f1; font-size: 0.95rem; display: flex; align-items: center; gap: 6px; }
         .dialog-text { font-size: 0.9rem; line-height: 1.5; color: #e2e8f0; }
@@ -54,10 +56,12 @@
         /* --- KONTROLER GERAKAN (D-PAD) --- */
         .controls-overlay {
             position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%);
-            display: flex; gap: 15px; background: rgba(0,0,0,0.2); padding: 10px; border-radius: 20px;
+            display: grid; grid-template-columns: repeat(3, 55px); grid-template-rows: repeat(3, 55px);
+            gap: 8px; background: rgba(0,0,0,0.4); padding: 10px; border-radius: 20px; z-index: 10;
+            display: none;
         }
         .ctrl-btn {
-            width: 55px; height: 55px; background: rgba(255,255,255,0.15); backdrop-filter: blur(5px);
+            background: rgba(255,255,255,0.15); backdrop-filter: blur(5px);
             border: 1px solid rgba(255,255,255,0.2); border-radius: 50%; color: white;
             font-size: 1.2rem; display: flex; align-items: center; justify-content: center;
             cursor: pointer; user-select: none; transition: 0.1s;
@@ -69,6 +73,7 @@
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(11, 12, 16, 0.95); display: none;
             flex-direction: column; justify-content: center; align-items: center; padding: 20px;
+            z-index: 20;
         }
         .memory-screen.active { display: flex; }
         .frame-3d {
@@ -83,7 +88,7 @@
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             background: linear-gradient(135deg, #0f172a, #1e1b4b); display: none;
             flex-direction: column; justify-content: center; align-items: center; padding: 25px;
-            overflow-y: auto;
+            overflow-y: auto; z-index: 20;
         }
         .ending-screen.active { display: flex; }
         .paper-letter {
@@ -102,7 +107,7 @@
 
     <div class="game-header">
         <h1 id="stage-title">CAMPUS HUB - MABA STAGE</h1>
-        <p>Gunakan tombol bawah untuk menggerakkan Ilham tampan mendekati Pos</p>
+        <p>Ikuti petualangan cerita perkuliahan Ilham</p>
     </div>
 
     <div class="dialog-container" id="dialog-box">
@@ -120,10 +125,15 @@
     </div>
 
     <div class="controls-overlay" id="joystick">
-        <button class="ctrl-btn" onmousedown="setMove('left', true)" onmouseup="setMove('left', false)" ontouchstart="setMove('left', true)" ontouchend="setMove('left', false)">◀</button>
+        <div></div>
         <button class="ctrl-btn" onmousedown="setMove('forward', true)" onmouseup="setMove('forward', false)" ontouchstart="setMove('forward', true)" ontouchend="setMove('forward', false)">▲</button>
-        <button class="ctrl-btn" onmousedown="setMove('back', true)" onmouseup="setMove('back', false)" ontouchstart="setMove('back', true)" ontouchend="setMove('back', false)">▼</button>
+        <div></div>
+        <button class="ctrl-btn" onmousedown="setMove('left', true)" onmouseup="setMove('left', false)" ontouchstart="setMove('left', true)" ontouchend="setMove('left', false)">◀</button>
+        <div style="background: rgba(255,255,255,0.1); border-radius: 50%;"></div>
         <button class="ctrl-btn" onmousedown="setMove('right', true)" onmouseup="setMove('right', false)" ontouchstart="setMove('right', true)" ontouchend="setMove('right', false)">▶</button>
+        <div></div>
+        <button class="ctrl-btn" onmousedown="setMove('back', true)" onmouseup="setMove('back', false)" ontouchstart="setMove('back', true)" ontouchend="setMove('back', false)">▼</button>
+        <div></div>
     </div>
 
     <div class="memory-screen" id="memory-view">
@@ -147,7 +157,7 @@
             <p style="color:#334155;">
                 Dunia perkuliahan 3D ini telah sukses kamu taklukan dengan gemilang. Sekarang, saatnya melangkah tegap memasuki gerbang dunia nyata dengan sejuta potensi hebatmu!
             </p>
-            <p style="text-align:right; font-weight:700; margin-top:20px; color:#4f46e5;">Warmest Hugs, ✨</p>
+            <p style="text-align:right; font-weight:700; margin-top:20px; color:#4f46e5;">With Love, Bu Adel ✨</p>
         </div>
         <button class="btn-next" style="margin-top:25px; background:#ec4899; box-shadow:0 4px 12px rgba(236,72,153,0.4);" onclick="location.reload()">MAIN LAGI 🔄</button>
     </div>
@@ -157,30 +167,31 @@
         let storyStep = 0;
         let currentSemester = 1;
         
+        // Link otomatis membaca file foto asli yang ada di dalam repository github kamu
         const gameData = {
             1: {
                 title: "CAMPUS HUB - SEMESTER 1",
                 talk: "Wah, nggak nyangka aku udah masuk dunia perkuliahan! Semester 1 rasanya masih adaptasi ya, lingkungan baru di KPI aman lah yaaa. Selesaikan tantangan ini untuk lanjut!",
                 q: "Apa fokus utama jurusan Komunikasi dan Penyiaran Islam?",
                 opts: ["Penyiaran media & dakwah", "Sains murni roket"], ans: 0,
-                desc: "Kenangan Semester 1: Langkah gagah pertama Ilham masuk gerbang kampus Universitas KH. Mukhtar Syafaat sebagai mahasiswa KPI sejati.",
-                img: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=500"
+                desc: "Kenangan Semester 1: Langkah pertama Ilham masuk kuliah sebagai maba KPI yang penuh ambisi.",
+                img: "Screenshot (1027).png"
             },
             2: {
                 title: "CAMPUS HUB - SEMESTER 2",
                 talk: "Masuk Semester 2! Materi siaran, public speaking, dan produksi media mulai terasa menantang nih. Harus tetap fokus tampan!",
                 q: "Alat komunikasi audio krusial untuk kegiatan broadcasting radio adalah...",
                 opts: ["Lensa Proyektor", "Microphone"], ans: 1,
-                desc: "Kenangan Semester 2: Keseruan praktik perdana memegang program siaran di dalam ruangan laboratorium radio penyiaran kampus.",
-                img: "https://images.unsplash.com/photo-1517842645767-c639042777db?w=500"
+                desc: "Kenangan Semester 2: Sesi seru diskusi dan tugas kelompok siaran penyiaran.",
+                img: "Screenshot (1028).png"
             },
             3: {
                 title: "CAMPUS HUB - SEMESTER 7 (FINAL BOSS)",
                 talk: "Gila, waktu cepat banget berlalu! Kita sudah sampai di fase pengerjaan skripsi, penelitian sosial empiris, dan persiapan sidang sarjana!",
                 q: "Pendekatan penelitian riset sosial berupa narasi deskriptif mendalam dinamakan pendekatan...",
                 opts: ["Kualitatif", "Kuantitatif Angka"], ans: 0,
-                desc: "Kenangan Perjuangan Akhir: Malam suntuk lembar revisi skripsi, tumpukan berkas ACC, hingga pengumuman kelulusan Yudisium yang mengharukan.",
-                img: "https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=500"
+                desc: "Kenangan Perjuangan Akhir: Malam suntuk revisi skripsi demi mengejar kelulusan sarjana impian.",
+                img: "musmadin.jpeg"
             }
         };
 
@@ -204,16 +215,16 @@
             renderer.shadowMap.enabled = true;
             container.appendChild(renderer.domElement);
 
-            // Pencahayaan Estetik Cinema
-            const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+            // Pencahayaan
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
             scene.add(ambientLight);
             const dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
             dirLight.position.set(10, 20, 10);
             scene.add(dirLight);
 
-            // Lantai Lapangan Universitas
+            // Lantai Lapangan
             const floorGeo = new THREE.PlaneGeometry(100, 100);
-            const floorMat = new THREE.MeshStandardMaterial({ color: #1e293b, roughness: 0.8 });
+            const floorMat = new THREE.MeshStandardMaterial({ color: 0x1e293b, roughness: 0.8 });
             const floor = new THREE.Mesh(floorGeo, floorMat);
             floor.rotation.x = -Math.PI / 2;
             scene.add(floor);
@@ -225,32 +236,32 @@
             pathLine.position.set(0, 0.01, -10);
             scene.add(pathLine);
 
-            // MEMBUAT MODEL KARAKTER ILHAM GANTENG (3D GEOMETRY COMPOSITION)
+            // MODEL KARAKTER ILHAM GANTENG
             playerGroup = new THREE.Group();
             
-            // 1. Badan Setelan Jas Biru Tua (Mirip Foto)
+            // Badan Setelan Jas Biru Tua (Mirip Foto)
             const bodyGeo = new THREE.CylinderGeometry(0.6, 0.4, 1.8, 16);
-            const bodyMat = new THREE.MeshStandardMaterial({ color: #1e3a8a, roughness: 0.5 }); // Navy suit color
+            const bodyMat = new THREE.MeshStandardMaterial({ color: 0x1e3a8a, roughness: 0.5 });
             const body = new THREE.Mesh(bodyGeo, bodyMat);
             body.position.y = 1.4;
             playerGroup.add(body);
 
-            // 2. Kepala & Leher
+            // Kepala
             const headGeo = new THREE.SphereGeometry(0.45, 32, 32);
-            const headMat = new THREE.MeshStandardMaterial({ color: #fbcfe8, roughness: 0.6 }); // Kulit bersih cerah
+            const headMat = new THREE.MeshStandardMaterial({ color: 0xfbcfe8, roughness: 0.6 });
             const head = new THREE.Mesh(headGeo, headMat);
             head.position.y = 2.6;
             playerGroup.add(head);
 
-            // 3. Rambut Wavy Curtain Tampan (Warna Hitam Pekat)
+            // Rambut Wavy Curtain Tampan (Warna Hitam)
             const hairGroup = new THREE.Group();
             const hairTopGeo = new THREE.SphereGeometry(0.48, 16, 16, 0, Math.PI*2, 0, Math.PI/2);
-            const hairMat = new THREE.MeshStandardMaterial({ color: #0f172a, roughness: 0.9 });
+            const hairMat = new THREE.MeshStandardMaterial({ color: 0x0f172a, roughness: 0.9 });
             const hairTop = new THREE.Mesh(hairTopGeo, hairMat);
             hairTop.position.set(0, 2.7, 0);
             hairGroup.add(hairTop);
 
-            // Poni Belah Tengah Tiruan
+            // Poni Belah Tengah
             const strandGeo = new THREE.BoxGeometry(0.2, 0.3, 0.2);
             const leftStrand = new THREE.Mesh(strandGeo, hairMat);
             leftStrand.position.set(-0.2, 2.5, 0.35);
@@ -261,15 +272,15 @@
             hairGroup.add(leftStrand, rightStrand);
             playerGroup.add(hairGroup);
 
-            // 4. Dasi Hitam Elegan (Sesuai Foto Referensi)
+            // Dasi Hitam
             const tieGeo = new THREE.ConeGeometry(0.08, 0.5, 4);
-            const tieMat = new THREE.MeshStandardMaterial({ color: #000000 });
+            const tieMat = new THREE.MeshStandardMaterial({ color: 0x000000 });
             const tie = new THREE.Mesh(tieGeo, tieMat);
             tie.position.set(0, 2.1, 0.5);
             tie.rotation.x = 0.1;
             playerGroup.add(tie);
 
-            // Kaki Setelan Celana
+            // Kaki
             const legGeo = new THREE.CylinderGeometry(0.15, 0.15, 0.7);
             const leftLeg = new THREE.Mesh(legGeo, bodyMat);
             leftLeg.position.set(-0.25, 0.35, 0);
@@ -280,47 +291,68 @@
             playerGroup.position.set(0, 0, 4);
             scene.add(playerGroup);
 
-            // POS TARGET SEMESTER (ZONA CAHAYA LINGKARAN BERPENDAR)
+            // POS TARGET SEMESTER (LINGKARAN BERPENDAR)
             const cpGeo = new THREE.CylinderGeometry(1.5, 1.5, 0.1, 32);
-            const cpMat = new THREE.MeshStandardMaterial({ color: #6366f1, emissive: #6366f1, emissiveIntensity: 0.5, transparent: true, opacity: 0.6 });
+            const cpMat = new THREE.MeshStandardMaterial({ color: 0x6366f1, emissive: 0x6366f1, emissiveIntensity: 0.5, transparent: true, opacity: 0.6 });
             checkpointMesh = new THREE.Mesh(cpGeo, cpMat);
             setCheckpointPosition();
             scene.add(checkpointMesh);
 
+            // Aktifkan Kendali Keyboard secara otomatis
+            window.addEventListener('keydown', handleKeyDown);
+            window.addEventListener('keyup', handleKeyUp);
             window.addEventListener('resize', onWindowResize);
             animate();
         }
 
         function setCheckpointPosition() {
-            // Posisi berangsur maju ke depan seiring bertambahnya level
-            if(currentSemester === 1) checkpointMesh.position.set(0, 0.05, -2);
-            if(currentSemester === 2) checkpointMesh.position.set(0, 0.05, -8);
-            if(currentSemester === 3) checkpointMesh.position.set(0, 0.05, -15);
+            if(currentSemester === 1) checkpointMesh.position.set(0, 0.05, -1);
+            if(currentSemester === 2) checkpointMesh.position.set(0, 0.05, -7);
+            if(currentSemester === 3) checkpointMesh.position.set(0, 0.05, -14);
         }
 
         function setMove(direction, isMoving) {
-            document.getElementById('bgm').play();
+            playBgmOnce();
             moveState[direction] = isMoving;
+        }
+
+        function handleKeyDown(e) {
+            playBgmOnce();
+            if (e.key === 'ArrowUp' || e.key === 'w') moveState.forward = true;
+            if (e.key === 'ArrowDown' || e.key === 's') moveState.back = true;
+            if (e.key === 'ArrowLeft' || e.key === 'a') moveState.left = true;
+            if (e.key === 'ArrowRight' || e.key === 'd') moveState.right = true;
+        }
+
+        function handleKeyUp(e) {
+            if (['ArrowUp', 'w'].includes(e.key)) moveState.forward = false;
+            if (['ArrowDown', 's'].includes(e.key)) moveState.back = false;
+            if (['ArrowLeft', 'a'].includes(e.key)) moveState.left = false;
+            if (['ArrowRight', 'd'].includes(e.key)) moveState.right = false;
+        }
+
+        function playBgmOnce() {
+            const audio = document.getElementById('bgm');
+            if(audio.paused) audio.play().catch(()=> {});
         }
 
         function animate() {
             requestAnimationFrame(animate);
 
-            // Pergerakan Posisi Karakter 3D
-            if (moveState.forward) playerGroup.position.z -= 0.08;
-            if (moveState.back) playerGroup.position.z += 0.08;
-            if (moveState.left) playerGroup.position.x -= 0.08;
-            if (moveState.right) playerGroup.position.x += 0.08;
+            if (storyStep === 1) {
+                if (moveState.forward) playerGroup.position.z -= 0.08;
+                if (moveState.back) playerGroup.position.z += 0.08;
+                if (moveState.left) playerGroup.position.x -= 0.08;
+                if (moveState.right) playerGroup.position.x += 0.08;
+            }
 
-            // Efek Animasi Mengambang pada Pos Penanda Lingkaran
-            checkpointMesh.style = ""; 
             checkpointMesh.rotation.y += 0.01;
 
-            // Kamera Mengikuti Pergerakan Ilham (Gaya Kamera Sakura Simulator)
-            camera.position.set(playerGroup.position.x, playerGroup.position.y + 6, playerGroup.position.z + 9);
+            // Kamera Mengikuti Ilham
+            camera.position.set(playerGroup.position.x, playerGroup.position.y + 6, playerGroup.position.z + 8);
             camera.lookAt(playerGroup.position.x, playerGroup.position.y + 1.5, playerGroup.position.z);
 
-            // DETEKSI COLLISION: Ketika Ilham menginjak lingkaran Semester
+            // Deteksi tabrakan
             if (storyStep === 1) {
                 let distance = playerGroup.position.distanceTo(checkpointMesh.position);
                 if (distance < 1.6) {
@@ -337,26 +369,25 @@
             renderer.setSize(window.innerWidth, window.innerHeight);
         }
 
-        // --- SISTEM ALUR MANAGER SKRIP DIALOG ---
+        // --- STORY LOGIC ---
         function advanceStory() {
             if (storyStep === 0) {
-                // Selesai Perkenalan Maba, Masuk Mode Eksplorasi Gerak Jalan
                 storyStep = 1;
                 document.getElementById('dialog-box').style.display = 'none';
-                document.getElementById('stage-title').innerText = "MISI: JALANKAN ILHAM MASUK KE LINGKARAAN CAHAYA";
-                init3D(); // Aktifkan Render 3D Canvas
+                document.getElementById('joystick').style.display = 'grid'; // Tampilkan D-Pad
+                document.getElementById('stage-title').innerText = "MISI: JALANKAN ILHAM KE AREA BULATAN UNGU";
+                init3D();
             }
         }
 
         function triggerSemesterQuiz() {
-            storyStep = 2; // Kunci kontroler jalan sementara kuis berlangsung
+            storyStep = 2; // Kunci jalan kaki
             moveState = { forward: false, back: false, left: false, right: false };
             
             let data = gameData[currentSemester];
             document.getElementById('stage-title').innerText = data.title;
             document.getElementById('dialog-content').innerText = data.talk;
             
-            // Render Pilihan Jawaban Ujian Kuis
             let optionsHtml = "";
             data.opts.forEach((option, idx) => {
                 optionsHtml += `<button class="quiz-btn" onclick="verifyAnswer(${idx})">${option}</button>`;
@@ -371,16 +402,14 @@
         function verifyAnswer(chosenIdx) {
             let data = gameData[currentSemester];
             if (chosenIdx === data.ans) {
-                // Jawaban Benar -> Tampilkan Pop-Up Galeri Foto Kenangan
                 document.getElementById('quiz-wrapper').style.display = 'none';
                 document.getElementById('dialog-box').style.display = 'none';
                 
-                // Isi Konten Galeri Foto
                 document.getElementById('memory-photo').src = data.img;
                 document.getElementById('memory-caption').innerText = data.desc;
                 document.getElementById('memory-view').classList.add('active');
             } else {
-                alert("Waduh, jawaban salah! Ilham harus ingat kembali materi kuliahnya agar tetap ganteng pintar. Coba lagi!");
+                alert("Jawaban salah! Yuk coba pilih opsi yang lain.");
             }
         }
 
@@ -389,15 +418,14 @@
             
             if (currentSemester < 3) {
                 currentSemester++;
-                storyStep = 1; // Kembalikan ke mode eksplorasi jalan kaki
+                storyStep = 1; // Aktifkan jalan kembali
                 setCheckpointPosition();
+                document.getElementById('stage-title').innerText = "MISI: JALANKAN ILHAM KE AREA BULATAN UNGU";
             } else {
-                // Jika sudah melewati semua level -> Trigger Upacara Kelulusan Akhir
                 document.getElementById('joystick').style.display = 'none';
                 document.getElementById('ending-view').classList.add('active');
                 
-                // Ledakan Confetti Selebrasi Megah
-                var end = Date.now() + (4 * 1000);
+                var end = Date.now() + (5 * 1000);
                 (function frame() {
                     window.confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0 } });
                     window.confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1 } });
