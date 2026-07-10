@@ -3,61 +3,75 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ilham's Graduation Journey - Anime Edition</title>
-    <!-- Library Confetti untuk Efek Kelulusan -->
+    <title>Ilham S.Sos - Warrior's Journey 3D</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&family=Press+Start+2P&display=swap');
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body, html { 
-            width: 100%; height: 100%; overflow: hidden; 
-            font-family: 'Plus Jakarta Sans', sans-serif; 
-            background: #0f172a; color: #fff; 
+        :root {
+            --bg-game: #050509;
+            --accent-blue: #6366f1;
+            --accent-gold: #fbbf24;
+            --text-light: #e2e8f0;
         }
 
-        /* --- CONTAINER UTAMA GAME --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body, html { width: 100%; height: 100%; overflow: hidden; font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg-game); color: var(--text-light); }
+
+        /* --- CONTAINER UTAMA --- */
         #game-wrapper {
             width: 100%; height: 100%; display: flex; flex-direction: column; position: relative;
         }
 
-        /* --- AREA 1: MAP TEMPAT JALAN-JALAN (ATAS) --- */
-        #map-area {
-            flex: 1; background: #1e293b; position: relative; overflow: hidden;
-            border-bottom: 4px solid #334155;
+        /* --- AREA 1: 3D HERO DISPLAY (THREE.JS CANVASS) --- */
+        #hero-display-area {
+            flex: 1; position: relative; overflow: hidden;
+            border-bottom: 3px solid rgba(255,255,255,0.1);
         }
-        canvas { display: block; width: 100%; height: 100%; background: #1e293b; }
+        #canvas-3d { width: 100%; height: 100%; display: block; }
+
+        /* --- UI OVERLAY BANNER STATUS --- */
+        .stage-banner {
+            position: absolute; top: 15px; left: 50%; transform: translateX(-50%);
+            background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(8px);
+            padding: 10px 20px; border-radius: 20px; border: 1px solid rgba(99, 102, 241, 0.3);
+            text-align: center; pointer-events: none; z-index: 10;
+        }
+        .stage-banner h1 { font-family: 'Press Start 2P', monospace; font-size: 0.65rem; color: var(--accent-blue); letter-spacing: 1px; }
+        .stage-banner p { font-size: 0.7rem; color: #94a3b8; margin-top: 3px; }
 
         /* --- AREA 2: DIALOG & CONTROLLER PANEL (BAWAH) --- */
         #interaction-panel {
-            height: 260px; background: #0b0f19; padding: 15px; 
+            height: 250px; background: #010103; padding: 15px; 
             display: grid; grid-template-columns: 1fr 140px; gap: 15px; position: relative;
         }
 
-        /* --- BALON DIALOG GAYA ANIME --- */
+        /* --- BALON DIALOG GAYA GAME ANIME --- */
         .dialog-box {
-            background: rgba(30, 41, 59, 0.7); border: 2px solid #6366f1;
+            background: rgba(30, 41, 59, 0.6); border: 2px solid var(--accent-blue);
             border-radius: 12px; padding: 15px; display: flex; flex-direction: column;
-            justify-content: space-between; height: 100%; backdrop-filter: blur(5px);
+            justify-content: space-between; height: 100%; backdrop-filter: blur(10px);
         }
         .speaker-tag { font-weight: 700; color: #818cf8; font-size: 0.95rem; margin-bottom: 5px; }
         .dialog-text { font-size: 0.88rem; line-height: 1.5; color: #f1f5f9; overflow-y: auto; }
 
-        /* KUIS OPSI UNTUK UJIAN SEMESTER */
-        .quiz-container { display: none; flex-direction: column; gap: 6px; margin-top: 5px; }
+        /* BOX OPSI KUIS UJIAN SEMESTER */
+        .quiz-wrapper { display: none; flex-direction: column; gap: 7px; margin-top: 5px; }
         .quiz-btn {
-            background: rgba(99, 102, 241, 0.2); border: 1px solid #6366f1;
-            color: #fff; padding: 8px 12px; border-radius: 6px; cursor: pointer;
-            text-align: left; font-size: 0.8rem; transition: 0.2s;
+            width: 100%; background: rgba(99, 102, 241, 0.2); border: 1px solid rgba(99, 102, 241, 0.5);
+            color: #fff; padding: 10px 14px; border-radius: 8px; cursor: pointer;
+            text-align: left; font-size: 0.82rem; transition: 0.2s;
         }
-        .quiz-btn:hover { background: #6366f1; }
+        .quiz-btn:hover { background: var(--accent-blue); border-color: var(--accent-blue); }
 
         .action-btn {
-            align-self: flex-end; background: #6366f1; color: white; border: none;
-            padding: 8px 16px; border-radius: 20px; font-weight: 600; cursor: pointer; font-size: 0.8rem;
+            align-self: flex-end; background: var(--accent-blue); color: white; border: none;
+            padding: 9px 18px; border-radius: 20px; font-weight: 600; cursor: pointer; font-size: 0.8rem;
+            box-shadow: 0 4px 10px rgba(99, 102, 241, 0.4);
         }
 
-        /* --- CONTROLLER D-PAD DI POJOK KANAN (TIDAK AKAN MENUMPUK) --- */
+        /* --- CONTROLLER D-PAD POJOK KANAN (TIDAK BERTUMPUK) --- */
         .dpad-grid {
             display: grid; grid-template-columns: repeat(3, 42px); grid-template-rows: repeat(3, 42px);
             gap: 5px; justify-content: center; align-content: center;
@@ -65,40 +79,40 @@
         .dpad-btn {
             background: #334155; color: white; border: none; border-radius: 8px;
             font-size: 1rem; display: flex; align-items: center; justify-content: center;
-            cursor: pointer; user-select: none;
+            cursor: pointer; user-select: none; transition: 0.1s;
         }
-        .dpad-btn:active { background: #6366f1; }
+        .dpad-btn:active { background: var(--accent-blue); transform: scale(0.95); }
         .dpad-btn.disabled { opacity: 0.3; cursor: not-allowed; background: #1e293b; }
 
-        /* --- POTRET KARAKTER ANIME TAMPAN (MUNCUL PAS DIALOG) --- */
-        #character-portrait {
-            position: absolute; bottom: 255px; left: 20px; width: 150px; height: 210px;
-            border-radius: 12px; overflow: hidden; border: 3px solid #6366f1;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.5); display: none; z-index: 5;
-            background: #1e293b;
-        }
-        #character-portrait img { width: 100%; height: 100%; object-fit: cover; }
-
-        /* --- SCREEN POP-UP ALBUM FOTO --- */
-        .pop-screen {
+        /* --- SCREEN POP-UP GALERI FOTO KENANGAN --- */
+        .memory-screen {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(15, 23, 42, 0.95); display: none;
+            background: rgba(11, 12, 16, 0.97); display: none;
             flex-direction: column; justify-content: center; align-items: center; padding: 20px; z-index: 50;
         }
-        .pop-screen.active { display: flex; }
+        .memory-screen.active { display: flex; }
         .photo-frame {
-            width: 100%; max-width: 360px; height: 260px; background: #1e293b;
-            border: 6px solid #fff; border-radius: 4px; box-shadow: 0 15px 30px rgba(0,0,0,0.7);
-            overflow: hidden; margin-bottom: 15px;
+            width: 100%; max-width: 380px; height: 280px; background: #1e293b;
+            border: 6px solid #fff; border-radius: 4px; box-shadow: 0 20px 40px rgba(0,0,0,0.8);
+            overflow: hidden; margin-bottom: 20px;
         }
         .photo-frame img { width: 100%; height: 100%; object-fit: cover; }
 
-        .header-banner {
-            position: absolute; top: 15px; left: 50%; transform: translateX(-50%);
-            background: rgba(15,23,42,0.8); padding: 8px 16px; border-radius: 20px;
-            font-size: 0.75rem; font-weight: 700; color: #818cf8; border: 1px solid rgba(255,255,255,0.1);
-            pointer-events: none; text-align: center;
+        /* --- SCREEN SURAT KELULUSAN WISUDA --- */
+        .ending-screen {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(135deg, #0f172a, #1e1b4b); display: none;
+            flex-direction: column; justify-content: center; align-items: center; padding: 25px;
+            overflow-y: auto; z-index: 50;
         }
+        .ending-screen.active { display: flex; }
+        .paper-letter {
+            background: #ffffff; color: #1e293b; padding: 25px; border-radius: 20px;
+            width: 100%; max-width: 440px; box-shadow: 0 25px 50px rgba(0,0,0,0.6);
+            line-height: 1.6; font-size: 0.95rem; text-align: left;
+        }
+
+        audio { display: none; }
     </style>
 </head>
 <body>
@@ -106,257 +120,297 @@
     <audio id="bgm" loop src="https://assets.mixkit.co/music/preview/mixkit-beautiful-dream-493.mp3"></audio>
 
     <div id="game-wrapper">
-        <!-- HEADER PETUNJUK -->
-        <div class="header-banner" id="mission-tag">TIMELINE UTAMA PERKULIAHAN</div>
-
-        <!-- 1. AREA JALAN KARAKTER (ATAS) -->
-        <div id="map-area">
-            <canvas id="mapCanvas"></canvas>
-            
-            <!-- Foto Ilham Tampan (Akan muncul mengambang di atas kotak dialog saat bicara) -->
-            <div id="character-portrait">
-                <!-- Ganti ke link foto anime cowok ganteng milikmu -->
-                <img src="https://i.pinimg.com/736xl/5d/15/90/5d159049f86343cacadfc2e8ad0591f7.jpg" alt="Ilham Tampan">
-            </div>
+        
+        <div class="stage-banner">
+            <h1 id="mission-tag">EXPLORATION MODE</h1>
+            <p>Jalankan Ilham gagah mendekati Pos Zona</p>
         </div>
 
-        <!-- 2. AREA INTERAKSI & KONTROL (BAWAH) -->
+        <div id="hero-display-area">
+            <canvas id="canvas-3d"></canvas>
+        </div>
+
         <div id="interaction-panel">
-            <!-- Sisi Kiri: Balon Dialog / Soal Kuis -->
             <div class="dialog-box">
                 <div>
-                    <div class="speaker-tag" id="speaker-title">👦 Ilham (Maba)</div>
+                    <div class="speaker-tag" id="speaker-title">👦 Ilham (Warrior)</div>
                     <div class="dialog-text" id="story-text">
-                        Hai! Aku Ilham. Aku mahasiswa baru jurusan Komunikasi dan Penyiaran Islam di Universitas KH. Mukhtar Syafaat. Ayo ikuti perjalananku sampai sarjana!
+                        Hai! Aku Ilham. Selamat datang di simulasi petualangan sarjanaku. Ayo bantu aku menaklukan seluruh tantangan akademik Universitas KH. Mukhtar Syafaat dan menyandang gelar S.Sos!
                     </div>
                 </div>
 
-                <!-- Opsi Kuis Ujian -->
-                <div class="quiz-container" id="quiz-box">
+                <div class="quiz-wrapper" id="quiz-box">
+                    <p style="font-size:0.8rem; font-weight:600; color:var(--accent-gold); margin-bottom:5px;">Ujian Pembuka Semester:</p>
                     <div id="quiz-options"></div>
                 </div>
 
-                <button class="action-btn" id="main-action-btn" onclick="nextStep()">LET'S GO! 🚀</button>
+                <button class="action-btn" id="main-action-btn" onclick="nextStep()">MULAI PERJALANAN 🚀</button>
             </div>
 
-            <!-- Sisi Kanan: D-Pad Pergerakan Kompak (Terpisah, Gak Bakal Numpuk) -->
             <div class="dpad-grid">
                 <div></div>
-                <button class="dpad-btn" id="kp-up" onmousedown="move('up')" onmouseup="stop()">▲</button>
+                <button class="dpad-btn" id="kp-up" onmousedown="setMove('up', true)" onmouseup="setMove('up', false)" ontouchstart="setMove('up', true)" ontouchend="setMove('up', false)">▲</button>
                 <div></div>
-                <button class="dpad-btn" id="kp-left" onmousedown="move('left')" onmouseup="stop()">◀</button>
+                <button class="dpad-btn" id="kp-left" onmousedown="setMove('left', true)" onmouseup="setMove('left', false)" ontouchstart="setMove('left', true)" ontouchend="setMove('left', false)">◀</button>
                 <div style="background: rgba(255,255,255,0.05); border-radius: 4px;"></div>
-                <button class="dpad-btn" id="kp-right" onmousedown="move('right')" onmouseup="stop()">▶</button>
+                <button class="dpad-btn" id="kp-right" onmousedown="setMove('right', true)" onmouseup="setMove('right', false)" ontouchstart="setMove('right', true)" ontouchend="setMove('right', false)">▶</button>
                 <div></div>
-                <button class="dpad-btn" id="kp-down" onmousedown="move('down')" onmouseup="stop()">▼</button>
+                <button class="dpad-btn" id="kp-down" onmousedown="setMove('down', true)" onmouseup="setMove('down', false)" ontouchstart="setMove('down', true)" ontouchend="setMove('down', false)">▼</button>
                 <div></div>
             </div>
         </div>
     </div>
 
-    <!-- POP-UP ALBUM FOTO KENANGAN -->
-    <div class="pop-screen" id="album-screen">
-        <h2 style="color:#fbbf24; margin-bottom:5px; font-size:1.1rem;">KENANGAN BERHASIL DIBUKA 📸</h2>
-        <p style="color:#94a3b8; font-size:0.75rem; margin-bottom:15px;">Arsip Album Digital Ilham</p>
+    <div class="memory-screen" id="album-screen">
+        <h2 style="color:var(--accent-gold); margin-bottom:5px; font-size:1.1rem;">KENANGAN UNLOCKED ✨</h2>
+        <p style="color:#94a3b8; font-size:0.75rem; margin-bottom:15px;">Arsip Memori Digital Ilham</p>
         <div class="photo-frame">
             <img id="album-img" src="" alt="Foto Kenangan">
         </div>
-        <p style="text-align:center; max-width:340px; font-size:0.85rem; color:#cbd5e1; line-height:1.5; margin-bottom:20px;" id="album-caption"></p>
-        <button class="action-btn" style="padding:10px 25px; border-radius:20px;" onclick="resumeExploration()">LANJUT JALAN KAKI 🗺️</button>
+        <p style="text-align:center; max-width:360px; font-size:0.85rem; color:#cbd5e1; line-height:1.5; margin-bottom:20px;" id="album-caption"></p>
+        <button class="action-btn" style="padding:10px 25px; border-radius:20px;" onclick="resumeExploration()">KEMBALI KE PETA JALAN 🗺️</button>
     </div>
 
-    <!-- POP-UP KELULUSAN WISUDA AKHIR -->
-    <div class="pop-screen" id="ending-screen" style="background: linear-gradient(135deg, #0f172a, #1e1b4b);">
+    <div class="ending-screen" id="ending-screen">
         <div style="font-size:3.5rem; margin-bottom:10px;">🎓🤵</div>
-        <h2 style="color:#fbbf24; font-size:1.3rem; font-weight:700; margin-bottom:15px;">HAPPY GRADUATION</h2>
-        <div style="background:#fff; color:#1e293b; padding:20px; border-radius:16px; max-width:400px; line-height:1.6; font-size:0.9rem;">
-            <h3 style="text-align:center; color:#4f46e5; margin-bottom:10px; font-weight:700;">Letter for Ilham, S.Sos</h3>
-            <p style="margin-bottom:10px; color:#334155;">
-                Selamat atas kelulusannya, Ilham! Setelan jas tampan bergaya anime dan gelar Sarjana Sosial (S.Sos) ini resmi jadi milikmu sekarang setelah menaklukan seluruh tantangan semester di Universitas KH. Mukhtar Syafaat.
+        <h2 style="color:var(--accent-gold); font-size:1.4rem; font-weight:700; margin-bottom:15px; letter-spacing:1px;">HAPPY GRADUATION</h2>
+        <div class="paper-letter">
+            <h3 style="text-align:center; color:#4f46e5; margin-bottom:12px; font-weight:700;">Special Letter for Ilham, S.Sos</h3>
+            <p style="margin-bottom:12px; color:#334155;">
+                Selamat atas kelulusannya, Ilham! Setelan jas *armor* tempur dan gelar Sarjana Sosial (S.Sos) ini kini resmi melekat sebagai bukti nyata atas segala keteguhan hati, dedikasi hebat, serta perjuangan luar biasa yang kamu tunjukkan di Universitas KH. Mukhtar Syafaat.
             </p>
             <p style="color:#334155;">
-                Misi simulasi perjalanan kampus selesai dengan predikat kelulusan sempurna!
+                Peta dunia simulasi perkuliahan 3D ini telah sukses kamu taklukan dengan gemilang. Sekarang, saatnya melangkah tegap menyambut peta kehidupan nyata yang jauh lebih seru!
             </p>
+            <p style="text-align:right; font-weight:700; margin-top:20px; color:#4f46e5;">Warmest Hugs, Bu Adel ✨</p>
         </div>
-        <button class="action-btn" style="margin-top:20px; background:#ec4899;" onclick="location.reload()">MAIN LAGI 🔄</button>
+        <button class="action-btn" style="margin-top:25px; background:#ec4899; box-shadow:0 4px 12px rgba(236,72,153,0.4);" onclick="location.reload()">MAIN LAGI 🔄</button>
     </div>
 
     <script>
-        const canvas = document.getElementById('mapCanvas');
-        const ctx = canvas.getContext('2d');
-
-        // Mengatur resolusi internal canvas agar tajam
-        function resizeCanvas() {
-            canvas.width = canvas.parentElement.clientWidth;
-            canvas.height = canvas.parentElement.clientHeight;
-        }
-        window.addEventListener('load', () => { resizeCanvas(); drawMap(); });
-        window.addEventListener('resize', () => { resizeCanvas(); drawMap(); });
-
-        // VARIABEL UTAMA GAMEPLAY
-        let gameStep = 0; // 0: Awal, 1: Jalan Bebas, 2: Sedang Kuis
-        let activeSemester = 1;
-        let player = { x: 100, y: 120, size: 14, speed: 5, dx: 0, dy: 0 };
-
-        // Titik Pos Kampus Koordinat Map
-        const targets = {
-            1: { x: 80, y: 50, radius: 18, color: '#f87171', name: 'Smt 1' },
-            2: { x: 220, y: 90, radius: 18, color: '#fb923c', name: 'Smt 2' },
-            3: { x: 150, y: 150, radius: 18, color: '#60a5fa', name: 'Smt 3' }
-        };
+        // --- DATA & KONFIGURASI CERITA SEMESTER ---
+        let currentActiveSemester = 1;
+        let storyStep = 0; // 0: Awal, 1: Jalan Bebas, 2: Sedang Kuis
 
         const semesterContent = {
             1: {
-                title: "💬 Ilham - Masa Kuliah Semester 1",
-                talk: "Wah, nggak nyangka aku udah resmi kuliah! Semester 1 tantangannya masih aman dan lancar jaya lah yaaa. Tapi tugas-tugas dasar KPI sudah mulai menanti. Selesaikan mini kuis ini yuk!",
-                q: "Apa singkatan resmi dari program studi KPI?",
-                opts: ["Komunikasi dan Penyiaran Islam", "Kolega Penyiaran Indonesia"], ans: 0,
-                desc: "Kenangan Semester 1: Masa pengenalan mahasiswa baru yang penuh semangat memakai jas almamater kebanggaan.",
+                title: "💬 Ilham - Masa Perkenalan Maba",
+                talk: "Wah, nggak nyangka aku udah resmi kuliah! Semester 1 tantangannya masih aman dan lancar jaya lah yaaa. Tapi tugas-tugas dasar KPI KPI sudah mulai menanti. Selesaikan mini kuis ini yuk!",
+                q: "Apa fokus utama jurusan KPI Universitas KH. Mukhtar Syafaat?",
+                opts: ["Komunikasi dan Penyiaran Islam", "Kolega Pemuda Indonesia"], ans: 0,
+                desc: "Kenangan Semester 1: Langkah pertama Ilham memakai jas almamater tempur dengan bangga.",
                 img: "Screenshot (1027).png"
             },
             2: {
-                title: "💬 Ilham - Naik Tingkat Semester 2",
+                title: "💬 Ilham - Babak Praktikum Siaran",
                 talk: "Masuk Semester 2! Sekarang jadwal praktikum siaran, public speaking, dan olah suara di laboratorium broadcasting makin padat. Siap buat uji kompetensi?",
                 q: "Perangkat utama penangkap suara saat siaran radio/podcast dinamakan...",
                 opts: ["Lensa Makro", "Microphone Komunikasi"], ans: 1,
-                desc: "Kenangan Semester 2: Momen kolaborasi kelompok menyelesaikan projek siaran radio perdana.",
+                desc: "Kenangan Semester 2: Keseruan projek kelompok teknik penyiaran bersama teman sekelas.",
                 img: "Screenshot (1028).png"
             },
             3: {
-                title: "💬 Ilham - Babak Akhir Sidang Skripsi",
-                talk: "Fase krusial! Perjuangan mengumpulkan data riset sosial komunikasi, bimbingan maraton dosen, hingga persiapan sidang sarjana. Bantu aku menjawab pertanyaan metodologi ini!",
+                title: "💬 Ilham - Perjuangan Sidang Skripsi",
+                talk: "Fase krusial! Perjuangan mengumpulkan data riset sosial, bimbingan maraton dosen, hingga persiapan mental menuju sidang sarjana. Jawab pertanyaan metodologi ini!",
                 q: "Riset ilmiah yang berfokus mendeskripsikan fenomena sosial secara mendalam disebut metode...",
-                opts: ["Kualitatif Deskriptif", "Kuantitatif Statistik"], ans: 0,
-                desc: "Kenangan Akhir: Detik-detik haru pengumuman kelulusan yudisium setelah revisi skripsi disetujui penuh.",
+                opts: ["Kualitatif Deskriptif", "Kuantitatif Angka"], ans: 0,
+                desc: "Kenangan Perjuangan Akhir: Malam suntuk revisi skripsi demi mengejar kelulusan sarjana impian.",
                 img: "musmadin.jpeg"
             }
         };
 
-        // --- ENGINE RENDER GRAPHIC MAP 2D ---
-        function drawMap() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        // --- ENGINE RENDER GRAFIS 3D (THREE.JS) ---
+        let scene, camera, renderer, playerGroup, checkpointMesh;
+        let moveState = { up: false, down: false, left: false, right: false };
 
-            // 1. Gambar Background Jalanan Kampus Estetik
-            ctx.fillStyle = '#1e293b';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
+        function init3D() {
+            const canvas = document.getElementById('canvas-3d');
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color('#050509');
+            scene.fog = new THREE.FogExp2('#050509', 0.05);
 
-            // 2. Gambar Garis Jalur Hubungan Antar Semester
-            ctx.beginPath();
-            ctx.strokeStyle = 'rgba(99, 102, 241, 0.4)';
-            ctx.lineWidth = 3;
-            ctx.setLineDash([5, 5]);
-            ctx.moveTo(80, 50);
-            ctx.lineTo(220, 90);
-            ctx.lineTo(150, 150);
-            ctx.stroke();
-            ctx.setLineDash([]);
+            camera = new THREE.PerspectiveCamera(45, canvas.clientWidth / canvas.clientHeight, 0.1, 1000);
+            camera.position.set(0, 7, 11);
+            camera.lookAt(0, 1.5, 0);
 
-            // 3. Gambar Bulatan Pos Zona Kampus
-            for (let id in targets) {
-                let target = targets[id];
-                ctx.beginPath();
-                ctx.arc(target.x, target.y, target.radius, 0, Math.PI * 2);
-                ctx.fillStyle = (id <= activeSemester) ? target.color : '#475569';
-                ctx.fill();
-                ctx.strokeStyle = '#fff';
-                ctx.lineWidth = 2;
-                ctx.stroke();
+            renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true });
+            renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+            renderer.shadowMap.enabled = true;
 
-                // Label Teks Semester di Atas Lingkaran
-                ctx.fillStyle = '#fff';
-                ctx.font = 'bold 10px Plus Jakarta Sans';
-                ctx.textAlign = 'center';
-                ctx.fillText(target.name, target.x, target.y + 4);
+            // Pencahayaan Cinema
+            scene.add(new THREE.AmbientLight(0xffffff, 0.6));
+            const dirLight = new THREE.DirectionalLight(0xffffff, 0.9);
+            dirLight.position.set(10, 20, 10);
+            scene.add(dirLight);
+
+            // Lantai Lapangan Universitas
+            const floorGeo = new THREE.PlaneGeometry(80, 80);
+            const floorMat = new THREE.MeshStandardMaterial({ color: #1e293b, roughness: 0.8 });
+            const floor = new THREE.Mesh(floorGeo, floorMat);
+            floor.rotation.x = -Math.PI / 2;
+            scene.add(floor);
+
+            // Garis Jalur Rute 3D
+            const pathGeo = new THREE.BoxGeometry(0.3, 0.02, 30);
+            const pathMat = new THREE.MeshBasicMaterial({ color: 0x6366f1, transparent: true, opacity: 0.3 });
+            const pathLine = new THREE.Mesh(pathGeo, pathMat);
+            pathLine.position.set(0, 0.01, -10);
+            scene.add(pathLine);
+
+            // MODEL KARAKTER ILHAM GAGAH (3D GEOMETRY COMPOSITION)
+            playerGroup = new THREE.Group();
+            
+            // 1. Badan Berotot Setelan Jas Biru Tua Tempur
+            const torsoGeo = new THREE.CylinderGeometry(0.55, 0.35, 1.6, 16);
+            const bodyMat = new THREE.MeshStandardMaterial({ color: 0x1e3a8a, roughness: 0.5 });
+            const torso = new THREE.Mesh(torsoGeo, bodyMat);
+            torso.position.y = 1.35;
+            playerGroup.add(torso);
+
+            // Bahu Kekar
+            const shoulderGeo = new THREE.SphereGeometry(0.25, 16, 16);
+            const shoulderMat = new THREE.MeshStandardMaterial({ color: 0x1e293b });
+            const leftShoulder = new THREE.Mesh(shoulderGeo, shoulderMat);
+            leftShoulder.position.set(-0.6, 1.9, 0);
+            const rightShoulder = leftShoulder.clone();
+            rightShoulder.position.x = 0.6;
+            playerGroup.add(leftShoulder, rightShoulder);
+
+            // 2. Kepala Tampan
+            const headGeo = new THREE.SphereGeometry(0.42, 32, 32);
+            const skinMat = new THREE.MeshStandardMaterial({ color: 0xfbcfe8, roughness: 0.6 });
+            const head = new THREE.Mesh(headGeo, skinMat);
+            head.position.y = 2.45;
+            playerGroup.add(head);
+
+            // 3. Rambut Wavy Curtain Hitam (Tampan)
+            const hairGroup = new THREE.Group();
+            const hairTopGeo = new THREE.SphereGeometry(0.46, 16, 16, 0, Math.PI*2, 0, Math.PI/2);
+            const hairMat = new THREE.MeshStandardMaterial({ color: 0x0f172a, roughness: 0.9 });
+            const hairTop = new THREE.Mesh(hairTopGeo, hairMat);
+            hairTop.position.set(0, 2.55, 0);
+            hairGroup.add(hairTop);
+
+            const strandGeo = new THREE.BoxGeometry(0.18, 0.28, 0.18);
+            const leftStrand = new THREE.Mesh(strandGeo, hairMat);
+            leftStrand.position.set(-0.2, 2.35, 0.32);
+            leftStrand.rotation.z = 0.2;
+            const rightStrand = leftStrand.clone();
+            rightStrand.position.x = 0.2;
+            rightStrand.rotation.z = -0.2;
+            hairGroup.add(leftStrand, rightStrand);
+            playerGroup.add(hairGroup);
+
+            // 4. Dasi Hitam Elegan (Penyempurna Jas)
+            const tieGeo = new THREE.ConeGeometry(0.07, 0.45, 4);
+            const tieMat = new THREE.MeshStandardMaterial({ color: 0x000000 });
+            const tie = new THREE.Mesh(tieGeo, tieMat);
+            tie.position.set(0, 1.95, 0.48);
+            tie.rotation.x = 0.1;
+            playerGroup.add(tie);
+
+            // Kaki Setelan Celana
+            const legGeo = new THREE.CylinderGeometry(0.15, 0.15, 0.65);
+            const leftLeg = new THREE.Mesh(legGeo, bodyMat);
+            leftLeg.position.set(-0.22, 0.33, 0);
+            const rightLeg = leftLeg.clone();
+            rightLeg.position.x = 0.22;
+            playerGroup.add(leftLeg, rightLeg);
+
+            playerGroup.position.set(0, 0, 4);
+            scene.add(playerGroup);
+
+            // POS TARGET SEMESTER (ZONA CAHAYA UNGU BERPENDAR)
+            const cpGeo = new THREE.CylinderGeometry(1.4, 1.4, 0.1, 32);
+            const cpMat = new THREE.MeshStandardMaterial({ color: 0x6366f1, emissive: 0x6366f1, emissiveIntensity: 0.6, transparent: true, opacity: 0.5 });
+            checkpointMesh = new THREE.Mesh(cpGeo, cpMat);
+            setCheckpointPosition();
+            scene.add(checkpointMesh);
+
+            window.addEventListener('resize', onWindowResize);
+            animate();
+        }
+
+        function setCheckpointPosition() {
+            if(currentActiveSemester === 1) checkpointMesh.position.set(0, 0.05, -1);
+            if(currentActiveSemester === 2) checkpointMesh.position.set(0, 0.05, -7);
+            if(currentActiveSemester === 3) checkpointMesh.position.set(0, 0.05, -14);
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+
+            // Sistem Gerak Karakter saat Mode Jelajah Aktif
+            if (storyStep === 1) {
+                if (moveState.up) playerGroup.position.z -= 0.09;
+                if (moveState.down) playerGroup.position.z += 0.09;
+                if (moveState.left) playerGroup.position.x -= 0.09;
+                if (moveState.right) playerGroup.position.x += 0.09;
+
+                // Batasi agar karakter tidak keluar dari peta lantai
+                if (playerGroup.position.x < -15) playerGroup.position.x = -15;
+                if (playerGroup.position.x > 15) playerGroup.position.x = 15;
+                if (playerGroup.position.z > 8) playerGroup.position.z = 8;
+                if (playerGroup.position.z < -25) playerGroup.position.z = -25;
             }
 
-            // 4. Gambar Karakter Utama (Ditampilkan sebagai Marker/Pin Bersinar yang Rapi)
-            ctx.beginPath();
-            ctx.arc(player.x, player.y, player.size, 0, Math.PI * 2);
-            ctx.fillStyle = '#6366f1';
-            ctx.fill();
-            ctx.strokeStyle = '#ffffff';
-            ctx.lineWidth = 3;
-            ctx.stroke();
+            // Animasi Mengambang & Berputar Pos Zona
+            checkpointMesh.rotation.y += 0.01;
 
-            // Efek Panah Penunjuk di Dalam Pin Karakter
-            ctx.fillStyle = '#fff';
-            ctx.font = '9px Plus Jakarta Sans';
-            ctx.fillText("ILHAM", player.x, player.y - 18);
-        }
+            // Kamera Mengikuti Pergerakan Ilham (Sakura School Style)
+            camera.position.set(playerGroup.position.x, playerGroup.position.y + 6, playerGroup.position.z + 8);
+            camera.lookAt(playerGroup.position.x, playerGroup.position.y + 1.2, playerGroup.position.z);
 
-        // --- SISTEM KENDALI GERAK GERIK (D-PAD & KEYBOARD) ---
-        function move(dir) {
-            document.getElementById('bgm').play().catch(()=>{});
-            if (gameStep !== 1) return; // Kunci jalan kaki kalau tidak dalam mode jelajah
-
-            if (dir === 'up') player.dy = -player.speed;
-            if (dir === 'down') player.dy = player.speed;
-            if (dir === 'left') player.dx = -player.speed;
-            if (dir === 'right') player.dx = player.speed;
-        }
-
-        function stop() { player.dx = 0; player.dy = 0; }
-
-        // Dukungan Kendali Tombol Keyboard Laptop/PC
-        window.addEventListener('keydown', (e) => {
-            if(e.key === 'ArrowUp' || e.key === 'w') move('up');
-            if(e.key === 'ArrowDown' || e.key === 's') move('down');
-            if(e.key === 'ArrowLeft' || e.key === 'a') move('left');
-            if(e.key === 'ArrowRight' || e.key === 'd') move('right');
-        });
-        window.addEventListener('keyup', stop);
-
-        // REAL-TIME UPDATE LOOP ANIMATION
-        function updateLoop() {
-            if (gameStep === 1) {
-                player.x += player.dx;
-                player.y += player.dy;
-
-                // Batas tabrakan dinding canvas
-                if (player.x < player.size) player.x = player.size;
-                if (player.x > canvas.width - player.size) player.x = canvas.width - player.size;
-                if (player.y < player.size) player.y = player.size;
-                if (player.y > canvas.height - player.size) player.y = canvas.height - player.size;
-
-                drawMap();
-
-                // Deteksi jika pin menabrak koordinat bulatan semester aktif
-                let target = targets[activeSemester];
-                if (target) {
-                    let distance = Math.hypot(player.x - target.x, player.y - target.y);
-                    if (distance < player.size + target.radius) {
-                        stop();
-                        openSemesterQuiz();
-                    }
+            // Deteksi Tabrakan (Masuk ke Zona)
+            if (storyStep === 1) {
+                let distance = playerGroup.position.distanceTo(checkpointMesh.position);
+                if (distance < 1.5) {
+                    stop(); // Hentikan gerakan saat masuk zona
+                    openSemesterQuiz();
                 }
             }
-            requestAnimationFrame(updateLoop);
-        }
-        requestAnimationFrame(updateLoop);
 
-        // --- LOGIC ALUR CERITA ---
+            renderer.render(scene, camera);
+        }
+
+        function onWindowResize() {
+            const canvas = document.getElementById('canvas-3d');
+            camera.aspect = canvas.clientWidth / canvas.clientHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+        }
+
+        // --- SISTEM GERAK & KONTROLER D-PAD ---
+        function setMove(direction, isMoving) {
+            playBgmOnce();
+            moveState[direction] = isMoving;
+        }
+
+        function stop() { moveState = { up: false, down: false, left: false, right: false }; }
+
+        function playBgmOnce() {
+            const audio = document.getElementById('bgm');
+            if(audio.paused) audio.play().catch(()=>{});
+        }
+
+        // --- LOGIC ALUR CERITA GAME ---
         function nextStep() {
-            if (gameStep === 0) {
-                // Aktifkan mode jelajah peta, tampilkan D-pad
-                gameStep = 1;
-                document.getElementById('character-portrait').style.display = 'block'; // Tampilkan foto gantengnya!
-                document.getElementById('mission-tag').innerText = "MISI: ARAHKAN PIN ILHAM KE BULATAN SEMESTER 1";
-                document.getElementById('speaker-title').innerText = "🎮 Sistem Navigasi";
-                document.getElementById('story-text').innerText = "Gunakan tombol D-Pad panah di pojok kanan bawah untuk mengarahkan pin lingkaran biru Ilham menuju area target semester.";
-                document.getElementById('main-action-btn').style.display = 'none';
-                toggleDpad(true);
+            if (storyStep === 0) {
+                storyStep = 1; // Masuk mode eksplorasi
+                document.getElementById('dialog-box').style.display = 'none';
+                document.getElementById('mission-tag').innerText = "EXPLORATION MODE";
+                init3D();
+                playBgmOnce();
             }
         }
 
         function openSemesterQuiz() {
-            gameStep = 2; // Kunci pergerakan
-            toggleDpad(false); // Matikan warna aktif D-pad agar fokus isi kuis
+            storyStep = 2; // Kunci kontroler jalan kaki
+            stop();
 
-            let data = semesterContent[activeSemester];
-            document.getElementById('speaker-title').innerText = data.title;
+            let data = semesterContent[currentActiveSemester];
             document.getElementById('story-text').innerText = data.talk;
 
-            // Buat pilihan jawaban kuis
             let optionsHtml = "";
             data.opts.forEach((opt, idx) => {
                 optionsHtml += `<button class="quiz-btn" onclick="checkAnswer(${idx})">${opt}</button>`;
@@ -364,58 +418,46 @@
 
             document.getElementById('quiz-options').innerHTML = optionsHtml;
             document.getElementById('quiz-box').style.display = 'flex';
+            document.getElementById('btn-dialog-action').style.display = 'none';
+            document.getElementById('dialog-box').style.display = 'flex';
         }
 
         function checkAnswer(chosen) {
-            let data = semesterContent[activeSemester];
+            let data = semesterContent[currentActiveSemester];
             if (chosen === data.ans) {
-                // Jawaban Benar -> Sembunyikan box kuis, tampilkan lembar pop-up kenangan
+                alert("Misi Selesai! 🎉 Memori kenangan berhasil terbuka.");
                 document.getElementById('quiz-box').style.display = 'none';
+                document.getElementById('dialog-box').style.display = 'none';
                 
                 document.getElementById('album-img').src = data.img;
                 document.getElementById('album-caption').innerText = data.desc;
                 document.getElementById('album-screen').classList.add('active');
             } else {
-                alert("Jawaban kurang tepat! Yuk dipikirkan lagi jawabannya biar Ilham lulus dengan nilai bagus.");
+                alert("Jawaban salah, Ilham gagal fokus! Coba ingat-ingat lagi materi kuliahnya.");
             }
         }
 
         function resumeExploration() {
             document.getElementById('album-screen').classList.remove('active');
 
-            if (activeSemester < 3) {
-                activeSemester++;
-                gameStep = 1; // Kembali jalankan mode eksplorasi pin
-                toggleDpad(true);
-                
-                // Geser posisi pin sedikit biar tidak langsung tabrakan ulang di tempat yang sama
-                player.y += 35;
-                document.getElementById('speaker-title').innerText = "🎮 Sistem Navigasi";
-                document.getElementById('story-text').innerText = `Misi berhasil! Yuk jalankan kembali pin Ilham menuju target berikutnya: Semester ${activeSemester}.`;
-                document.getElementById('mission-tag').innerText = `MISI: ARAHKAN PIN ILHAM KE BULATAN SEMESTER ${activeSemester}`;
+            if (currentActiveSemester < 3) {
+                currentActiveSemester++;
+                storyStep = 1; // Aktifkan jalan kaki kembali
+                setCheckpointPosition();
+                // Mundurkan sedikit posisi karakter biar nggak langsung tabrakan ulang
+                playerGroup.position.y += 20; 
+                document.getElementById('mission-tag').innerText = "EXPLORATION MODE";
             } else {
-                // Kelulusan Akhir tercapai
+                document.getElementById('interaction-panel').style.display = 'none';
                 document.getElementById('ending-screen').classList.add('active');
                 
-                // Efek kembang api selebrasi kelulusan
                 var end = Date.now() + (5 * 1000);
                 (function frame() {
-                    window.confetti({ particleCount: 6, angle: 60, spread: 55, origin: { x: 0 } });
-                    window.confetti({ particleCount: 6, angle: 120, spread: 55, origin: { x: 1 } });
+                    window.confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0 } });
+                    window.confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1 } });
                     if (Date.now() < end) requestAnimationFrame(frame);
                 }());
             }
-        }
-
-        function toggleDpad(enable) {
-            const btns = document.querySelectorAll('.dpad-btn');
-            btns.forEach(btn => {
-                if(enable) {
-                    btn.classList.remove('disabled');
-                } else {
-                    btn.classList.add('disabled');
-                }
-            });
         }
     </script>
 </body>
