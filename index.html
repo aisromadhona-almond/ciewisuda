@@ -4,15 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Buku Kenangan - Frekuensi Jiwa</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Playfair+Display:ital,wght@0,500;1,400&family=Poppins:wght@300;400;500&family=Reenie+Beanie&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Playfair+Display:ital,wght=0,500;1,400&family=Poppins:wght@300;400;500&family=Reenie+Beanie&display=swap" rel="stylesheet">
     
     <style>
         :root {
-            --bg-wood: #2c1d11;        /* Warna kayu jati tua untuk latar belakang */
-            --paper-warm: #f2e6d0;     /* Warna kertas perkamen/kulit wayang yang hangat */
-            --accent-maroon: #800020;  /* Merah marun klasik keraton */
-            --accent-gold: #b89047;    /* Emas redup/prada */
-            --text-dark: #3a2e2b;      /* Teks gelap sawo matang */
+            --bg-wood: #2c1d11;        
+            --paper-warm: #f2e6d0;     
+            --accent-maroon: #800020;  
+            --accent-gold: #b89047;    
+            --text-dark: #3a2e2b;      
             --text-muted: #706058;     
         }
 
@@ -20,7 +20,6 @@
 
         body {
             background-color: var(--bg-wood);
-            /* Tekstur garis kayu minimalis pada background */
             background-image: radial-gradient(circle at 50% 50%, rgba(0,0,0,0.4) 0%, #170f09 100%);
             color: var(--text-dark);
             font-family: 'Poppins', sans-serif;
@@ -32,24 +31,22 @@
             perspective: 2000px;
         }
 
-        /* ==========================================================================
-           STRUKTUR BUKU 3D YANG BENAR (FIXED PROLOGUE ISSUE)
-           ========================================================================== */
         .book-container {
             position: relative;
-            width: 900px; /* Lebar total saat buku terbuka (2 halaman berdampingan) */
+            width: 900px; 
             height: 600px;
             display: flex;
-            justify-content: flex-end; /* Memastikan rotasi halaman berpusat di tengah */
+            justify-content: center;
+            align-items: center;
         }
 
         .book {
             position: relative;
-            width: 450px; /* Lebar satu bilah halaman */
+            width: 450px; 
             height: 100%;
             transform-style: preserve-3d;
             transition: transform 0.6s ease;
-            transform: translateX(-50%); /* Mengetengahkan buku saat terbuka */
+            transform: translateX(50%); /* Start pos: geser kanan agar center saat tertutup */
         }
 
         .page {
@@ -60,12 +57,6 @@
             transform-origin: left center;
             transform-style: preserve-3d;
             transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-            pointer-events: none; /* Mencegah halaman bawah terklik tidak sengaja */
-        }
-
-        /* Hanya halaman teratas yang bisa diinteraksi */
-        .page.active {
-            pointer-events: auto;
         }
 
         .front, .back {
@@ -78,13 +69,11 @@
             flex-direction: column;
             justify-content: space-between;
             background-color: var(--paper-warm);
-            /* Efek tekstur kertas serat alami */
             background-image: radial-gradient(rgba(0,0,0,0.02) 1px, transparent 0);
             background-size: 4px 4px;
             box-shadow: inset 0 0 40px rgba(44, 29, 17, 0.15);
         }
 
-        /* Halaman Kanan (Membuka Lembaran Baru) */
         .front {
             border-radius: 0 8px 8px 0;
             border-left: 2px solid rgba(0, 0, 0, 0.1);
@@ -95,7 +84,6 @@
             background: linear-gradient(to right, rgba(0,0,0,0.15), transparent);
         }
 
-        /* Halaman Kiri (Catatan Sebaliknya) */
         .back {
             transform: rotateY(180deg);
             border-radius: 8px 0 0 8px;
@@ -107,19 +95,12 @@
             background: linear-gradient(to left, rgba(0,0,0,0.15), transparent);
         }
 
+        /* State saat halaman dibalik */
         .page.flipped {
             transform: rotateY(-180deg);
         }
 
-        /* Urutan Tumpukan Awal Buku */
-        #p1 { z-index: 4; }
-        #p2 { z-index: 3; }
-        #p3 { z-index: 2; }
-        #p4 { z-index: 1; }
-
-        /* ==========================================================================
-           DESAIN ESTETIKA WAYANG & JOGLO
-           ========================================================================== */
+        /* STYLE KONTEN WAYANG */
         .gunungan-icon {
             align-self: center;
             opacity: 0.15;
@@ -157,7 +138,6 @@
             text-align: justify;
         }
 
-        /* Bingkai Foto Klasik Bermotif Emas */
         .photo-frame {
             width: 100%;
             height: 220px;
@@ -186,7 +166,6 @@
             color: var(--accent-maroon); font-weight: 500; letter-spacing: 1px; font-size: 9px; cursor: pointer;
         }
 
-        /* Chapter 2 Kategori Interaktif */
         .tabs-jawa { display: flex; gap: 6px; margin: 8px 0; }
         .tab-btn {
             background: rgba(128, 0, 32, 0.05); border: 1px solid rgba(128, 0, 32, 0.2);
@@ -196,7 +175,6 @@
         .tab-btn.active { background: var(--accent-maroon); color: #fff; }
         .tab-content { font-style: italic; min-height: 50px; font-size: 12px; display: flex; align-items: center; }
 
-        /* Ujian Akhir / Skripsi Bar */
         .bar-container {
             background: #e6d8be; height: 8px; border-radius: 4px; overflow: hidden;
             border: 1px solid rgba(0,0,0,0.05); margin: 10px 0;
@@ -215,9 +193,9 @@
     <div class="book" id="scrapbook">
         
         <!-- ==========================================
-             LEMBAR 1: SAMPIEL (COVER) & PROLOGUE asli
+             LEMBAR 1: SAM SAMPUL (COVER) & PURWAKA
              ========================================== -->
-        <div class="page active" id="p1">
+        <div class="page" id="p1" style="z-index: 20;">
             <div class="front" onclick="nextPage(1)">
                 <span class="italic-phrase" style="text-align: center;">— Catatan Kidung Perjalanan —</span>
                 <div class="gunungan-icon">📜</div>
@@ -227,7 +205,6 @@
                 </div>
                 <div class="nav-hint" style="text-align: center; margin-top: 30px;">Wiwitan (Buka Lembaran) ➔</div>
             </div>
-            <!-- Halaman Kiri saat Lembar 2 Terbuka -->
             <div class="back" onclick="prevPage(1)">
                 <span class="italic-phrase">Purwaka (Prologue)</span>
                 <p class="handwritten" style="margin: auto 0; font-size: 24px; text-align: center; color: var(--accent-maroon);">
@@ -240,9 +217,9 @@
         </div>
 
         <!-- ==========================================
-             LEMBAR 2: BABAK 1 (MABA) & CATATAN TRANSISI BARU
+             LEMBAR 2: BABAK 1 (MABA) & CATATAN BARU
              ========================================== -->
-        <div class="page" id="p2">
+        <div class="page" id="p2" style="z-index: 19;">
             <div class="front" onclick="nextPage(2)">
                 <div>
                     <span class="italic-phrase">Babak I — Sinyal Pertama</span>
@@ -250,19 +227,17 @@
                 </div>
                 
                 <div class="photo-frame">
-                    <!-- GANTI DENGAN URL FOTO MABA -->
                     <img src="https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=400" alt="Foto Maba">
                 </div>
 
                 <p class="paragraph-story">
-                    Sebelum panggung hari ini berdiri megah, ada hari di mana kamu melangkah sebagai pengelana baru di dunia kampus. Membawa bertumpuk asa, rasa ingin tahu, dan kekhawatiran tentang ke mana arah angin perjuangan ini akan membawamu pergi.
+                    Sebelum panggung hari ini berdiri megah, ada hari di mana kamu melangkah sebagai pengelana baru di dunia kampus. Membawa bertumpuk asa, rasa ingin tahu, dan kekhawatiran tentang perjalanan ini.
                 </p>
                 <div class="page-footer"><span class="nav-hint">Lajengaken (Lanjut) ➔</span><span>II</span></div>
             </div>
-            <!-- Halaman Kiri saat Lembar 3 Terbuka (PROLOGUE SUDAH BERGANTI) -->
             <div class="back" onclick="prevPage(2)">
                 <span class="italic-phrase">Catatan Babak I</span>
-                <p class="handwritten" style="margin: auto 0; text-align: center;">
+                <p class="handwritten" style="margin: auto 0; text-align: center; color: var(--accent-maroon);">
                     "Laksana lakon wayang yang baru keluar kotak,<br>
                     suaramu yang lamat-lamat mulai mencari<br>
                     di mana nada gendingnya harus berbunyi."
@@ -272,9 +247,9 @@
         </div>
 
         <!-- ==========================================
-             LEMBAR 3: BABAK 2 (ORGANISASI) & TABS INFO
+             LEMBAR 3: BABAK 2 (ORGANISASI) & CATATAN BARU TWO
              ========================================== -->
-        <div class="page" id="p3">
+        <div class="page" id="p3" style="z-index: 18;">
             <div class="front" onclick="nextPage(3)">
                 <div>
                     <span class="italic-phrase">Babak II — Menemukan Suara</span>
@@ -282,7 +257,7 @@
                 </div>
 
                 <p class="paragraph-story">
-                    Ruang diskusi dan laboratorium komunikasi menjadi medan karyamu. Kamu mulai mengerti bahwa jalinan komunikasi bukan sekadar seni merangkai kata di bibir, melainkan mentransfer rasa dan menyebarkan kebermanfaatan.
+                    Ruang diskusi dan laboratorium komunikasi menjadi medan karyamu. Kamu mulai mengerti bahwa jalinan komunikasi bukan sekadar seni merangkai kata di bibir, melainkan mentransfer rasa.
                 </p>
 
                 <div>
@@ -298,10 +273,9 @@
 
                 <div class="page-footer"><span class="nav-hint">Lajengaken (Lanjut) ➔</span><span>IV</span></div>
             </div>
-            <!-- Halaman Kiri saat Lembar 4 Terbuka -->
             <div class="back" onclick="prevPage(3)">
                 <span class="italic-phrase">Catatan Babak II</span>
-                <p class="handwritten" style="margin: auto 0; text-align: center;">
+                <p class="handwritten" style="margin: auto 0; text-align: center; color: var(--accent-maroon);">
                     "Setiap karya yang tercipta lewat jemari dan suara,<br>
                     adalah ukiran prasasti kecil<br>
                     yang menegaskan bahwa kamu pernah berproses."
@@ -311,9 +285,9 @@
         </div>
 
         <!-- ==========================================
-             LEMBAR 4: BABAK 3 & 4 (SILENT EPISODES & SKRIPSI)
+             LEMBAR 4: BABAK 3 & 4 (THESIS) & CATATAN BARU THREE
              ========================================== -->
-        <div class="page" id="p4">
+        <div class="page" id="p4" style="z-index: 17;">
             <div class="front" onclick="event.stopPropagation();">
                 <div>
                     <span class="italic-phrase">Babak III — Ujian Akhir (Thesis)</span>
@@ -321,7 +295,7 @@
                 </div>
 
                 <p class="paragraph-story">
-                    Perjuangan tidak selalu berhias sorot lampu penonton. Ada malam-malam sepi ditemani tumpukan revisi literatur dan secangkir kopi penahan kantuk. Di sinilah kesabaranmu diuji layaknya ksatria yang sedang bertapa di tengah sunyi.
+                    Perjuangan tidak selalu berhias sorot lampu penonton. Ada malam-malam sepi ditemani tumpukan revisi literatur. Di sinilah kesabaranmu diuji layaknya ksatria yang sedang bertapa.
                 </p>
 
                 <div class="thesis-box" id="thesisZone">
@@ -329,12 +303,11 @@
                     <button class="btn-action" onclick="resolveThesis()">Tuntaskan Riset Akhir</button>
                 </div>
 
-                <div id="graduationZone" style="display: none; animation: fadeIn 0.8s ease forwards;">
+                <div id="graduationZone" style="display: none;">
                     <div class="photo-frame" style="height:120px; margin: 5px 0;">
-                        <!-- GANTI DENGAN FOTO HASIL SIDANG -->
                         <img src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=400" alt="Foto Sidang">
                     </div>
-                    <p class="handwritten" style="text-align: center; color: var(--accent-maroon); font-size: 20px; margin-top:2px;">
+                    <p class="handwritten" style="text-align: center; color: var(--accent-maroon); font-size: 20px;">
                         Lakon Skripsi Telah Paripurna.
                     </p>
                 </div>
@@ -344,10 +317,9 @@
                     <span>VI</span>
                 </div>
             </div>
-            <!-- Halaman Kiri saat Lembar Terakhir Terbuka -->
             <div class="back" onclick="prevPage(4)">
                 <span class="italic-phrase">Catatan Akhir</span>
-                <p class="handwritten" style="margin: auto 0; text-align: center;">
+                <p class="handwritten" style="margin: auto 0; text-align: center; color: var(--accent-maroon);">
                     "Malam yang pekat melahirkan fajar yang hangat.<br>
                     Perjuangan sunyimu kini bersiap<br>
                     menyambut riuh sorak kemenangan."
@@ -357,9 +329,9 @@
         </div>
 
         <!-- ==========================================
-             LEMBAR 5: BABAK 5 (WISUDA & PENUTUP)
+             LEMBAR 5: SAM SAMPUL BELAKANG (FINISH)
              ========================================== -->
-        <div class="page" id="p5">
+        <div class="page" id="p5" style="z-index: 16;">
             <div class="front" onclick="event.stopPropagation();">
                 <div>
                     <span class="italic-phrase">Babak IV — Toga Kemenangan</span>
@@ -367,17 +339,16 @@
                 </div>
 
                 <div class="photo-frame" style="height: 180px;">
-                    <!-- GANTI DENGAN FOTO TOGA / WISUDA -->
                     <img src="https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=400" alt="Wisuda">
                 </div>
 
-                <p class="paragraph-story" style="font-size: 12px; line-height: 1.6;">
-                    Hari ini, namanya digaungkan bersama gelar kehormatan akademis. Kebanggaan memancar menggantikan seluruh letih yang menguap menjadi air mata haru bahagia.
+                <p class="paragraph-story" style="font-size: 12px;">
+                    Hari ini, namanya digaungkan bersama gelar kehormatan akademis. Letih yang menguap menjadi air mata haru bahagia.
                 </p>
                 
                 <div style="border-top: 1px dashed rgba(128,0,32,0.15); margin-top: 5px; padding-top: 5px;">
-                    <p class="handwritten" style="font-size: 21px; line-height: 1.2; text-align: center; color: var(--accent-maroon);">
-                        "Matur nuwun atas keteguhanmu.<br>Selamat menempuh lembaran baru kehidupan!"
+                    <p class="handwritten" style="font-size: 21px; text-align: center; color: var(--accent-maroon);">
+                        "Matur nuwun atas keteguhanmu.<br>Selamat menempuh lembaran baru!"
                     </p>
                 </div>
 
@@ -386,36 +357,41 @@
                     <span>VIII</span>
                 </div>
             </div>
-            <div class="back">
-                <!-- Cover Belakang Buku -->
-            </div>
+            <div class="back"></div>
         </div>
 
     </div>
 </div>
 
 <script>
-    // CONTROL AKTIVITAS HALAMAN BIAR TIDAK TABRAKAN
-    let currentPage = 1;
+    const book = document.getElementById("scrapbook");
 
+    // FUNGSI UTAMA: MENANGANI BUKA & Z-INDEX SECARA REALTIME
     function nextPage(pageNumber) {
         const page = document.getElementById(`p${pageNumber}`);
         page.classList.add("flipped");
-        page.classList.remove("active");
         
-        currentPage = pageNumber + 1;
-        const nextPageEl = document.getElementById(`p${currentPage}`);
-        if(nextPageEl) nextPageEl.classList.add("active");
+        // Sesaat setelah dibalik, langsung buang z-indexnya ke paling bawah (1)
+        // Agar tulisan di halaman selanjutnya/di bawahnya tidak tertutup!
+        setTimeout(() => {
+            page.style.zIndex = pageNumber;
+        }, 300);
+
+        if (pageNumber === 1) {
+            book.style.transform = "translateX(0%)"; // Buku center terbuka penuh
+        }
     }
 
     function prevPage(pageNumber) {
         const page = document.getElementById(`p${pageNumber}`);
         page.classList.remove("flipped");
-        page.classList.add("active");
         
-        const oldActivePage = document.getElementById(`p${currentPage}`);
-        if(oldActivePage && currentPage !== pageNumber) oldActivePage.classList.remove("active");
-        currentPage = pageNumber;
+        // Kembalikan z-index tinggi saat halaman ditutup lagi
+        page.style.zIndex = 20 - pageNumber + 1;
+
+        if (pageNumber === 1) {
+            book.style.transform = "translateX(50%)"; // Kembali ke posisi cover kanan
+        }
     }
 
     function closeBook() {
@@ -426,7 +402,7 @@
         }
     }
 
-    // TABS BABAK 2
+    // INTERAKSI TABS
     const quotes = {
         speaking: "🎙️ [Wicara]: Lantang dan berani menyuarakan gagasan di podium, menggerakkan audiens lewat intonasi.",
         visual: "📷 [Netra]: Menangkap esensi kehidupan lewat lensa, menyusun visual yang bercerita tanpa suara.",
@@ -440,7 +416,7 @@
         document.getElementById("voiceDisplay").innerText = quotes[key];
     }
 
-    // MINI GAME SKRIPSI
+    // GAME MINI THESIS
     let energy = 100;
     function resolveThesis() {
         energy -= 25;
