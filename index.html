@@ -3,310 +3,413 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>A Frequency Called Purpose - The Book</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Poppins:wght@300;400;600&family=Reenie+Beanie&family=Press+Start+2P&display=swap" rel="stylesheet">
+    <title>A Frequency Called Purpose - The Scrapbook</title>
+    <!-- Google Fonts: Nuansa Kalem & Klasik -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Poppins:wght@300;400;500&family=Reenie+Beanie&display=swap" rel="stylesheet">
     
     <style>
         :root {
-            --bg-dark: #0b0b12;
-            --book-bg: #12121f;
-            --neon-cyan: #00f0ff;
-            --neon-magenta: #ff007c;
-            --text-color: #d1d1e0;
+            --bg-cozy: #121214;       /* Warna gelap kalem, tidak pekat */
+            --paper-dark: #1a1a22;    /* Warna lembaran buku yang hangat */
+            --accent-warm: #d4af37;   /* Warna emas redup untuk highlight estetik */
+            --text-main: #e2e2e9;     /* Warna teks putih gading yang lembut */
+            --text-muted: #8e8e9f;    /* Warna teks sekunder */
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
-            background-color: var(--bg-dark);
-            color: var(--text-color);
+            background-color: var(--bg-cozy);
+            color: var(--text-main);
             font-family: 'Poppins', sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            overflow: hidden;
-            perspective: 2000px; /* Memberikan efek kedalaman 3D yang kuat */
+            min-height: 100vh;
+            overflow-x: hidden;
+            perspective: 2500px; /* Kedalaman 3D untuk efek balik halaman */
+            padding: 20px;
         }
 
-        /* Latar Belakang Partikel Glow Bergerak */
-        .bg-glow {
-            position: absolute; width: 100%; height: 100%;
-            background: radial-gradient(circle at 30% 30%, rgba(0, 240, 255, 0.05) 0%, transparent 50%),
-                        radial-gradient(circle at 70% 70%, rgba(255, 0, 124, 0.05) 0%, transparent 50%);
+        /* Ambient Light di Background */
+        .ambient-glow {
+            position: fixed; width: 100%; height: 100%; top: 0; left: 0;
+            background: radial-gradient(circle at 50% 50%, rgba(212, 175, 55, 0.03) 0%, transparent 60%);
             z-index: -1;
+            pointer-events: none;
         }
 
         /* ==========================================================================
-           WADAH UTAMA BUKU (BOOK CONTAINER)
+           STRUKTUR UTAMA BUKU (BOOK COVER & PAGES)
            ========================================================================== */
         .book {
             position: relative;
-            width: 450px;
-            height: 600px;
-            transition: transform 0.5s;
+            width: 500px;
+            height: 680px;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
             transform-style: preserve-3d;
         }
 
-        /* Setiap Lembar Halaman */
         .page {
             position: absolute;
             width: 100%;
             height: 100%;
             top: 0; left: 0;
-            transform-origin: left center; /* Berbalik dari sisi kiri seperti buku asli */
+            transform-origin: left center;
             transform-style: preserve-3d;
-            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: transform 0.9s cubic-bezier(0.4, 0, 0.2, 1);
             z-index: 1;
             cursor: pointer;
         }
 
-        /* Sisi Depan dan Belakang Halaman */
         .front, .back {
             position: absolute;
             width: 100%;
             height: 100%;
-            padding: 40px 30px;
-            border-radius: 0 16px 16px 0;
-            box-shadow: 5px 0 25px rgba(0,0,0,0.5);
-            backface-visibility: hidden; /* Menyembunyikan sisi sebaliknya saat berputar */
+            padding: 45px 40px;
+            border-radius: 0 12px 12px 0;
+            box-shadow: 10px 10px 30px rgba(0,0,0,0.6);
+            backface-visibility: hidden;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
+            background: var(--paper-dark);
+            border-left: 1px solid rgba(255, 255, 255, 0.03);
         }
 
-        .front {
-            background: linear-gradient(135deg, #16162a, var(--book-bg));
-            border-left: 4px solid #0d0d1a;
+        .front::after {
+            content: ''; position: absolute; top: 0; left: 0; width: 10px; height: 100%;
+            background: linear-gradient(to right, rgba(0,0,0,0.3), transparent);
         }
 
         .back {
-            background: linear-gradient(135deg, var(--book-bg), #16162a);
-            transform: rotateY(180deg); /* Memutar sisi belakang */
-            border-right: 4px solid #0d0d1a;
-            border-radius: 16px 0 0 16px;
+            transform: rotateY(180deg);
+            border-radius: 12px 0 0 12px;
         }
 
-        /* State ketika halaman dibalik (Terbuka) */
         .page.flipped {
             transform: rotateY(-180deg);
         }
 
-        /* LAYER Z-INDEX BIAR HALAMAN MENUMPUK RAPI */
-        #p1 { z-index: 3; }
-        #p2 { z-index: 2; }
-        #p3 { z-index: 1; }
+        /* Tumpukan Halaman Teratur */
+        #p1 { z-index: 6; }
+        #p2 { z-index: 5; }
+        #p3 { z-index: 4; }
+        #p4 { z-index: 3; }
+        #p5 { z-index: 2; }
+        #p6 { z-index: 1; }
 
         /* ==========================================================================
-           DESAIN ELEMEN DI DALAM HALAMAN (SCRAPBOOK AESTHETIC)
+           TIPOGRAFI & ORNAMEN KALEM (AESTHETIC JURNAL)
            ========================================================================== */
-        
-        /* Gaya Cover Jurnal */
-        .cover-title {
-            font-family: 'Cinzel', serif;
-            font-size: 26px;
-            letter-spacing: 2px;
-            color: #fff;
-            text-align: center;
-            text-shadow: 0 0 15px rgba(0, 240, 255, 0.3);
-            margin-top: 40px;
+        .title-serif {
+            font-family: 'Playfair Display', serif;
+            font-weight: 600;
+            color: #ffffff;
+            line-height: 1.3;
         }
 
-        .cover-subtitle {
-            font-family: 'Poppins', sans-serif;
-            font-size: 12px;
-            text-transform: uppercase;
-            letter-spacing: 4px;
-            color: var(--neon-cyan);
-            text-align: center;
+        .italic-phrase {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            color: var(--accent-warm);
+            font-size: 15px;
+            letter-spacing: 1px;
         }
 
-        /* Parallax & Glow Photo Frame */
-        .photo-frame {
+        .handwritten {
+            font-family: 'Reenie Beanie', cursive;
+            font-size: 27px;
+            color: #d1d1e0;
+            line-height: 1.3;
+            letter-spacing: 1px;
+        }
+
+        .paragraph-story {
+            font-size: 13.5px;
+            line-height: 1.8;
+            color: #b3b3c6;
+            text-align: justify;
+        }
+
+        /* Minimalist Polaroid Frame dengan Parallax */
+        .scrapbook-frame {
             width: 100%;
-            height: 240px;
-            background: #0d0d1a;
-            border: 1px solid rgba(0, 240, 255, 0.2);
-            box-shadow: 0 0 15px rgba(0, 240, 255, 0.1);
-            border-radius: 8px;
+            height: 250px;
+            background: #121218;
+            padding: 12px 12px 35px 12px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+            border-radius: 4px;
             overflow: hidden;
             position: relative;
-            margin: 20px 0;
-            transition: transform 0.2s ease; /* Untuk efek parallax halus */
+            margin: 15px 0;
+            transition: transform 0.2s ease-out;
         }
 
-        .photo-frame img {
+        .scrapbook-frame img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            opacity: 0.8;
-            transition: opacity 0.3s;
+            filter: grayscale(20%) sepia(10%); /* Nuansa hangat nostalgia */
+            transition: transform 0.3s ease;
+            border-radius: 2px;
         }
 
-        .photo-frame:hover img { opacity: 1; }
-
-        /* Catatan Tulisan Tangan (Scrapbook Feel) */
-        .handwritten {
-            font-family: 'Reenie Beanie', cursive;
-            font-size: 26px;
-            color: #e6e6ff;
-            line-height: 1.2;
-            transform: rotate(-1deg);
-            margin-top: 15px;
+        /* Garis Frekuensi Tipis */
+        .thin-wave {
+            width: 60px; height: 2px;
+            background: linear-gradient(to right, var(--accent-warm), transparent);
+            margin: 10px 0;
         }
 
-        .page-number {
-            font-size: 11px;
-            font-family: 'Cinzel', serif;
-            color: #555577;
-            text-align: right;
+        .page-footer {
+            display: flex; justify-content: space-between; align-items: center;
+            font-size: 11px; font-family: 'Playfair Display', serif; color: var(--text-muted);
+            border-top: 1px solid rgba(255,255,255,0.05); padding-top: 10px;
         }
 
-        /* Petunjuk Aksi di Kanan Bawah */
-        .hint-next {
-            font-size: 10px;
-            letter-spacing: 2px;
-            color: var(--neon-cyan);
-            text-align: right;
-            text-transform: uppercase;
-            animation: pulse 1.5s infinite alternate;
-        }
-
-        @keyframes pulse {
-            0% { opacity: 0.4; } 100% { opacity: 1; }
+        .nav-hint {
+            color: var(--accent-warm); letter-spacing: 1px; text-transform: uppercase; font-size: 9px;
         }
 
         /* ==========================================================================
-           CHAPTER 4: GAME PENGUNCI HALAMAN (THE THESIS LOCK)
+           INTERAKSI CHAPTER 2 & GAME CHAPTER 4
            ========================================================================== */
-        .lock-overlay {
-            text-align: center;
-            padding: 20px 0;
+        .chapter2-tabs {
+            display: flex; gap: 8px; margin: 15px 0;
         }
-        .game-title {
-            font-family: 'Press Start 2P', cursive;
-            font-size: 11px;
-            color: var(--neon-magenta);
-            margin-bottom: 15px;
+        .tab-btn {
+            background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.1);
+            color: var(--text-main); font-size: 11px; padding: 6px 12px; border-radius: 20px;
+            cursor: pointer; transition: all 0.3s;
         }
-        .hp-container {
-            background: #0d0d1a; border: 1px solid #333; height: 20px;
-            border-radius: 10px; overflow: hidden; position: relative; margin-bottom: 20px;
+        .tab-btn:hover, .tab-btn.active {
+            border-color: var(--accent-warm); color: var(--accent-warm); background: rgba(214,175,55,0.05);
         }
-        .hp-bar {
-            width: 100%; height: 100%; background: linear-gradient(to right, #ff007c, #00f0ff);
-            transition: width 0.2s;
+        .tab-content {
+            font-style: italic; min-height: 70px; display: flex; align-items: center; color: #c4c4d5;
         }
-        .hp-text {
-            position: absolute; width: 100%; text-align: center; top: 4px;
-            font-family: 'Press Start 2P', cursive; font-size: 8px; color: #fff;
+
+        /* Chapter 4 Mission */
+        .thesis-box { text-align: center; padding: 15px 0; }
+        .bar-container {
+            background: #121218; height: 12px; border-radius: 6px; overflow: hidden;
+            position: relative; border: 1px solid rgba(255,255,255,0.05); margin: 15px 0;
         }
-        .btn-attack {
-            background: transparent; border: 1px solid var(--neon-cyan);
-            color: var(--neon-cyan); padding: 10px 20px; border-radius: 20px;
-            font-family: 'Poppins', sans-serif; font-size: 12px; cursor: pointer;
-            box-shadow: 0 0 10px rgba(0, 240, 255, 0.1);
-            transition: all 0.3s;
+        .bar-fill { width: 100%; height: 100%; background: var(--accent-warm); transition: width 0.3s; }
+        .btn-action {
+            background: transparent; border: 1px solid var(--accent-warm); color: var(--accent-warm);
+            padding: 8px 24px; border-radius: 4px; font-size: 12px; cursor: pointer; transition: all 0.3s;
         }
-        .btn-attack:hover {
-            background: var(--neon-cyan); color: #000; box-shadow: 0 0 15px var(--neon-cyan);
-        }
+        .btn-action:hover { background: var(--accent-warm); color: var(--bg-cozy); }
     </style>
 </head>
 <body>
 
-<div class="bg-glow"></div>
+<div class="ambient-glow"></div>
 
-<div class="book" id="myBook">
+<div class="book" id="scrapbook">
     
     <!-- ==========================================
-         HALAMAN 1: COVER BUKU
+         HALAMAN 1: COVER
          ========================================== -->
-    <div class="page" id="p1" onclick="flipPage(1)">
-        <div class="front">
-            <div class="cover-subtitle">A Digital Journal</div>
-            <div>
-                <h1 class="cover-title">A FREQUENCY<br>CALLED PURPOSE</h1>
-                <p style="text-align: center; font-size: 12px; color: #666680; margin-top: 15px; letter-spacing: 1px;">
-                    The journey of a voice, from a student to a storyteller.
-                </p>
-            </div>
-            <div class="hint-next">Buka Lembar Pertama ➔</div>
+    <div class="page" id="p1" onclick="nextPage(1)">
+        <div class="front" style="background: linear-gradient(135deg, #181822, #13131a); justify-content: center; text-align: center;">
+            <span class="italic-phrase">— A Personal Chronicle</span>
+            <h1 class="title-serif" style="font-size: 28px; margin: 20px 0 10px 0; letter-spacing: 1px;">A FREQUENCY<br>CALLED PURPOSE</h1>
+            <p style="font-size: 12px; color: var(--text-muted); letter-spacing: 2px; text-transform: uppercase;">From Student to Storyteller</p>
+            <div style="margin-top: 60px;" class="nav-hint">Buka Lembaran Kenangan ➔</div>
         </div>
-        <div class="back" onclick="event.stopPropagation(); flipPage(1, false);">
-            <!-- Sisi belakang halaman 1 (Kosong / transisi estetis) -->
-            <div class="cover-subtitle" style="color: #444;">Memory Core</div>
-            <p class="handwritten" style="text-align: center; margin: auto 0;">
-                "Setiap babak punya suaranya sendiri. Dan ini adalah awal ketika frekuensi itu pertama kali dinyalakan..."
+        <div class="back" onclick="event.stopPropagation(); prevPage(1);">
+            <span class="italic-phrase">Prologue</span>
+            <p class="handwritten" style="margin: auto 0; font-size: 25px; text-align: center;">
+                "Sebelum riuh toga merayakan namamu,<br>
+                ada sunyi panjang yang merawat mimpimu.<br>
+                Mari melihat kembali langkah awal itu..."
             </p>
-            <div class="page-number">☉ I</div>
+            <div class="page-footer"><span>Intro</span><span>☉ 01</span></div>
         </div>
     </div>
 
     <!-- ==========================================
          HALAMAN 2: CHAPTER 1 (MABA)
          ========================================== -->
-    <div class="page" id="p2" onclick="flipPage(2)">
+    <div class="page" id="p2" onclick="nextPage(2)">
         <div class="front">
-            <div class="cover-subtitle" style="text-align: left;">Chapter 1 // The First Signal</div>
+            <div>
+                <span class="italic-phrase">Chapter 1 — The First Signal</span>
+                <div class="thin-wave"></div>
+            </div>
             
-            <!-- Frame Foto dengan Efek Parallax Kinetik Mouse -->
-            <div class="photo-frame" onmousemove="parallaxEffect(event, this)" onmouseleave="resetParallax(this)">
+            <div class="scrapbook-frame" onmousemove="parallax(event, this)" onmouseleave="resetParallax(this)">
                 <!-- GANTI DENGAN URL FOTO MABA -->
                 <img src="https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=400" alt="Foto Maba">
             </div>
 
-            <p class="handwritten">
-                "Sebelum ada toga. Sebelum ada gelar. Ada seseorang yang memulai semuanya sebagai mahasiswa baru, membawa mimpi dan sedikit rasa penasaran tentang hari esok."
+            <p class="paragraph-story">
+                Sebelum ada riuh tepuk tangan hari ini, ada hari di mana kamu melangkah masuk sebagai mahasiswa baru. Datang membawa bertumpuk mimpi, rasa penasaran, dan mungkin... sedikit ketakutan tentang perjalanan panjang yang belum kamu ketahui ujungnya.
             </p>
-            <div class="hint-next">Buka Halaman Selanjutnya ➔</div>
+            <div class="page-footer"><span class="nav-hint">Lanjutkan Membaca ➔</span><span>☉ 02</span></div>
         </div>
-        <div class="back" onclick="event.stopPropagation(); flipPage(2, false);">
-            <div class="cover-subtitle" style="color: #444;">Intermission</div>
-            <p class="handwritten" style="text-align: center; margin: auto 0;">
-                "Langkah-langkah kecil di koridor kampus, tawa di kelas komunikasi, hingga malam-malam sepi yang melelahkan... Semua terekam rapi."
+        <div class="back" onclick="event.stopPropagation(); prevPage(2);">
+            <span class="italic-phrase">Transition</span>
+            <p class="handwritten" style="margin: auto 0; text-align: center;">
+                "Dari sebuah sinyal kecil yang pemalu,<br>suaramu perlahan mulai menemukan frekuensinya..."
             </p>
-            <div class="page-number">☉ II</div>
+            <div class="page-footer"><span>Chapter 1</span><span>☉ 03</span></div>
         </div>
     </div>
 
     <!-- ==========================================
-         HALAMAN 3: CHAPTER 4 (FINAL BOSS SKRIPSI)
+         HALAMAN 3: CHAPTER 2 (STUDIO / ORGANISASI)
          ========================================== -->
-    <div class="page" id="p3">
-        <div class="front" onclick="event.stopPropagation();">
-            <div class="cover-subtitle" style="text-align: left; color: var(--neon-magenta);">Chapter 4 // Final Boss</div>
-            
-            <!-- Konten Utama Kunci Skripsi -->
-            <div class="lock-overlay" id="lockZone">
-                <div class="game-title">⚔️ MISSION: SKRIPSI DEFENSE</div>
-                <div class="hp-container">
-                    <div id="hpBar" class="hp-bar"></div>
-                    <div id="hpText" class="hp-text">HP: 100%</div>
-                </div>
-                <button class="btn-attack" onclick="attackThesis()">💻 Hadapi Skripsi</button>
-                <p style="font-size: 11px; color: #555; margin-top: 15px; line-height: 1.4;">
-                    Halaman ini dikunci oleh perjuangan akhir.<br>Klik tombol di atas untuk menyelesaikannya!
-                </p>
+    <div class="page" id="p3" onclick="nextPage(3)">
+        <div class="front">
+            <div>
+                <span class="italic-phrase">Chapter 2 — Finding The Voice</span>
+                <div class="thin-wave"></div>
             </div>
 
-            <!-- Konten Hadiah Wisuda Setelah Menang -->
-            <div id="unlockZone" style="display: none; animation: fadeIn 1s ease forwards;">
-                <div class="photo-frame">
-                    <!-- GANTI DENGAN URL FOTO SIDANG/WISUDA -->
-                    <img src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=400" alt="Foto Kelulusan">
+            <p class="paragraph-story">
+                Ruang kuliah, panggung organisasi, dan setiap aktivitas penyiaran menjadi laboratorium bagimu. Kamu perlahan belajar bahwa komunikasi bukan sekadar seni berbicara, melainkan tentang memahami, menyampaikan, dan memberi arti pada setiap pesan.
+            </p>
+
+            <!-- Menu Interaktif Kalem -->
+            <div>
+                <div class="chapter2-tabs">
+                    <button class="tab-btn" onclick="switchVoice('speaking', this, event)">🎙️ Speaking</button>
+                    <button class="tab-btn" onclick="switchVoice('visual', this, event)">📷 Visual</button>
+                    <button class="tab-btn" onclick="switchVoice('writing', this, event)">📝 Writing</button>
                 </div>
-                <p class="handwritten" style="color: var(--neon-cyan);">
-                    "Kamu pantas sampai di titik ini. Selamat atas bab baru yang luar biasa indah yang sedang kamu mulai!"
-                </p>
+                <div id="voiceDisplay" class="tab-content paragraph-story">
+                    *Klik salah satu elemen di atas untuk melihat potongan catatan perjalanan.
+                </div>
             </div>
 
-            <div class="page-number">☉ III</div>
+            <div class="page-footer"><span class="nav-hint">Lanjutkan Membaca ➔</span><span>☉ 04</span></div>
         </div>
-        <div class="back">
-            <!-- Halaman paling terakhir / Penutup Buku -->
-            <div class="cover-subtitle">The End of Volume I</div>
-            <h2 class="cover-title" style="font-size: 20px; color: var(--neon-magenta);">FIN.</h2>
+        <div class="back" onclick="event.stopPropagation(); prevPage(3);">
+            <span class="italic-phrase">Behind The Lens</span>
+            <p class="handwritten" style="margin: auto 0; text-align: center;">
+                "Namun, tidak semua bagian dari cerita indah ini<br>sempat tertangkap oleh lensa kamera..."
+            </p>
+            <div class="page-footer"><span>Chapter 2</span><span>☉ 05</span></div>
+        </div>
+    </div>
+
+    <!-- ==========================================
+         HALAMAN 4: CHAPTER 3 (SILENT EPISODES)
+         ========================================== -->
+    <div class="page" id="p4" onclick="nextPage(4)">
+        <div class="front">
+            <div>
+                <span class="italic-phrase">Chapter 3 — The Silent Episodes</span>
+                <div class="thin-wave"></div>
+            </div>
+
+            <p class="paragraph-story">
+                Ada babak-babak di mana layar terasa redup. Tatapan lelah menghadap laptop di tengah malam, suasana kampus yang sunyi saat semua orang telah pulang, dan perjuangan-perjuangan kecil yang tak pernah mendapat tepuk tangan riuh. Namun, justru di lembaran sunyi inilah jiwamu ditempa kuat.
+            </p>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 15px 0;">
+                <!-- GANTI DENGAN DUA FOTO RANDOM PERJUANGAN/KAMPUS -->
+                <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=200" alt="Suasana Malam" style="width:100%; height:110px; object-fit:cover; border-radius:4px; opacity:0.6;">
+                <img src="https://images.unsplash.com/photo-1501504905252-473c47e087f8?w=200" alt="Laptop" style="width:100%; height:110px; object-fit:cover; border-radius:4px; opacity:0.6;">
+            </div>
+
+            <div class="page-footer"><span class="nav-hint">Menuju Ujian Akhir ➔</span><span>☉ 06</span></div>
+        </div>
+        <div class="back" onclick="event.stopPropagation(); prevPage(4);">
+            <span class="italic-phrase">The Last Hurdle</span>
+            <p class="handwritten" style="margin: auto 0; text-align: center;">
+                "Dan tibalah saatnya menghadapi<br>gerbang terakhir sebelum kelulusan..."
+            </p>
+            <div class="page-footer"><span>Chapter 3</span><span>☉ 07</span></div>
+        </div>
+    </div>
+
+    <!-- ==========================================
+         HALAMAN 5: CHAPTER 4 (FINAL BOSS: THESIS)
+         ========================================== -->
+    <div class="page" id="p5">
+        <div class="front" onclick="event.stopPropagation();">
+            <div>
+                <span class="italic-phrase">Chapter 4 — Final Boss: Thesis</span>
+                <div class="thin-wave"></div>
+            </div>
+
+            <!-- Interaksi Klik Skripsi Kalem -->
+            <div class="thesis-box" id="thesisZone">
+                <p class="paragraph-story" style="text-align: center; font-style: italic; margin-bottom: 10px;">
+                    "Selesaikan lembar riset akhir untuk membuka dokumen kelulusan."
+                </p>
+                <div class="bar-container">
+                    <div id="hpFill" class="bar-fill"></div>
+                </div>
+                <button class="btn-action" onclick="resolveThesis()">Tuntaskan Sidang Skripsi</button>
+            </div>
+
+            <!-- Konten yang Terbuka Setelah Sukses Klik -->
+            <div id="graduationZone" style="display: none; animation: fadeIn 1s ease forwards;">
+                <div class="scrapbook-frame">
+                    <!-- GANTI DENGAN FOTO HASIL SIDANG -->
+                    <img src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=400" alt="Foto Sidang">
+                </div>
+                <p class="handwritten" style="text-align: center; color: var(--accent-warm); font-size: 24px;">
+                    Status: Completed. Tugas akhir telah tuntas diselesaikan.
+                </p>
+            </div>
+
+            <div class="page-footer">
+                <!-- Tombol Next Manual Khusus Halaman Game agar tidak bentrok -->
+                <span id="nextTrigger" class="nav-hint" style="visibility: hidden; cursor:pointer;" onclick="nextPage(5)">Buka Babak Klimaks ➔</span>
+                <span>☉ 08</span>
+            </div>
+        </div>
+        <div class="back" onclick="event.stopPropagation(); prevPage(5);">
+            <span class="italic-phrase">The Climax</span>
+            <p class="handwritten" style="margin: auto 0; text-align: center;">
+                "Dulu kamu belajar menyampaikan pesan.<br>Hari ini, kamulah pesan terbaik itu sendiri."
+            </p>
+            <div class="page-footer"><span>Chapter 4</span><span>☉ 09</span></div>
+        </div>
+    </div>
+
+    <!-- ==========================================
+         HALAMAN 6: CHAPTER 5 & ENDING
+         ========================================== -->
+    <div class="page" id="p6">
+        <div class="front" onclick="event.stopPropagation();">
+            <div>
+                <span class="italic-phrase">Chapter 5 — The Graduation Frequency</span>
+                <div class="thin-wave"></div>
+            </div>
+
+            <div class="scrapbook-frame" style="height: 220px;">
+                <!-- GANTI DENGAN FOTO WISUDA / TOGA -->
+                <img src="https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=400" alt="Wisuda">
+            </div>
+
+            <p class="paragraph-story" style="font-size: 13px;">
+                Hari ini nama beserta gelarmu dipanggil. Seluruh bait perjuangan sunyi yang kamu lewati mengkristal menjadi seulas senyum penuh kemenangan di hari kelulusanmu.
+            </p>
+            
+            <div style="border-top: 1px dashed rgba(255,255,255,0.1); margin-top: 10px; padding-top: 10px;">
+                <span class="italic-phrase" style="font-size: 13px; display: block; margin-bottom: 5px;">One Last Message:</span>
+                <p class="handwritten" style="font-size: 23px; line-height: 1.2;">
+                    "Aku mungkin tidak tahu semua lelahmu, tapi aku tahu satu hal... Kamu sangat pantas berada di titik ini. Selamat atas bab baru perjalananmu."
+                </p>
+            </div>
+
+            <div class="page-footer">
+                <span class="nav-hint" style="cursor:pointer;" onclick="closeBook()">➔ Tutup Jurnal</span>
+                <span>☉ 10</span>
+            </div>
+        </div>
+        <div class="back" style="background: linear-gradient(135deg, #13131a, #0b0b12); justify-content: center; text-align: center;">
+            <h2 class="title-serif" style="color: var(--accent-warm); font-size: 22px;">FIN.</h2>
+            <p style="font-size: 11px; color: var(--text-muted); margin-top: 10px; letter-spacing: 1px;">A Journey Remembered Perfectly.</p>
         </div>
     </div>
 
@@ -314,66 +417,82 @@
 
 <script>
     // ==========================================
-    // JS 1: MEKANISME BALIK HALAMAN BUKU (PAGE FLIP)
+    // NAVIGASI BALIK HALAMAN (PAGE FLIP CONTROLLER)
     // ==========================================
-    function flipPage(pageNumber, isForward = true) {
+    const book = document.getElementById("scrapbook");
+
+    function nextPage(pageNumber) {
         const page = document.getElementById(`p${pageNumber}`);
-        const book = document.getElementById("myBook");
-        
-        if (isForward) {
-            page.classList.add("flipped");
-            // Menggeser sumbu tengah buku sedikit ke kiri saat halaman dibuka agar estetik di layar
-            if(pageNumber === 1) book.style.transform = "translateX(25%)";
-        } else {
-            page.classList.remove("flipped");
-            if(pageNumber === 1) book.style.transform = "translateX(0%)";
+        page.classList.add("flipped");
+        if (pageNumber === 1) book.style.transform = "translateX(25%)";
+    }
+
+    function prevPage(pageNumber) {
+        const page = document.getElementById(`p${pageNumber}`);
+        page.classList.remove("flipped");
+        if (pageNumber === 1) book.style.transform = "translateX(0%)";
+    }
+
+    function closeBook() {
+        // Balikkan semua halaman kembali ke cover awal
+        for (let i = 5; i >= 1; i--) {
+            setTimeout(() => {
+                prevPage(i);
+            }, (5 - i) * 150);
         }
     }
 
     // ==========================================
-    // JS 2: EFEK PARALLAX KINETIK FOTO (GERAK IKUT MOUSE)
+    // INTERAKSI TABS PADA CHAPTER 2
     // ==========================================
-    function parallaxEffect(event, element) {
-        const img = element.querySelector('img');
-        const rect = element.getBoundingClientRect();
-        
-        // Menghitung posisi kursor relatif terhadap frame foto
-        const x = event.clientX - rect.left - (rect.width / 2);
-        const y = event.clientY - rect.top - (rect.height / 2);
-        
-        // Geser gambar berlawanan arah cursor secara lembut
-        const moveX = (x / rect.width) * -20;
-        const moveY = (y / rect.height) * -20;
-        
-        img.style.transform = `scale(1.1) translate(${moveX}px, ${moveY}px)`;
-    }
+    const quotes = {
+        speaking: "🎙️ [Catatan Speaking]: Menemukan keberanian untuk berdiri tegak di podium, menyuarakan ide-ide besar, dan menavigasi atensi lewat ketukan artikulasi.",
+        visual: "📷 [Catatan Visual]: Seni membingkai realitas. Memahami dunia lewat sudut estetis lensa, menangkap yang tersirat, dan membiarkan gambar bercerita.",
+        writing: "📝 [Catatan Writing]: Menuangkan gagasan abstrak ke dalam untaian aksara terstruktur. Menyusun pesan kuat yang melampaui keterbatasan ruang bising."
+    };
 
-    function resetParallax(element) {
-        const img = element.querySelector('img');
-        img.style.transform = `scale(1) translate(0px, 0px)`;
+    function switchVoice(key, element, event) {
+        event.stopPropagation(); // Biar halaman tidak ikut berbalik saat tombol diklik
+        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+        element.classList.add('active');
+        document.getElementById("voiceDisplay").innerText = quotes[key];
     }
 
     // ==========================================
-    // JS 3: GAME SKRIPSI PENGUNCI LEMBARAN KELULUSAN
+    // INTERAKSI GAME MINI PADA CHAPTER 4
     // ==========================================
-    let hp = 100;
-    function attackThesis() {
-        if (hp <= 0) return;
+    let energy = 100;
+    function resolveThesis() {
+        if (energy <= 0) return;
+        energy -= 25;
+        document.getElementById("hpFill").style.width = energy + "%";
         
-        hp -= 25; // Berkurang 25% setiap klik
-        if (hp < 0) hp = 0;
-        
-        document.getElementById("hpBar").style.width = hp + "%";
-        document.getElementById("hpText").innerText = "HP: " + hp + "%";
-        
-        if (hp === 0) {
-            // Efek transisi halus memunculkan memori wisuda
-            document.getElementById("lockZone").style.display = "none";
-            document.getElementById("unlockZone").style.display = "block";
-            
-            // Memberikan kedipan neon tanda sukses
-            document.getElementById("p3").querySelector('.front').style.borderColor = "var(--neon-cyan)";
+        if (energy === 0) {
+            document.getElementById("thesisZone").style.display = "none";
+            document.getElementById("graduationZone").style.display = "block";
+            // Memunculkan tombol navigasi halaman selanjutnya setelah game kelar
+            document.getElementById("nextTrigger").style.visibility = "visible";
         }
+    }
+
+    // ==========================================
+    // EFEK KINETIK PARALLAX FOTO (MOUSE POSITION)
+    // ==========================================
+    function parallax(e, frame) {
+        const img = frame.querySelector('img');
+        const box = frame.getBoundingClientRect();
+        const x = e.clientX - box.left - (box.width / 2);
+        const y = e.clientY - box.top - (box.height / 2);
+        
+        // Pergeseran mikro yang sangat halus agar terkesan premium
+        const moveX = (x / box.width) * -12;
+        const moveY = (y / box.height) * -12;
+        
+        img.style.transform = `scale(1.08) translate(${moveX}px, ${moveY}px)`;
+    }
+
+    function resetParallax(frame) {
+        frame.querySelector('img').style.transform = "scale(1) translate(0px, 0px)";
     }
 </script>
 
