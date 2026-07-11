@@ -3,27 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kidung Perjalanan - Primbon Jiwa</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800&family=Playfair+Display:ital,wght@0,600;1,500&family=Poppins:wght@300;400;500&family=Reenie+Beanie&display=swap" rel="stylesheet">
+    <title>Kidung Perjalanan - Serat Klasik</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800&family=Playfair+Display:ital,wght=0,600;1,500&family=Poppins:wght@300;400;500&family=Reenie+Beanie&display=swap" rel="stylesheet">
     
     <style>
         :root {
-            --bg-kejawen: #140d07;     /* Warna hitam kayu jati bakar/wingit */
-            --paper-kulit: #dfcdb4;    /* Warna kulit wayang kulit klasik kuno */
-            --aksen-maroon: #5c0612;   /* Merah klasik kraton tua */
-            --aksen-prada: #aa823a;    /* Emas prada kuno redup */
-            --text-sepia: #2b1f1a;     /* Teks gelap arang */
-            --text-muted: #6e5c54;     
+            --bg-ruangan: #1a1512;     /* Latar belakang ruangan kayu hangat gelap */
+            --paper-ivory: #fcf9f2;    /* WARNA BARU: Putih gading bersih, kontras tinggi */
+            --aksen-keraton: #8c2020;  /* Merah bata/marun keraton elegan */
+            --aksen-emas: #c9a054;     /* Emas prada terang mewah */
+            --text-utama: #1c1816;     /* WARNA BARU: Tulisan hitam arang pekat, sangat terbaca */
+            --text-muted: #615855;     
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
-            background-color: var(--bg-kejawen);
-            background-image: 
-                radial-gradient(circle at 50% 50%, rgba(0,0,0,0.2) 0%, #090604 100%),
-                url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4' viewBox='0 0 4 4'%3E%3Cpath d='M1 3h1v1H1z' fill='%232c1b10' fill-opacity='0.15'/%3E%3C/svg%3E");
-            color: var(--text-sepia);
+            background-color: var(--bg-ruangan);
+            background-image: radial-gradient(circle at 50% 50%, rgba(0,0,0,0.3) 0%, #0d0a09 100%);
+            color: var(--text-utama);
             font-family: 'Poppins', sans-serif;
             display: flex;
             justify-content: center;
@@ -70,44 +68,41 @@
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            background-color: var(--paper-kulit);
-            background-image: radial-gradient(rgba(0,0,0,0.03) 1px, transparent 0);
-            background-size: 5px 5px;
-            box-shadow: inset 0 0 50px rgba(58, 36, 21, 0.25);
-            border: 1px solid rgba(170, 130, 58, 0.2);
+            background-color: var(--paper-ivory);
+            box-shadow: inset 0 0 35px rgba(140, 32, 32, 0.06), 0 10px 25px rgba(0,0,0,0.3);
+            border: 1px solid rgba(201, 160, 84, 0.3);
         }
 
         .front {
-            border-radius: 0 4px 4px 0;
-            border-left: 3px solid #362215;
+            border-radius: 0 6px 6px 0;
+            border-left: 4px solid #4a1212;
             z-index: 2;
         }
         .front::after {
-            content: ''; position: absolute; top: 0; left: 0; width: 20px; height: 100%;
-            background: linear-gradient(to right, rgba(0,0,0,0.2), transparent);
+            content: ''; position: absolute; top: 0; left: 0; width: 18px; height: 100%;
+            background: linear-gradient(to right, rgba(0,0,0,0.08), transparent);
         }
 
         .back {
             transform: rotateY(180deg);
-            border-radius: 4px 0 0 4px;
-            border-right: 3px solid #362215;
+            border-radius: 6px 0 0 6px;
+            border-right: 4px solid #4a1212;
             z-index: 1;
         }
         .back::after {
-            content: ''; position: absolute; top: 0; right: 0; width: 20px; height: 100%;
-            background: linear-gradient(to left, rgba(0,0,0,0.2), transparent);
+            content: ''; position: absolute; top: 0; right: 0; width: 18px; height: 100%;
+            background: linear-gradient(to left, rgba(0,0,0,0.08), transparent);
         }
 
         .page.flipped {
             transform: rotateY(-180deg);
         }
 
-        /* KEJAWEN ORNAMENTS */
+        /* ORNAMEN KLASIK */
         .gunungan-kuno {
             align-self: center;
-            font-size: 55px;
-            color: var(--aksen-maroon);
-            filter: drop-shadow(0px 2px 4px rgba(0,0,0,0.15));
+            font-size: 50px;
+            color: var(--aksen-keraton);
             margin: 10px 0;
             text-align: center;
         }
@@ -115,43 +110,45 @@
         .title-kejawen {
             font-family: 'Cinzel', serif;
             font-weight: 800;
-            color: var(--aksen-maroon);
+            color: var(--aksen-keraton);
             letter-spacing: 2px;
             line-height: 1.4;
-            border-bottom: 2px double var(--aksen-prada);
+            border-bottom: 2px double var(--aksen-emas);
             padding-bottom: 8px;
         }
 
         .italic-phrase {
             font-family: 'Playfair Display', serif;
             font-style: italic;
-            color: var(--aksen-maroon);
+            color: var(--aksen-keraton);
             font-size: 13px;
             letter-spacing: 1px;
+            font-weight: 600;
         }
 
         .handwritten {
-            font-family: 'Reenie Beanie', cursive;
-            font-size: 27px;
-            color: #2e221c;
-            line-height: 1.2;
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-size: 18px;
+            color: #2b221e;
+            line-height: 1.6;
+            text-shadow: 0 0 0px #000; /* Mempertegas tulisan latin quote */
         }
 
         .paragraph-story {
-            font-size: 12.5px;
+            font-size: 13px;
             line-height: 1.8;
-            color: var(--text-sepia);
+            color: var(--text-utama);
             text-align: justify;
         }
 
         .photo-frame-kuno {
             width: 100%;
             height: 210px;
-            background: #d4bf9c;
-            padding: 10px 10px 25px 10px;
-            border: 2px solid var(--aksen-maroon);
-            outline: 1px solid var(--aksen-prada);
-            box-shadow: 3px 5px 15px rgba(0,0,0,0.15);
+            background: #f4eee1;
+            padding: 8px 8px 25px 8px;
+            border: 1px solid var(--aksen-emas);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
             margin: 10px 0;
         }
 
@@ -159,38 +156,38 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
-            filter: sepia(60%) contrast(90%) brightness(95%);
         }
 
         .page-footer {
             display: flex; justify-content: space-between; align-items: center;
             font-size: 11px; font-family: 'Playfair Display', serif; color: var(--text-muted);
-            border-top: 1px dashed var(--aksen-maroon); padding-top: 6px;
+            border-top: 1px dashed rgba(140, 32, 32, 0.2); padding-top: 6px;
         }
 
         .nav-hint {
-            color: var(--aksen-maroon); font-weight: 600; letter-spacing: 1px; font-size: 9px; cursor: pointer;
+            color: var(--aksen-keraton); font-weight: 600; letter-spacing: 1px; font-size: 10px; cursor: pointer;
             text-transform: uppercase;
         }
 
-        /* GAME TEBAK GAMBAR AKSARA */
+        /* GAME ZONE */
         .game-zone {
-            background: #d4bf9c;
-            border: 1px dashed var(--aksen-maroon);
+            background: #f4eee1;
+            border: 1px solid var(--aksen-emas);
             padding: 15px;
             text-align: center;
-            border-radius: 2px;
+            border-radius: 4px;
             margin: 10px 0;
         }
         .aksara-box {
-            font-size: 38px;
+            font-size: 36px;
             font-weight: bold;
-            color: var(--aksen-maroon);
-            margin: 10px 0;
+            color: var(--aksen-keraton);
+            margin: 8px 0;
             letter-spacing: 4px;
-            background: rgba(0,0,0,0.04);
+            background: rgba(255,255,255,0.7);
             padding: 5px;
             border-radius: 4px;
+            border: 1px solid rgba(0,0,0,0.05);
         }
         .game-options {
             display: grid;
@@ -199,31 +196,33 @@
             margin-top: 10px;
         }
         .btn-option {
-            background: var(--paper-kulit);
-            border: 1px solid var(--aksen-maroon);
-            color: var(--text-sepia);
+            background: var(--paper-ivory);
+            border: 1px solid var(--aksen-keraton);
+            color: var(--text-utama);
             padding: 8px;
             font-size: 12px;
             cursor: pointer;
-            font-family: 'Playfair Display', serif;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+            border-radius: 4px;
             transition: all 0.2s;
         }
         .btn-option:hover {
-            background: var(--aksen-maroon);
+            background: var(--aksen-keraton);
             color: #fff;
         }
         .game-feedback {
-            font-size: 12px; font-weight: 500; margin-top: 8px; min-height: 18px;
+            font-size: 12px; font-weight: 600; margin-top: 8px; min-height: 18px;
         }
 
         .tabs-jawa { display: flex; gap: 6px; margin: 8px 0; }
         .tab-btn {
-            background: rgba(92, 6, 18, 0.08); border: 1px solid var(--aksen-maroon);
-            color: var(--aksen-maroon); font-size: 11px; padding: 4px 10px; cursor: pointer;
-            font-family: 'Playfair Display', serif;
+            background: rgba(140, 32, 32, 0.05); border: 1px solid var(--aksen-keraton);
+            color: var(--aksen-keraton); font-size: 11px; padding: 5px 12px; cursor: pointer;
+            border-radius: 4px; font-weight: 500;
         }
-        .tab-btn.active { background: var(--aksen-maroon); color: #fff; }
-        .tab-content { font-style: italic; min-height: 50px; font-size: 12px; display: flex; align-items: center; }
+        .tab-btn.active { background: var(--aksen-keraton); color: #fff; }
+        .tab-content { font-style: italic; min-height: 50px; font-size: 12.5px; display: flex; align-items: center; color: #403531; }
     </style>
 </head>
 <body>
@@ -237,16 +236,16 @@
         <div class="page" id="p1" style="z-index: 20;">
             <div class="front" onclick="nextPage(1)">
                 <span class="italic-phrase" style="text-align: center;">— Serat Kidung Kaulan —</span>
-                <div class="gunungan-kuno">ꦜ</div>
+                <div class="gunungan-kuno">📜</div>
                 <div style="text-align: center;">
                     <h1 class="title-kejawen" style="font-size: 22px;">A FREQUENCY<br>CALLED PURPOSE</h1>
-                    <p style="font-size: 9px; color: var(--text-muted); letter-spacing: 2px; margin-top: 8px;">ꦥꦿꦶꦭꦏꦸꦲꦸꦠꦩ</p>
+                    <p style="font-size: 10px; color: var(--text-muted); letter-spacing: 2px; margin-top: 8px; font-weight: 500;">PRILAKU UTAMA</p>
                 </div>
-                <div class="nav-hint" style="text-align: center; margin-top: 35px; color: var(--aksen-maroon);">Nawiti Lembaran ➔</div>
+                <div class="nav-hint" style="text-align: center; margin-top: 35px;">Nawiti Lembaran ➔</div>
             </div>
             <div class="back" onclick="prevPage(1)">
                 <span class="italic-phrase">Purwaka (Prologue)</span>
-                <p class="handwritten" style="margin: auto 0; font-size: 24px; text-align: center; color: var(--aksen-maroon);">
+                <p class="handwritten" style="margin: auto 0; font-size: 20px; text-align: center; color: var(--aksen-keraton);">
                     "Sebelum riuh toga merayakan namamu,<br>
                     ada sunyi panjang yang merawat mimpimu.<br>
                     Mari melihat kembali langkah awal itu..."
@@ -262,7 +261,7 @@
             <div class="front" onclick="nextPage(2)">
                 <div>
                     <span class="italic-phrase">Babak I — Wiwitan Sinyal</span>
-                    <div style="height: 1px; background: var(--aksen-prada); margin: 5px 0;"></div>
+                    <div style="height: 1px; background: var(--aksen-emas); margin: 5px 0;"></div>
                 </div>
                 
                 <div class="photo-frame-kuno">
@@ -276,7 +275,7 @@
             </div>
             <div class="back" onclick="prevPage(2)">
                 <span class="italic-phrase">Sasmita Babak I</span>
-                <p class="handwritten" style="margin: auto 0; text-align: center; color: var(--aksen-maroon);">
+                <p class="handwritten" style="margin: auto 0; text-align: center; color: var(--aksen-keraton); font-size: 19px;">
                     "Laksana wayang kulit yang baru keluar kotak,<br>
                     suaramu yang lamat-lamat mulai mencari<br>
                     di mana ketukan gending hidupmu berada."
@@ -292,7 +291,7 @@
             <div class="front" onclick="nextPage(3)">
                 <div>
                     <span class="italic-phrase">Babak II — Ngrumat Swara</span>
-                    <div style="height: 1px; background: var(--aksen-prada); margin: 5px 0;"></div>
+                    <div style="height: 1px; background: var(--aksen-emas); margin: 5px 0;"></div>
                 </div>
 
                 <p class="paragraph-story">
@@ -305,7 +304,7 @@
                         <button class="tab-btn" onclick="switchVoice('visual', this, event)">📷 Netra</button>
                         <button class="tab-btn" onclick="switchVoice('writing', this, event)">📝 Aksara</button>
                     </div>
-                    <div id="voiceDisplay" class="tab-content paragraph-story">
+                    <div id="voiceDisplay" class="tab-content">
                         *Ketuk salah satu unsur warisan memori di atas.
                     </div>
                 </div>
@@ -314,7 +313,7 @@
             </div>
             <div class="back" onclick="prevPage(3)">
                 <span class="italic-phrase">Sasmita Babak II</span>
-                <p class="handwritten" style="margin: auto 0; text-align: center; color: var(--aksen-maroon);">
+                <p class="handwritten" style="margin: auto 0; text-align: center; color: var(--aksen-keraton); font-size: 19px;">
                     "Setiap ukiran karya dan rekam visualmu,<br>
                     adalah goresan tapak yang abadi,<br>
                     menolak tunduk pada pusaran waktu."
@@ -324,22 +323,21 @@
         </div>
 
         <!-- ==========================================
-             LEMBAR 4: BABAK 3 (TEBAK GAMBAR AKSARA/THESIS)
+             LEMBAR 4: BABAK 3 (GAME TEBAK GAMBAR AKSARA)
              ========================================== -->
         <div class="page" id="p4" style="z-index: 17;">
             <div class="front" onclick="event.stopPropagation();">
                 <div>
                     <span class="italic-phrase">Babak III — Ujian Prabawa (Skripsi)</span>
-                    <div style="height: 1px; background: var(--aksen-prada); margin: 5px 0;"></div>
+                    <div style="height: 1px; background: var(--aksen-emas); margin: 5px 0;"></div>
                 </div>
 
-                <p class="paragraph-story" style="margin-bottom: 5px;">
+                <p class="paragraph-story">
                     Ujian tersulit menjelang pungkasan. Sang ksatria wajib memecahkan sandi prasasti kuno untuk menuntaskan babak skripsi ini!
                 </p>
 
-                <!-- GAME BOX -->
                 <div class="game-zone" id="gameZone">
-                    <p style="font-size: 11px; font-weight: 500;">Tebak makna dari Aksara Jawa kuno ini:</p>
+                    <p style="font-size: 12px; font-weight: 500;">Tebak makna dari Aksara Jawa kuno ini:</p>
                     <div class="aksara-box">ꦭꦏꦾꦤꦸ</div>
                     <div class="game-options">
                         <button class="btn-option" onclick="checkAnswer('salah', this)">A. Kamulyan</button>
@@ -350,24 +348,23 @@
                     <div id="gameFeedback" class="game-feedback"></div>
                 </div>
 
-                <!-- GRADUATION RESULT SECTION -->
                 <div id="graduationZone" style="display: none; animation: fadeIn 0.6s ease-out forwards;">
                     <div class="photo-frame-kuno" style="height:120px; margin: 5px 0;">
                         <img src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=400" alt="Foto Sidang">
                     </div>
-                    <p class="handwritten" style="text-align: center; color: var(--aksen-maroon); font-size: 20px;">
+                    <p class="handwritten" style="text-align: center; color: var(--aksen-keraton); font-size: 18px; font-weight: 600;">
                         Prasasti terpecahkan. Lakon sidang paripurna!
                     </p>
                 </div>
 
                 <div class="page-footer">
-                    <span id="nextTrigger" class="nav-hint" style="visibility: hidden;" onclick="nextPage(4)">Nuju Kemenangan ➔</span>
+                    <span id="nextTrigger" class="nav-hint" style="visibility: hidden;" onclick="nextPage(4)">Menuju Kemenangan ➔</span>
                     <span>VI</span>
                 </div>
             </div>
             <div class="back" onclick="prevPage(4)">
                 <span class="italic-phrase">Sasmita Pungkasan</span>
-                <p class="handwritten" style="margin: auto 0; text-align: center; color: var(--aksen-maroon);">
+                <p class="handwritten" style="margin: auto 0; text-align: center; color: var(--aksen-keraton); font-size: 19px;">
                     "Malam tapa brata yang sunyi parah,<br>
                     kini lebur runtuh digantikan<br>
                     fajar kemenangan yang benderang."
@@ -377,13 +374,13 @@
         </div>
 
         <!-- ==========================================
-             LEMBAR 5: SAM SAMPUL MBURI (FINISH)
+             LEMBAR 5: SAM SAMPUL MBURI (WISUDA)
              ========================================== -->
         <div class="page" id="p5" style="z-index: 16;">
             <div class="front" onclick="event.stopPropagation();">
                 <div>
                     <span class="italic-phrase">Babak IV — Toga Kamulyan</span>
-                    <div style="height: 1px; background: var(--aksen-prada); margin: 5px 0;"></div>
+                    <div style="height: 1px; background: var(--aksen-emas); margin: 5px 0;"></div>
                 </div>
 
                 <div class="photo-frame-kuno" style="height: 180px;">
@@ -394,8 +391,8 @@
                     Hari agung pun tiba. Namamu digemakan bersama sematan gelar luhur. Seluruh laku prihatin yang kamu pupuk kini menjelma senyum mahardika.
                 </p>
                 
-                <div style="border-top: 1px dashed var(--aksen-maroon); margin-top: 5px; padding-top: 5px;">
-                    <p class="handwritten" style="font-size: 20px; text-align: center; color: var(--aksen-maroon);">
+                <div style="border-top: 1px dashed var(--aksen-keraton); margin-top: 5px; padding-top: 5px;">
+                    <p class="handwritten" style="font-size: 18px; text-align: center; color: var(--aksen-keraton);">
                         "Matur nuwun atas segala teguh jiwamu.<br>Rahayu ing tembe buri!"
                     </p>
                 </div>
@@ -449,7 +446,7 @@
     const quotes = {
         speaking: "🎙️ [Wicara]: Lantang nan wibawa menyuarakan visi pencerah di tengah riuh khalayak.",
         visual: "📷 [Netra]: Membaca rahasia alam maya dan memotret rasa lewat keheningan bidikan lensa.",
-        writing: "📝 [Aksara]: Mengikat butir-butir kawruh ke dalam lembar naskah riset berbobot."
+        writing: "📝 [Aksara]: Mengikat ilmu dan pemikiran ke dalam goresan artikel ilmiah terstruktur."
     };
 
     function switchVoice(key, element, event) {
@@ -459,23 +456,21 @@
         document.getElementById("voiceDisplay").innerText = quotes[key];
     }
 
-    // LOGIK MINI GAME TEBAK AKSARA
     function checkAnswer(status, btn) {
         const feedback = document.getElementById("gameFeedback");
         if(status === 'benar') {
             feedback.style.color = "green";
             feedback.innerText = "Leres! Jawaban Anda Benar (Kelulusan).";
             
-            // Beri jeda sedikit agar user bisa melihat feedback sukses
             setTimeout(() => {
                 document.getElementById("gameZone").style.display = "none";
                 document.getElementById("graduationZone").style.display = "block";
                 document.getElementById("nextTrigger").style.visibility = "visible";
             }, 800);
         } else {
-            feedback.style.color = "var(--aksen-maroon)";
+            feedback.style.color = "var(--aksen-keraton)";
             feedback.innerText = "Meleset, coba renungkan kembali aksaranya...";
-            btn.style.backgroundColor = "rgba(92, 6, 18, 0.1)";
+            btn.style.backgroundColor = "rgba(140, 32, 32, 0.1)";
         }
     }
 </script>
