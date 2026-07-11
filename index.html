@@ -3,409 +3,376 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>A Frequency Called Purpose - Cyber Terminal</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Share+Tech+Mono&family=Poppins:wght@300;400;600&family=Press+Start+2P&display=swap" rel="stylesheet">
+    <title>A Frequency Called Purpose - The Book</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Poppins:wght@300;400;600&family=Reenie+Beanie&family=Press+Start+2P&display=swap" rel="stylesheet">
     
     <style>
         :root {
-            --bg-dark: #06060c;
+            --bg-dark: #0b0b12;
+            --book-bg: #12121f;
             --neon-cyan: #00f0ff;
             --neon-magenta: #ff007c;
-            --neon-purple: #9d00ff;
-            --terminal-green: #39ff14;
+            --text-color: #d1d1e0;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
             background-color: var(--bg-dark);
-            color: #ffffff;
+            color: var(--text-color);
             font-family: 'Poppins', sans-serif;
-            overflow: hidden;
-            height: 100vh;
-            perspective: 1000px;
-        }
-
-        /* ==========================================================================
-           1. SCREEN BOOTING TERMINAL (AWAL)
-           ========================================================================== */
-        #boot-screen {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background-color: #000;
-            z-index: 9999;
-            font-family: 'Share Tech Mono', monospace;
-            padding: 40px;
-            color: var(--neon-cyan);
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-start;
-        }
-
-        .terminal-log {
-            font-size: 16px;
-            line-height: 1.5;
-            white-space: pre-wrap;
-            margin-bottom: 10px;
-        }
-
-        .scanline {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
-            background-size: 100% 4px, 6px 100%;
-            z-index: 10000;
-            pointer-events: none;
-        }
-
-        /* ==========================================================================
-           2. MAIN DASHBOARD & HOLOGRAM GRAPHICS
-           ========================================================================== */
-        #main-dashboard {
-            display: none; /* Muncul setelah boot selesai */
-            height: 100vh;
-            width: 100vw;
-            position: relative;
-            background: radial-gradient(circle at 50% 50%, rgba(157, 0, 255, 0.1) 0%, transparent 70%);
-            animation: glitch-intro 0.4s ease-out;
-        }
-
-        /* Grid Background Bergerak (Kinetik) */
-        .cyber-grid {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background-image: 
-                linear-gradient(rgba(0, 240, 255, 0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0, 240, 255, 0.03) 1px, transparent 1px);
-            background-size: 40px 40px;
-            background-position: center;
-            z-index: -1;
-            transform: rotateX(60deg) scale(2) translateY(-50px);
-            animation: grid-move 20s linear infinite;
-        }
-
-        @keyframes grid-move {
-            0% { background-position: 0 0; }
-            100% { background-position: 0 800px; }
-        }
-
-        /* Header Console */
-        .console-header {
-            padding: 20px;
-            text-align: center;
-            font-family: 'Orbitron', sans-serif;
-            border-bottom: 1px solid rgba(0, 240, 255, 0.2);
-            background: rgba(6, 6, 12, 0.8);
-            backdrop-filter: blur(5px);
-        }
-
-        .console-header h1 {
-            font-size: 20px;
-            letter-spacing: 4px;
-            color: #fff;
-            text-shadow: 0 0 10px var(--neon-cyan);
-        }
-
-        /* ==========================================================================
-           3. 3D HOLOGRAM DECK (TEMPAT FOTO MELAYANG)
-           ========================================================================== */
-        .hologram-deck {
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 30px;
-            height: calc(100vh - 180px);
-            padding: 0 40px;
-            overflow-x: auto;
+            height: 100vh;
+            overflow: hidden;
+            perspective: 2000px; /* Memberikan efek kedalaman 3D yang kuat */
         }
 
-        /* Kartu Hologram */
-        .holo-card {
-            background: rgba(16, 16, 32, 0.6);
-            border: 2px solid var(--neon-cyan);
-            box-shadow: 0 0 15px rgba(0, 240, 255, 0.2), inset 0 0 15px rgba(0, 240, 255, 0.1);
-            border-radius: 12px;
-            min-width: 260px;
-            max-width: 260px;
-            height: 380px;
-            padding: 15px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            position: relative;
-            transition: transform 0.1s ease, box-shadow 0.3s ease, border-color 0.3s ease;
-            transform-style: preserve-3d;
-            cursor: pointer;
-            /* Efek Gerak Kinetik Naik Turun Otomatis */
-            animation: holo-float 6s ease-in-out infinite alternate;
-        }
-
-        /* Mengacak delay gerakan mengambang antar kartu */
-        .holo-card:nth-child(2) { animation-delay: -1.5s; border-color: var(--neon-purple); box-shadow: 0 0 15px rgba(157,0,255,0.2); }
-        .holo-card:nth-child(3) { animation-delay: -3s; border-color: var(--neon-magenta); box-shadow: 0 0 15px rgba(255,0,124,0.2); }
-        .holo-card:nth-child(4) { animation-delay: -4.5s; }
-
-        @keyframes holo-float {
-            0% { transform: translateY(0px) rotateY(0deg); }
-            100% { transform: translateY(-15px) rotateY(2deg); }
-        }
-
-        .holo-card:hover {
-            border-color: #fff !important;
-            box-shadow: 0 0 25px rgba(0, 240, 255, 0.6) !important;
-        }
-
-        .holo-img {
-            width: 100%;
-            height: 180px;
-            object-fit: cover;
-            border-radius: 6px;
-            border: 1px solid rgba(255,255,255,0.1);
-            margin-bottom: 15px;
-            pointer-events: none;
-        }
-
-        .holo-chapter {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 11px;
-            color: var(--neon-cyan);
-            letter-spacing: 1px;
-            margin-bottom: 5px;
-            align-self: flex-start;
-        }
-
-        .holo-card:nth-child(2) .holo-chapter { color: var(--neon-purple); }
-        .holo-card:nth-child(3) .holo-chapter { color: var(--neon-magenta); }
-
-        .holo-title {
-            font-size: 14px;
-            font-weight: 600;
-            margin-bottom: 10px;
-            align-self: flex-start;
-        }
-
-        .holo-desc {
-            font-size: 11px;
-            color: #aaa;
-            line-height: 1.4;
-            text-align: left;
+        /* Latar Belakang Partikel Glow Bergerak */
+        .bg-glow {
+            position: absolute; width: 100%; height: 100%;
+            background: radial-gradient(circle at 30% 30%, rgba(0, 240, 255, 0.05) 0%, transparent 50%),
+                        radial-gradient(circle at 70% 70%, rgba(255, 0, 124, 0.05) 0%, transparent 50%);
+            z-index: -1;
         }
 
         /* ==========================================================================
-           4. INTEGRASI GAME SKRIPSI DI DALAM KARTU 4
+           WADAH UTAMA BUKU (BOOK CONTAINER)
            ========================================================================== */
-        .card-game-container {
+        .book {
+            position: relative;
+            width: 450px;
+            height: 600px;
+            transition: transform 0.5s;
+            transform-style: preserve-3d;
+        }
+
+        /* Setiap Lembar Halaman */
+        .page {
+            position: absolute;
             width: 100%;
+            height: 100%;
+            top: 0; left: 0;
+            transform-origin: left center; /* Berbalik dari sisi kiri seperti buku asli */
+            transform-style: preserve-3d;
+            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 1;
+            cursor: pointer;
+        }
+
+        /* Sisi Depan dan Belakang Halaman */
+        .front, .back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            padding: 40px 30px;
+            border-radius: 0 16px 16px 0;
+            box-shadow: 5px 0 25px rgba(0,0,0,0.5);
+            backface-visibility: hidden; /* Menyembunyikan sisi sebaliknya saat berputar */
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            justify-content: space-between;
         }
-        .mini-hp-bar {
-            background: #222; height: 16px; border-radius: 8px; overflow: hidden; position: relative;
-            border: 1px solid #444;
+
+        .front {
+            background: linear-gradient(135deg, #16162a, var(--book-bg));
+            border-left: 4px solid #0d0d1a;
         }
-        .mini-hp-fill {
-            width: 100%; height: 100%; background: linear-gradient(to right, #ff0055, #00ff66);
+
+        .back {
+            background: linear-gradient(135deg, var(--book-bg), #16162a);
+            transform: rotateY(180deg); /* Memutar sisi belakang */
+            border-right: 4px solid #0d0d1a;
+            border-radius: 16px 0 0 16px;
+        }
+
+        /* State ketika halaman dibalik (Terbuka) */
+        .page.flipped {
+            transform: rotateY(-180deg);
+        }
+
+        /* LAYER Z-INDEX BIAR HALAMAN MENUMPUK RAPI */
+        #p1 { z-index: 3; }
+        #p2 { z-index: 2; }
+        #p3 { z-index: 1; }
+
+        /* ==========================================================================
+           DESAIN ELEMEN DI DALAM HALAMAN (SCRAPBOOK AESTHETIC)
+           ========================================================================== */
+        
+        /* Gaya Cover Jurnal */
+        .cover-title {
+            font-family: 'Cinzel', serif;
+            font-size: 26px;
+            letter-spacing: 2px;
+            color: #fff;
+            text-align: center;
+            text-shadow: 0 0 15px rgba(0, 240, 255, 0.3);
+            margin-top: 40px;
+        }
+
+        .cover-subtitle {
+            font-family: 'Poppins', sans-serif;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            color: var(--neon-cyan);
+            text-align: center;
+        }
+
+        /* Parallax & Glow Photo Frame */
+        .photo-frame {
+            width: 100%;
+            height: 240px;
+            background: #0d0d1a;
+            border: 1px solid rgba(0, 240, 255, 0.2);
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+            position: relative;
+            margin: 20px 0;
+            transition: transform 0.2s ease; /* Untuk efek parallax halus */
+        }
+
+        .photo-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.8;
+            transition: opacity 0.3s;
+        }
+
+        .photo-frame:hover img { opacity: 1; }
+
+        /* Catatan Tulisan Tangan (Scrapbook Feel) */
+        .handwritten {
+            font-family: 'Reenie Beanie', cursive;
+            font-size: 26px;
+            color: #e6e6ff;
+            line-height: 1.2;
+            transform: rotate(-1deg);
+            margin-top: 15px;
+        }
+
+        .page-number {
+            font-size: 11px;
+            font-family: 'Cinzel', serif;
+            color: #555577;
+            text-align: right;
+        }
+
+        /* Petunjuk Aksi di Kanan Bawah */
+        .hint-next {
+            font-size: 10px;
+            letter-spacing: 2px;
+            color: var(--neon-cyan);
+            text-align: right;
+            text-transform: uppercase;
+            animation: pulse 1.5s infinite alternate;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 0.4; } 100% { opacity: 1; }
+        }
+
+        /* ==========================================================================
+           CHAPTER 4: GAME PENGUNCI HALAMAN (THE THESIS LOCK)
+           ========================================================================== */
+        .lock-overlay {
+            text-align: center;
+            padding: 20px 0;
+        }
+        .game-title {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 11px;
+            color: var(--neon-magenta);
+            margin-bottom: 15px;
+        }
+        .hp-container {
+            background: #0d0d1a; border: 1px solid #333; height: 20px;
+            border-radius: 10px; overflow: hidden; position: relative; margin-bottom: 20px;
+        }
+        .hp-bar {
+            width: 100%; height: 100%; background: linear-gradient(to right, #ff007c, #00f0ff);
             transition: width 0.2s;
         }
-        .mini-hp-text {
-            position: absolute; width: 100%; text-align: center; font-family: 'Press Start 2P', cursive;
-            font-size: 7px; top: 4px; color: #fff;
+        .hp-text {
+            position: absolute; width: 100%; text-align: center; top: 4px;
+            font-family: 'Press Start 2P', cursive; font-size: 8px; color: #fff;
         }
-        .mini-btn-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; }
-        .mini-btn {
-            background: rgba(255,255,255,0.05); border: 1px solid #444; color: #fff; font-size: 9px;
-            padding: 6px; border-radius: 4px; cursor: pointer; font-family: 'Orbitron', sans-serif;
+        .btn-attack {
+            background: transparent; border: 1px solid var(--neon-cyan);
+            color: var(--neon-cyan); padding: 10px 20px; border-radius: 20px;
+            font-family: 'Poppins', sans-serif; font-size: 12px; cursor: pointer;
+            box-shadow: 0 0 10px rgba(0, 240, 255, 0.1);
+            transition: all 0.3s;
         }
-        .mini-btn:hover { background: var(--neon-cyan); color: #000; }
-
-        /* Footer Status */
-        .console-footer {
-            position: absolute; bottom: 0; left: 0; width: 100%; padding: 15px;
-            background: rgba(6, 6, 12, 0.9); border-top: 1px solid rgba(255,255,255,0.05);
-            display: flex; justify-content: space-between; font-family: 'Share Tech Mono', monospace;
-            font-size: 12px; color: #666;
-        }
-
-        /* System Glitch Intro Animation */
-        @keyframes glitch-intro {
-            0% { transform: scale(0.9); opacity: 0; filter: hue-rotate(90deg) blur(5px); }
-            50% { transform: scale(1.02); opacity: 0.8; filter: hue-rotate(-90deg); }
-            100% { transform: scale(1); opacity: 1; filter: none; }
+        .btn-attack:hover {
+            background: var(--neon-cyan); color: #000; box-shadow: 0 0 15px var(--neon-cyan);
         }
     </style>
 </head>
 <body>
 
-<div class="scanline"></div>
+<div class="bg-glow"></div>
 
-<!-- ==========================================
-     1. SCREEN BOOTING TERMINAL 
-     ========================================== -->
-<div id="boot-screen">
-    <div class="terminal-log" id="log-container"></div>
-</div>
-
-<!-- ==========================================
-     2. MAIN INTERACTIVE DASHBOARD
-     ========================================== -->
-<div id="main-dashboard">
-    <div class="cyber-grid"></div>
-
-    <div class="console-header">
-        <h1>🎙️ A FREQUENCY CALLED PURPOSE</h1>
+<div class="book" id="myBook">
+    
+    <!-- ==========================================
+         HALAMAN 1: COVER BUKU
+         ========================================== -->
+    <div class="page" id="p1" onclick="flipPage(1)">
+        <div class="front">
+            <div class="cover-subtitle">A Digital Journal</div>
+            <div>
+                <h1 class="cover-title">A FREQUENCY<br>CALLED PURPOSE</h1>
+                <p style="text-align: center; font-size: 12px; color: #666680; margin-top: 15px; letter-spacing: 1px;">
+                    The journey of a voice, from a student to a storyteller.
+                </p>
+            </div>
+            <div class="hint-next">Buka Lembar Pertama ➔</div>
+        </div>
+        <div class="back" onclick="event.stopPropagation(); flipPage(1, false);">
+            <!-- Sisi belakang halaman 1 (Kosong / transisi estetis) -->
+            <div class="cover-subtitle" style="color: #444;">Memory Core</div>
+            <p class="handwritten" style="text-align: center; margin: auto 0;">
+                "Setiap babak punya suaranya sendiri. Dan ini adalah awal ketika frekuensi itu pertama kali dinyalakan..."
+            </p>
+            <div class="page-number">☉ I</div>
+        </div>
     </div>
 
-    <!-- 3D DECK TEMPAT KARTU HOLOGRAM INTERAKTIF -->
-    <div class="hologram-deck">
-        
-        <!-- KARTU 1: MABA -->
-        <div class="holo-card">
-            <span class="holo-chapter">SIGNAL // 01</span>
-            <h3 class="holo-title">The First Signal 📚</h3>
-            <!-- MAAF URL BISA DIGANTI FOTO MABA ASLI -->
-            <img class="holo-img" src="https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=300" alt="Maba">
-            <p class="holo-desc">"Sebelum ada toga. Sebelum ada gelar. Seseorang yang datang membawa mimpi, rasa penasaran, dan mungkin sedikit ketakutan tentang perjalanan awal."</p>
-        </div>
-
-        <!-- KARTU 2: KAMPUS / KPI -->
-        <div class="holo-card">
-            <span class="holo-chapter" style="color: var(--neon-purple);">SIGNAL // 02</span>
-            <h3 class="holo-title">Finding The Voice 🎧</h3>
-            <img class="holo-img" src="https://images.unsplash.com/photo-1478737270239-2f02b77fc618?w=300" alt="Kampus">
-            <p class="holo-desc">"Belajar bahwa komunikasi bukan hanya tentang berbicara. Tapi tentang memahami, menyampaikan, mendengarkan, dan memberi arti nyata."</p>
-        </div>
-
-        <!-- KARTU 3: PERJUANGAN DI BALIK LAYAR -->
-        <div class="holo-card">
-            <span class="holo-chapter" style="color: var(--neon-magenta);">SIGNAL // 03</span>
-            <h3 class="holo-title">The Silent Episodes 🌙</h3>
-            <img class="holo-img" src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=300" alt="Lelah">
-            <p class="holo-desc">"Ada bagian perjalanan yang tidak masuk kamera. Tidak semua lelah terlihat. Tapi setiap langkah kecil tetap membawamu menuju hari ini."</p>
-        </div>
-
-        <!-- KARTU 4: GAME BOSS SKRIPSI -->
-        <div class="holo-card" id="game-card">
-            <span class="holo-chapter">MISSION // FINAL</span>
-            <h3 class="holo-title" id="boss-title">Boss: Thesis Defense ⚔️</h3>
+    <!-- ==========================================
+         HALAMAN 2: CHAPTER 1 (MABA)
+         ========================================== -->
+    <div class="page" id="p2" onclick="flipPage(2)">
+        <div class="front">
+            <div class="cover-subtitle" style="text-align: left;">Chapter 1 // The First Signal</div>
             
-            <div class="card-game-container" id="game-zone">
-                <div class="mini-hp-bar">
-                    <div id="hp-fill" class="mini-hp-fill"></div>
-                    <div id="hp-text" class="mini-hp-text">HP: 100%</div>
-                </div>
-                <div class="mini-btn-grid">
-                    <button class="mini-btn" onclick="hitBoss(20, event)">💻 Laptop</button>
-                    <button class="mini-btn" onclick="hitBoss(25, event)">📚 Ref</button>
-                    <button class="mini-btn" onclick="hitBoss(20, event)">☕ Kopi</button>
-                    <button class="mini-btn" onclick="hitBoss(40, event)">🤲 Doa</button>
-                </div>
-                <p class="holo-desc" style="font-size:10px; margin-top:5px; color:#777;">Kalahkan BOSS untuk membuka enkripsi foto kelulusan!</p>
+            <!-- Frame Foto dengan Efek Parallax Kinetik Mouse -->
+            <div class="photo-frame" onmousemove="parallaxEffect(event, this)" onmouseleave="resetParallax(this)">
+                <!-- GANTI DENGAN URL FOTO MABA -->
+                <img src="https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=400" alt="Foto Maba">
             </div>
 
-            <!-- Area Hadiah Tersembunyi di dalam kartu -->
-            <div id="victory-zone" style="display:none; width:100%; text-align:center;">
-                <!-- SELEPAS MENANG URL GAMBAR BISA DIGANTI FOTO SIDANG/WISUDA -->
-                <img class="holo-img" src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=300" alt="Sidang" style="border: 1px solid #00ff66;">
-                <p class="holo-desc" style="color:#00ff66; text-align:center; font-weight:600;">COMPLETED. Kamu pantas berada di titik ini! ✨</p>
-            </div>
+            <p class="handwritten">
+                "Sebelum ada toga. Sebelum ada gelar. Ada seseorang yang memulai semuanya sebagai mahasiswa baru, membawa mimpi dan sedikit rasa penasaran tentang hari esok."
+            </p>
+            <div class="hint-next">Buka Halaman Selanjutnya ➔</div>
         </div>
-
+        <div class="back" onclick="event.stopPropagation(); flipPage(2, false);">
+            <div class="cover-subtitle" style="color: #444;">Intermission</div>
+            <p class="handwritten" style="text-align: center; margin: auto 0;">
+                "Langkah-langkah kecil di koridor kampus, tawa di kelas komunikasi, hingga malam-malam sepi yang melelahkan... Semua terekam rapi."
+            </p>
+            <div class="page-number">☉ II</div>
+        </div>
     </div>
 
-    <div class="console-footer">
-        <span>SYS.STATUS: ACTIVE</span>
-        <span>DESIGNED FOR THE STORYTELLER // 2026</span>
+    <!-- ==========================================
+         HALAMAN 3: CHAPTER 4 (FINAL BOSS SKRIPSI)
+         ========================================== -->
+    <div class="page" id="p3">
+        <div class="front" onclick="event.stopPropagation();">
+            <div class="cover-subtitle" style="text-align: left; color: var(--neon-magenta);">Chapter 4 // Final Boss</div>
+            
+            <!-- Konten Utama Kunci Skripsi -->
+            <div class="lock-overlay" id="lockZone">
+                <div class="game-title">⚔️ MISSION: SKRIPSI DEFENSE</div>
+                <div class="hp-container">
+                    <div id="hpBar" class="hp-bar"></div>
+                    <div id="hpText" class="hp-text">HP: 100%</div>
+                </div>
+                <button class="btn-attack" onclick="attackThesis()">💻 Hadapi Skripsi</button>
+                <p style="font-size: 11px; color: #555; margin-top: 15px; line-height: 1.4;">
+                    Halaman ini dikunci oleh perjuangan akhir.<br>Klik tombol di atas untuk menyelesaikannya!
+                </p>
+            </div>
+
+            <!-- Konten Hadiah Wisuda Setelah Menang -->
+            <div id="unlockZone" style="display: none; animation: fadeIn 1s ease forwards;">
+                <div class="photo-frame">
+                    <!-- GANTI DENGAN URL FOTO SIDANG/WISUDA -->
+                    <img src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=400" alt="Foto Kelulusan">
+                </div>
+                <p class="handwritten" style="color: var(--neon-cyan);">
+                    "Kamu pantas sampai di titik ini. Selamat atas bab baru yang luar biasa indah yang sedang kamu mulai!"
+                </p>
+            </div>
+
+            <div class="page-number">☉ III</div>
+        </div>
+        <div class="back">
+            <!-- Halaman paling terakhir / Penutup Buku -->
+            <div class="cover-subtitle">The End of Volume I</div>
+            <h2 class="cover-title" style="font-size: 20px; color: var(--neon-magenta);">FIN.</h2>
+        </div>
     </div>
+
 </div>
 
 <script>
     // ==========================================
-    // SCRIPT LOADING BOOTING ENGINE
+    // JS 1: MEKANISME BALIK HALAMAN BUKU (PAGE FLIP)
     // ==========================================
-    const logs = [
-        "SYSTEM INITIALIZATION...",
-        "CONNECTING TO THE FREQUENCY PROTOCOL... OK",
-        "LOADING MEMORY CORE BANK...",
-        "DECRYPTING FILE: MABA_DAY1.RAW [SUCCESS]",
-        "DECRYPTING FILE: SPEECH_COMMUNICATION.DATA [SUCCESS]",
-        "DECRYPTING FILE: MIDNIGHT_EFFORT.LOG [SUCCESS]",
-        "WARNING: ENCRYPTED BOSS SECTOR DETECTED AT 'THESIS' LEVEL",
-        "ATTEMPTING INJECT BYPASS...",
-        "ACCESS GRANTED. WELCOME, STORYTELLER."
-    ];
-
-    const logContainer = document.getElementById("log-container");
-    let logIdx = 0;
-
-    function printLogs() {
-        if (logIdx < logs.length) {
-            logContainer.innerHTML += logs[logIdx] + "<br>";
-            logIdx++;
-            setTimeout(printLogs, Math.random() * 400 + 150); // Kecepatan ketik acak ala hacker
+    function flipPage(pageNumber, isForward = true) {
+        const page = document.getElementById(`p${pageNumber}`);
+        const book = document.getElementById("myBook");
+        
+        if (isForward) {
+            page.classList.add("flipped");
+            // Menggeser sumbu tengah buku sedikit ke kiri saat halaman dibuka agar estetik di layar
+            if(pageNumber === 1) book.style.transform = "translateX(25%)";
         } else {
-            setTimeout(() => {
-                document.getElementById("boot-screen").style.display = "none";
-                document.getElementById("main-dashboard").style.display = "block";
-                init3DEffects();
-            }, 800);
+            page.classList.remove("flipped");
+            if(pageNumber === 1) book.style.transform = "translateX(0%)";
         }
     }
-    window.addEventListener("load", printLogs);
 
     // ==========================================
-    // SCRIPT INTERAKTIF 3D TILT EFFECT (MOUSEMOVE)
+    // JS 2: EFEK PARALLAX KINETIK FOTO (GERAK IKUT MOUSE)
     // ==========================================
-    function init3DEffects() {
-        const cards = document.querySelectorAll('.holo-card');
+    function parallaxEffect(event, element) {
+        const img = element.querySelector('img');
+        const rect = element.getBoundingClientRect();
         
-        cards.forEach(card => {
-            card.addEventListener('mousemove', (e) => {
-                // Hentikan animasi float saat cursor menyentuh kartu
-                card.style.animation = 'none';
-                
-                const cardRect = card.getBoundingClientRect();
-                const cardX = e.clientX - cardRect.left - (cardRect.width / 2);
-                const cardY = e.clientY - cardRect.top - (cardRect.height / 2);
-                
-                // Kalkulasi rotasi 3D berdasarkan koordinat kursor mouse
-                const rotateX = -(cardY / cardRect.height) * 25; 
-                const rotateY = (cardX / cardRect.width) * 25;
-                
-                card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.05)`;
-            });
-            
-            card.addEventListener('mouseleave', () => {
-                // Kembalikan ke animasi float awal ketika mouse pergi
-                card.style.transform = `rotateX(0deg) rotateY(0deg) scale(1)`;
-                card.style.animation = 'holo-float 6s ease-in-out infinite alternate';
-            });
-        });
+        // Menghitung posisi kursor relatif terhadap frame foto
+        const x = event.clientX - rect.left - (rect.width / 2);
+        const y = event.clientY - rect.top - (rect.height / 2);
+        
+        // Geser gambar berlawanan arah cursor secara lembut
+        const moveX = (x / rect.width) * -20;
+        const moveY = (y / rect.height) * -20;
+        
+        img.style.transform = `scale(1.1) translate(${moveX}px, ${moveY}px)`;
+    }
+
+    function resetParallax(element) {
+        const img = element.querySelector('img');
+        img.style.transform = `scale(1) translate(0px, 0px)`;
     }
 
     // ==========================================
-    // SCRIPT GAME BOSS SKRIPSI (KARTU 4)
+    // JS 3: GAME SKRIPSI PENGUNCI LEMBARAN KELULUSAN
     // ==========================================
     let hp = 100;
-    function hitBoss(damage, event) {
-        event.stopPropagation(); // Mencegah bentrok dengan sensor mouse hover kartu
+    function attackThesis() {
         if (hp <= 0) return;
-
-        hp -= damage;
+        
+        hp -= 25; // Berkurang 25% setiap klik
         if (hp < 0) hp = 0;
-
-        document.getElementById("hp-fill").style.width = hp + "%";
-        document.getElementById("hp-text").innerText = "HP: " + hp + "%";
-
+        
+        document.getElementById("hpBar").style.width = hp + "%";
+        document.getElementById("hpText").innerText = "HP: " + hp + "%";
+        
         if (hp === 0) {
-            document.getElementById("boss-title").innerText = "MISSION CLEAR! ✓";
-            document.getElementById("boss-title").style.color = "#00ff66";
-            document.getElementById("game-zone").style.display = "none";
-            document.getElementById("victory-zone").style.display = "block";
+            // Efek transisi halus memunculkan memori wisuda
+            document.getElementById("lockZone").style.display = "none";
+            document.getElementById("unlockZone").style.display = "block";
             
-            // Berikan efek kilatan cahaya khusus pada kartu saat menang
-            const gameCard = document.getElementById("game-card");
-            gameCard.style.borderColor = "#00ff66";
-            gameCard.style.boxShadow = "0 0 40px rgba(0, 255, 102, 0.8)";
+            // Memberikan kedipan neon tanda sukses
+            document.getElementById("p3").querySelector('.front').style.borderColor = "var(--neon-cyan)";
         }
     }
 </script>
