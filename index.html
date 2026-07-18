@@ -759,6 +759,88 @@
             font-size: 0.8rem;
         }
 
+        /* ================= LIGHTBOX FOTO ================= */
+        .book-photo img,
+        .grid-photo-box img {
+            cursor: zoom-in;
+        }
+
+        .lightbox-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(5, 4, 3, 0.92);
+            backdrop-filter: blur(6px);
+            z-index: 3500;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            padding: 30px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .lightbox-modal.show {
+            display: flex;
+            opacity: 1;
+        }
+
+        .lightbox-img-wrap {
+            max-width: 90vw;
+            max-height: 78vh;
+            border: 2px solid var(--accent-gold);
+            border-radius: 6px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.7);
+            overflow: hidden;
+            background-color: #000;
+        }
+
+        .lightbox-img-wrap img {
+            display: block;
+            max-width: 90vw;
+            max-height: 78vh;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+        }
+
+        .lightbox-caption {
+            font-family: var(--font-wayang);
+            color: var(--accent-gold);
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+            text-align: center;
+            margin-top: 15px;
+            max-width: 90vw;
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: 25px;
+            right: 30px;
+            background-color: transparent;
+            color: var(--accent-gold);
+            border: 1px solid var(--accent-gold);
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            font-size: 1.3rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+
+        .lightbox-close:hover {
+            background-color: var(--accent-gold);
+            color: #120b07;
+            transform: rotate(90deg);
+        }
+
         /* ================= EASTER EGG MINI TOAST ================= */
         .mini-toast {
             position: fixed;
@@ -872,7 +954,7 @@
                         <span class="chapter-badge">Lakon I: Mula Bukane Bocil</span>
                         <h2 class="page-title">Maba Lucu nan Polos 👶</h2>
                         <div class="book-photo">
-                            <img src="arsip1.png" alt="Zaman Maba" onerror="this.src='https://via.placeholder.com/400x300/f1ebd9/8a1c1c?text=Foto+Belum+Diupload'">
+                            <img src="slide2.png" alt="Zaman Maba" onerror="this.src='https://via.placeholder.com/400x300/f1ebd9/8a1c1c?text=Foto+Belum+Diupload'">
                             <div class="photo-caption">Waktu masih polos dan belum dendam sama tugas kuliah</div>
                         </div>
                         <p class="page-text">
@@ -886,7 +968,7 @@
                         <span class="chapter-badge">Lakon I: Mula Bukane Bocil</span>
                         <h2 class="page-title">Sumpah, Sibuk Banget! 📢</h2>
                         <div class="book-photo">
-                            <img src="arsip2.png" alt="Organisasi" onerror="this.src='https://via.placeholder.com/400x300/f1ebd9/8a1c1c?text=Foto+Belum+Diupload'">
+                            <img src="foto/organisasi.jpg" alt="Organisasi" onerror="this.src='https://via.placeholder.com/400x300/f1ebd9/8a1c1c?text=Foto+Belum+Diupload'">
                             <div class="photo-caption">Gaya elit, capek sulit. Tapi tetep lanjut organisasi!</div>
                         </div>
                         <p class="page-text">
@@ -904,7 +986,7 @@
                         <span class="chapter-badge">Lakon II: Sambat neng Ngarep Laptop</span>
                         <h2 class="page-title">Drama Bab 4 & 5 💻☠️</h2>
                         <div class="book-photo">
-                            <img src="arsip3.png" alt="Ngerjain Tugas" onerror="this.src='https://via.placeholder.com/400x300/f1ebd9/8a1c1c?text=Foto+Belum+Diupload'">
+                            <img src="foto/drama_skripsi.jpg" alt="Ngerjain Tugas" onerror="this.src='https://via.placeholder.com/400x300/f1ebd9/8a1c1c?text=Foto+Belum+Diupload'">
                             <div class="photo-caption">Muka begadang ditemani secangkir kopi dan sejuta kepasrahan</div>
                         </div>
                         <p class="page-text">
@@ -918,7 +1000,7 @@
                         <span class="chapter-badge">Lakon II: Sambat neng Ngarep Laptop</span>
                         <h2 class="page-title">Cie, Sarjana Sosial! 🎓</h2>
                         <div class="book-photo">
-                            <img src="arsip4.png" alt="Sidang Akhir" onerror="this.src='https://via.placeholder.com/400x300/f1ebd9/8a1c1c?text=Foto+Belum+Diupload'">
+                            <img src="foto/sidang_akhir.jpg" alt="Sidang Akhir" onerror="this.src='https://via.placeholder.com/400x300/f1ebd9/8a1c1c?text=Foto+Belum+Diupload'">
                             <div class="photo-caption">Sah jadi S.Sos! Dosen pengujinya aja sampai sungkem</div>
                         </div>
                         <p class="page-text">
@@ -936,7 +1018,7 @@
                         <span class="chapter-badge">Lakon III: Satria Kulkas 2 Pintu</span>
                         <h2 class="page-title">"Gak Butuh Disemangatin" 😒</h2>
                         <div class="book-photo">
-                            <img src="arsip5.png" alt="Mode Cuek" onerror="this.src='https://via.placeholder.com/400x300/f1ebd9/8a1c1c?text=Foto+Belum+Diupload'">
+                            <img src="foto/cuek.jpg" alt="Mode Cuek" onerror="this.src='https://via.placeholder.com/400x300/f1ebd9/8a1c1c?text=Foto+Belum+Diupload'">
                             <div class="photo-caption">Muka jutek andalan kalau dichat sok manis</div>
                         </div>
                         <p class="page-text">
@@ -950,7 +1032,7 @@
                         <span class="chapter-badge">Lakon III: Satria Kulkas 2 Pintu</span>
                         <h2 class="page-title">Aslinya Lembut nan Manis 🤗 <span class="easter-egg-icon" onclick="showEasterEgg()" title="???">🧊</span></h2>
                         <div class="book-photo">
-                            <img src="arsip6.png" alt="Mode Warm" onerror="this.src='https://via.placeholder.com/400x300/f1ebd9/8a1c1c?text=Foto+Belum+Diupload'">
+                            <img src="foto/hangat.jpg" alt="Mode Warm" onerror="this.src='https://via.placeholder.com/400x300/f1ebd9/8a1c1c?text=Foto+Belum+Diupload'">
                             <div class="photo-caption">Biar cuek, aslinya kalau ngeliat orang kesusahan langsung gercep</div>
                         </div>
                         <p class="page-text">
@@ -969,16 +1051,16 @@
                         <h2 class="page-title">Kilas Balik & Tawa 📸</h2>
                         <div class="photo-grid-2">
                             <div class="grid-photo-box h-180">
-                                <img src="slide2.png" alt="Foto Kenangan 1" onerror="this.src='https://via.placeholder.com/300x300/f1ebd9/8a1c1c?text=Foto'">
+                                <img src="foto/nongkrong.jpg" alt="Foto Kenangan 1" onerror="this.src='https://via.placeholder.com/300x300/f1ebd9/8a1c1c?text=Foto'">
                                 <div class="photo-caption">Edisi nongkrong habis kelas</div>
                             </div>
                             <div class="grid-photo-box h-180">
-                                <img src="slide3.png" alt="Foto Kenangan 2" onerror="this.src='https://via.placeholder.com/300x300/f1ebd9/8a1c1c?text=Foto'">
+                                <img src="foto/pendukung.jpg" alt="Foto Kenangan 2" onerror="this.src='https://via.placeholder.com/300x300/f1ebd9/8a1c1c?text=Foto'">
                                 <div class="photo-caption">Tim hore pendukung setia</div>
                             </div>
                         </div>
                         <div class="grid-photo-box h-120">
-                            <img src="slide4.png" alt="Foto Kenangan 3" onerror="this.src='https://via.placeholder.com/600x200/f1ebd9/8a1c1c?text=Foto'">
+                            <img src="foto/rusuh.jpg" alt="Foto Kenangan 3" onerror="this.src='https://via.placeholder.com/600x200/f1ebd9/8a1c1c?text=Foto'">
                             <div class="photo-caption">Momen random pas kumpul bareng, rusuh abis!</div>
                         </div>
                     </div>
@@ -990,20 +1072,20 @@
                         <h2 class="page-title">Yang Ga Boleh Dilupain 🎞️</h2>
                         <div class="photo-grid-3">
                             <div class="grid-photo-box h-140">
-                                <img src="slide4.png" alt="Grid 1" onerror="this.src='https://via.placeholder.com/200x200/f1ebd9/8a1c1c?text=Foto'">
+                                <img src="foto/pose.jpg" alt="Grid 1" onerror="this.src='https://via.placeholder.com/200x200/f1ebd9/8a1c1c?text=Foto'">
                                 <div class="photo-caption">Pose andalan</div>
                             </div>
                             <div class="grid-photo-box h-140">
-                                <img src="slide5.png" alt="Grid 2" onerror="this.src='https://via.placeholder.com/200x200/f1ebd9/8a1c1c?text=Foto'">
+                                <img src="foto/ngantuk.jpg" alt="Grid 2" onerror="this.src='https://via.placeholder.com/200x200/f1ebd9/8a1c1c?text=Foto'">
                                 <div class="photo-caption">Muka ngantuk</div>
                             </div>
                             <div class="grid-photo-box h-140">
-                                <img src="arsip1.png" alt="Grid 3" onerror="this.src='https://via.placeholder.com/200x200/f1ebd9/8a1c1c?text=Foto'">
+                                <img src="foto/ketawa.jpg" alt="Grid 3" onerror="this.src='https://via.placeholder.com/200x200/f1ebd9/8a1c1c?text=Foto'">
                                 <div class="photo-caption">Ketawa lepas</div>
                             </div>
                         </div>
                         <div class="grid-photo-box h-180">
-                            <img src="arsip2.png" alt="Foto Portrait" onerror="this.src='https://via.placeholder.com/600x300/f1ebd9/8a1c1c?text=Foto'">
+                            <img src="foto/estetik.jpg" alt="Foto Portrait" onerror="this.src='https://via.placeholder.com/600x300/f1ebd9/8a1c1c?text=Foto'">
                             <div class="photo-caption">Si paling estetik kalau difoto candid</div>
                         </div>
                     </div>
@@ -1018,7 +1100,7 @@
                         <span class="chapter-badge">Arsip Memori: Candi Perjuangan</span>
                         <h2 class="page-title">Saksi Bisu Perjuangan ☕</h2>
                         <div class="grid-photo-box h-260" style="margin-bottom: 12px;">
-                            <img src="arsip3.png" alt="Meja Kerja Skripsi" onerror="this.src='https://via.placeholder.com/600x400/f1ebd9/8a1c1c?text=Foto'">
+                            <img src="foto/meja_tempur.jpg" alt="Meja Kerja Skripsi" onerror="this.src='https://via.placeholder.com/600x400/f1ebd9/8a1c1c?text=Foto'">
                             <div class="photo-caption">Penampakan meja tempur waktu dikejar deadline kualitatif</div>
                         </div>
                         <p class="page-text" style="font-size: 0.85rem; text-align: center; font-style: italic;">
@@ -1033,19 +1115,19 @@
                         <h2 class="page-title">Keluarga Kedua di Kampus 🫶</h2>
                         <div class="photo-grid-2">
                             <div class="grid-photo-box h-120">
-                                <img src="arsip4.png" alt="Teman 1" onerror="this.src='https://via.placeholder.com/300x200/f1ebd9/8a1c1c?text=Foto'">
+                                <img src="foto/rapat.jpg" alt="Teman 1" onerror="this.src='https://via.placeholder.com/300x200/f1ebd9/8a1c1c?text=Foto'">
                                 <div class="photo-caption">Rapat ormawa</div>
                             </div>
                             <div class="grid-photo-box h-120">
-                                <img src="arsip5.png" alt="Teman 2" onerror="this.src='https://via.placeholder.com/300x200/f1ebd9/8a1c1c?text=Foto'">
+                                <img src="foto/keluarga_kpi.jpg" alt="Teman 2" onerror="this.src='https://via.placeholder.com/300x200/f1ebd9/8a1c1c?text=Foto'">
                                 <div class="photo-caption">Keluarga KPI</div>
                             </div>
                             <div class="grid-photo-box h-120">
-                                <img src="arsip6.png" alt="Teman 3" onerror="this.src='https://via.placeholder.com/300x200/f1ebd9/8a1c1c?text=Foto'">
+                                <img src="foto/nangis.jpg" alt="Teman 3" onerror="this.src='https://via.placeholder.com/300x200/f1ebd9/8a1c1c?text=Foto'">
                                 <div class="photo-caption">Nangis bareng</div>
                             </div>
                             <div class="grid-photo-box h-120">
-                                <img src="slide3.png" alt="Teman 4" onerror="this.src='https://via.placeholder.com/300x200/f1ebd9/8a1c1c?text=Foto'">
+                                <img src="foto/lulus_bareng.jpg" alt="Teman 4" onerror="this.src='https://via.placeholder.com/300x200/f1ebd9/8a1c1c?text=Foto'">
                                 <div class="photo-caption">LULUS BARENG!</div>
                             </div>
                         </div>
@@ -1106,22 +1188,22 @@
 
                         <div class="hologram-stage" id="holoStage">
                             <div class="holo-face">
-                                <img src="slide2.png" alt="Hologram 1" onerror="this.src='https://via.placeholder.com/300x400/002233/00e5ff?text=Foto+1'">
+                                <img src="foto/holo1.jpg" alt="Hologram 1" onerror="this.src='https://via.placeholder.com/300x400/002233/00e5ff?text=Foto+1'">
                                 <div class="holo-tint"></div>
                                 <div class="holo-scan"></div>
                             </div>
                             <div class="holo-face">
-                                <img src="slide3.png" alt="Hologram 2" onerror="this.src='https://via.placeholder.com/300x400/002233/00e5ff?text=Foto+2'">
+                                <img src="foto/holo2.jpg" alt="Hologram 2" onerror="this.src='https://via.placeholder.com/300x400/002233/00e5ff?text=Foto+2'">
                                 <div class="holo-tint"></div>
                                 <div class="holo-scan"></div>
                             </div>
                             <div class="holo-face">
-                                <img src="slide4.png" alt="Hologram 3" onerror="this.src='https://via.placeholder.com/300x400/002233/00e5ff?text=Foto+3'">
+                                <img src="foto/holo3.jpg" alt="Hologram 3" onerror="this.src='https://via.placeholder.com/300x400/002233/00e5ff?text=Foto+3'">
                                 <div class="holo-tint"></div>
                                 <div class="holo-scan"></div>
                             </div>
                             <div class="holo-face">
-                                <img src="slide5.png" alt="Hologram 4" onerror="this.src='https://via.placeholder.com/300x400/002233/00e5ff?text=Foto+4'">
+                                <img src="foto/holo4.jpg" alt="Hologram 4" onerror="this.src='https://via.placeholder.com/300x400/002233/00e5ff?text=Foto+4'">
                                 <div class="holo-tint"></div>
                                 <div class="holo-scan"></div>
                             </div>
@@ -1175,6 +1257,15 @@
 
     <!-- EASTER EGG TOAST -->
     <div class="mini-toast" id="miniToast">Ketahuan buka kulkasnya! 🧊 Isinya cuma es batu doang, dingin kayak sikapmu 😏</div>
+
+    <!-- LIGHTBOX FOTO -->
+    <div class="lightbox-modal" id="lightboxModal" onclick="closeLightboxOnBackdrop(event)">
+        <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+        <div class="lightbox-img-wrap">
+            <img id="lightboxImg" src="" alt="Foto diperbesar">
+        </div>
+        <div class="lightbox-caption" id="lightboxCaption"></div>
+    </div>
 
     <script>
         let currentSpread = 0;
@@ -1278,6 +1369,35 @@
             toast.classList.add('show');
             setTimeout(() => toast.classList.remove('show'), 3000);
         }
+
+        // ================= LIGHTBOX FOTO =================
+        function openLightbox(src, caption) {
+            document.getElementById('lightboxImg').src = src;
+            document.getElementById('lightboxCaption').innerText = caption || '';
+            document.getElementById('lightboxModal').classList.add('show');
+        }
+
+        function closeLightbox() {
+            document.getElementById('lightboxModal').classList.remove('show');
+        }
+
+        function closeLightboxOnBackdrop(e) {
+            if (e.target.id === 'lightboxModal') closeLightbox();
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeLightbox();
+        });
+
+        // Pasang lightbox otomatis ke semua foto di lembaran buku
+        document.querySelectorAll('.book-photo img, .grid-photo-box img').forEach((img) => {
+            img.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const wrapper = img.closest('.book-photo, .grid-photo-box');
+                const captionEl = wrapper ? wrapper.querySelector('.photo-caption') : null;
+                openLightbox(img.src, captionEl ? captionEl.textContent : '');
+            });
+        });
 
         // Navigasi keyboard
         document.addEventListener('keydown', (e) => {
