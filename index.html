@@ -3,477 +3,1304 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kidung Perjalanan - Serat Klasik</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800&family=Playfair+Display:ital,wght=0,600;1,500&family=Poppins:wght@300;400;500&family=Reenie+Beanie&display=swap" rel="stylesheet">
-    
+    <title>Maha Karya Wayang: Wisuda S.Sos Si Paling Sok Cuek</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&family=Cinzel:wght@400..900&display=swap" rel="stylesheet">
+
     <style>
-        :root {
-            --bg-ruangan: #1a1512;     /* Latar belakang ruangan kayu hangat gelap */
-            --paper-ivory: #fcf9f2;    /* WARNA BARU: Putih gading bersih, kontras tinggi */
-            --aksen-keraton: #8c2020;  /* Merah bata/marun keraton elegan */
-            --aksen-emas: #c9a054;     /* Emas prada terang mewah */
-            --text-utama: #1c1816;     /* WARNA BARU: Tulisan hitam arang pekat, sangat terbaca */
-            --text-muted: #615855;     
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; }
+        :root {
+            --paper-color: #fcfaf2;
+            --paper-dark: #1e1e24;
+            --text-dark: #2c2520;
+            --text-light: #f4f1ea;
+            --accent-gold: #c5a880;
+            --accent-red: #8a1c1c;
+            --accent-holo: #00e5ff;
+            --shadow-gold: rgba(197, 168, 128, 0.3);
+            --font-serif: 'Playfair Display', Georgia, serif;
+            --font-sans: 'Plus Jakarta Sans', sans-serif;
+            --font-wayang: 'Cinzel', serif;
+            --transition: all 0.5s cubic-bezier(0.645, 0.045, 0.355, 1);
+        }
 
         body {
-            background-color: var(--bg-ruangan);
-            background-image: radial-gradient(circle at 50% 50%, rgba(0,0,0,0.3) 0%, #0d0a09 100%);
-            color: var(--text-utama);
-            font-family: 'Poppins', sans-serif;
+            background: radial-gradient(circle, #221a15 0%, #0d0a08 100%);
+            color: var(--text-dark);
+            font-family: var(--font-sans);
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
+            padding: 20px;
             overflow: hidden;
-            perspective: 2200px;
+            perspective: 1500px;
         }
 
-        .book-container {
+        /* ================= WAYANG WELCOME OVERLAY ================= */
+        .welcome-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, #1a130e 0%, #050403 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            transition: opacity 1s ease, visibility 1s ease;
+        }
+
+        .welcome-overlay.fade-out {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .gunungan-logo {
+            width: 160px;
+            height: auto;
+            margin-bottom: 20px;
+            fill: var(--accent-gold);
+            filter: drop-shadow(0 0 10px var(--shadow-gold));
+            opacity: 0.8;
+            animation: glow 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            0% { filter: drop-shadow(0 0 5px var(--shadow-gold)); opacity: 0.7; }
+            100% { filter: drop-shadow(0 0 20px rgba(197, 168, 128, 0.6)); opacity: 1; }
+        }
+
+        .envelope-container {
+            cursor: pointer;
             position: relative;
-            width: 920px; 
-            height: 620px;
+            width: 280px;
+            height: 180px;
+            background-color: #3d2f24;
+            border: 2px solid var(--accent-gold);
+            border-radius: 6px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.6);
             display: flex;
             justify-content: center;
             align-items: center;
+            transition: transform 0.3s ease;
+            z-index: 5;
+        }
+
+        .envelope-container:hover {
+            transform: scale(1.05) translateY(-5px);
+        }
+
+        .envelope-flap {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 0;
+            border-left: 138px solid transparent;
+            border-right: 138px solid transparent;
+            border-top: 100px solid #291e16;
+            transform-origin: top;
+            transition: transform 0.4s ease-in-out;
+            z-index: 3;
+        }
+
+        .envelope-container.open .envelope-flap {
+            transform: rotateX(180deg);
+            z-index: 1;
+        }
+
+        .envelope-paper {
+            position: absolute;
+            bottom: 10px;
+            width: 252px;
+            height: 140px;
+            background-color: var(--paper-color);
+            border-radius: 4px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 15px;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            z-index: 2;
+            transition: transform 0.5s ease-in-out;
+            border: 1px solid var(--accent-gold);
+        }
+
+        .envelope-container.open .envelope-paper {
+            transform: translateY(-60px);
+        }
+
+        .envelope-paper p {
+            font-family: var(--font-wayang);
+            font-size: 0.9rem;
+            color: var(--text-dark);
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        .envelope-paper span {
+            font-size: 0.7rem;
+            color: var(--accent-red);
+            margin-top: 8px;
+            font-weight: bold;
+            font-family: var(--font-sans);
+        }
+
+        .click-hint {
+            color: var(--accent-gold);
+            font-size: 0.95rem;
+            margin-top: 25px;
+            font-family: var(--font-serif);
+            font-style: italic;
+            animation: bounce 1.5s infinite;
+            letter-spacing: 1px;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+
+        /* ================= AUDIO CONTROLLER ================= */
+        .audio-control {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background-color: rgba(26, 19, 14, 0.95);
+            border: 1px solid var(--accent-gold);
+            padding: 8px 15px;
+            border-radius: 30px;
+            color: var(--accent-gold);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            z-index: 1500;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: var(--transition);
+            font-family: var(--font-sans);
+        }
+
+        .audio-control:hover {
+            background-color: var(--accent-gold);
+            color: #000;
+        }
+
+        /* ================= ANIMATED BOOK 3D FLIP ================= */
+        .book-wrapper {
+            width: 100%;
+            max-width: 980px;
+            position: relative;
+            z-index: 10;
+            opacity: 0;
+            transform: rotateY(-35deg) rotateX(15deg) scale(0.7) translateZ(-500px);
+            transition: opacity 1.5s cubic-bezier(0.19, 1, 0.22, 1),
+                        transform 1.8s cubic-bezier(0.19, 1, 0.22, 1);
+            transform-style: preserve-3d;
+        }
+
+        .book-wrapper.show {
+            opacity: 1;
+            transform: rotateY(0deg) rotateX(0deg) scale(1) translateZ(0);
         }
 
         .book {
+            background-color: var(--paper-color);
+            border-radius: 8px;
+            box-shadow: 0 35px 75px rgba(0,0,0,0.6),
+                        inset 0 0 40px rgba(0, 0, 0, 0.05);
+            min-height: 650px;
             position: relative;
-            width: 460px; 
-            height: 100%;
-            transform-style: preserve-3d;
-            transition: transform 0.6s ease;
-            transform: translateX(50%);
+            display: flex;
+            overflow: hidden;
+            border: 10px solid #201610;
+        }
+
+        .spine {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            width: 4px;
+            background: linear-gradient(to right, rgba(0,0,0,0.3), rgba(0,0,0,0.05) 20%, rgba(255,255,255,0.15) 50%, rgba(0,0,0,0.05) 80%, rgba(0,0,0,0.3));
+            box-shadow: 0 0 15px rgba(0,0,0,0.3);
+            z-index: 10;
+            transform: translateX(-50%);
+        }
+
+        .page-spread {
+            display: none;
+            width: 100%;
+            grid-template-columns: 1fr 1fr;
+            min-height: 630px;
+            opacity: 0;
+            transform: scale(0.98);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .page-spread.active {
+            display: grid;
+            opacity: 1;
+            transform: scale(1);
         }
 
         .page {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            top: 0; left: 0;
-            transform-origin: left center;
-            transform-style: preserve-3d;
-            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .front, .back {
-            position: absolute;
-            width: 100%;
-            height: 100%;
             padding: 45px 40px;
-            backface-visibility: hidden;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            background-color: var(--paper-ivory);
-            box-shadow: inset 0 0 35px rgba(140, 32, 32, 0.06), 0 10px 25px rgba(0,0,0,0.3);
-            border: 1px solid rgba(201, 160, 84, 0.3);
+            position: relative;
+            overflow-y: auto;
+            background-image:
+                linear-gradient(to right, rgba(0, 0, 0, 0.02) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(0, 0, 0, 0.02) 1px, transparent 1px);
+            background-size: 20px 20px;
         }
 
-        .front {
-            border-radius: 0 6px 6px 0;
-            border-left: 4px solid #4a1212;
-            z-index: 2;
+        .page::before, .page::after {
+            content: "✦";
+            position: absolute;
+            top: 15px;
+            color: var(--accent-gold);
+            font-size: 1.2rem;
+            opacity: 0.6;
+            font-family: var(--font-wayang);
         }
-        .front::after {
-            content: ''; position: absolute; top: 0; left: 0; width: 18px; height: 100%;
-            background: linear-gradient(to right, rgba(0,0,0,0.08), transparent);
+        .page::before { left: 15px; }
+        .page::after { right: 15px; }
+
+        .page-left {
+            border-right: 1px solid rgba(0, 0, 0, 0.08);
+            background: linear-gradient(to right, var(--paper-color) 92%, #eae4d3 100%);
         }
 
-        .back {
-            transform: rotateY(180deg);
-            border-radius: 6px 0 0 6px;
-            border-right: 4px solid #4a1212;
-            z-index: 1;
-        }
-        .back::after {
-            content: ''; position: absolute; top: 0; right: 0; width: 18px; height: 100%;
-            background: linear-gradient(to left, rgba(0,0,0,0.08), transparent);
+        .page-right {
+            background: linear-gradient(to left, var(--paper-color) 92%, #eae4d3 100%);
         }
 
-        .page.flipped {
-            transform: rotateY(-180deg);
-        }
-
-        /* ORNAMEN KLASIK */
-        .gunungan-kuno {
-            align-self: center;
-            font-size: 50px;
-            color: var(--aksen-keraton);
-            margin: 10px 0;
-            text-align: center;
-        }
-
-        .title-kejawen {
-            font-family: 'Cinzel', serif;
-            font-weight: 800;
-            color: var(--aksen-keraton);
-            letter-spacing: 2px;
-            line-height: 1.4;
-            border-bottom: 2px double var(--aksen-emas);
-            padding-bottom: 8px;
-        }
-
-        .italic-phrase {
-            font-family: 'Playfair Display', serif;
-            font-style: italic;
-            color: var(--aksen-keraton);
-            font-size: 13px;
-            letter-spacing: 1px;
-            font-weight: 600;
-        }
-
-        .handwritten {
-            font-family: 'Playfair Display', serif;
-            font-style: italic;
-            font-size: 18px;
-            color: #2b221e;
-            line-height: 1.6;
-            text-shadow: 0 0 0px #000; /* Mempertegas tulisan latin quote */
-        }
-
-        .paragraph-story {
-            font-size: 13px;
-            line-height: 1.8;
-            color: var(--text-utama);
-            text-align: justify;
-        }
-
-        .photo-frame-kuno {
+        /* ================= COVER DESAIN WAYANG (dipakai juga untuk hologram) ================= */
+        .cover-spread {
+            background: radial-gradient(circle at center, #2e1f16 0%, #120b07 100%);
+            color: var(--text-light);
+            border-right: none;
             width: 100%;
-            height: 210px;
-            background: #f4eee1;
-            padding: 8px 8px 25px 8px;
-            border: 1px solid var(--aksen-emas);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-            margin: 10px 0;
+            display: none;
+            grid-template-columns: 1fr;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 60px 40px;
+            min-height: 630px;
+            position: relative;
         }
 
-        .photo-frame-kuno img {
+        .cover-spread.active {
+            display: flex;
+        }
+
+        .cover-content {
+            max-width: 600px;
+            border: 2px solid var(--accent-gold);
+            padding: 50px 30px;
+            background-color: rgba(0,0,0,0.5);
+            border-radius: 8px;
+            position: relative;
+            box-shadow: inset 0 0 30px rgba(0,0,0,0.8);
+        }
+
+        .cover-title {
+            font-family: var(--font-wayang);
+            font-size: 2rem;
+            color: #ffffff;
+            line-height: 1.3;
+            margin-bottom: 20px;
+            letter-spacing: 2px;
+            text-shadow: 0 4px 8px rgba(0,0,0,0.6);
+        }
+
+        .cover-subtitle {
+            font-size: 0.95rem;
+            opacity: 0.9;
+            font-weight: 300;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        .chapter-badge {
+            font-family: var(--font-wayang);
+            color: var(--accent-gold);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .page-title {
+            font-family: var(--font-wayang);
+            font-size: 1.4rem;
+            color: var(--text-dark);
+            margin-bottom: 15px;
+            line-height: 1.3;
+            border-bottom: 1px double var(--accent-gold);
+            padding-bottom: 5px;
+        }
+
+        .page-text {
+            font-size: 0.9rem;
+            color: #3e352e;
+            line-height: 1.7;
+            text-align: justify;
+            margin-bottom: 15px;
+        }
+
+        .page-number {
+            font-family: var(--font-wayang);
+            font-size: 0.8rem;
+            color: var(--accent-gold);
+            text-align: center;
+            margin-top: auto;
+            padding-top: 10px;
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+            letter-spacing: 1px;
+        }
+
+        .book-photo {
+            width: 100%;
+            height: 200px;
+            background-color: #f1ebd9;
+            border: 2px solid var(--accent-gold);
+            border-radius: 4px;
+            margin-bottom: 15px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .book-photo img {
             width: 100%;
             height: 100%;
             object-fit: cover;
+            filter: sepia(0.2) contrast(1.05);
+            transition: var(--transition);
         }
 
-        .page-footer {
-            display: flex; justify-content: space-between; align-items: center;
-            font-size: 11px; font-family: 'Playfair Display', serif; color: var(--text-muted);
-            border-top: 1px dashed rgba(140, 32, 32, 0.2); padding-top: 6px;
+        .book-photo:hover img {
+            transform: scale(1.05);
         }
 
-        .nav-hint {
-            color: var(--aksen-keraton); font-weight: 600; letter-spacing: 1px; font-size: 10px; cursor: pointer;
-            text-transform: uppercase;
-        }
-
-        /* GAME ZONE */
-        .game-zone {
-            background: #f4eee1;
-            border: 1px solid var(--aksen-emas);
-            padding: 15px;
+        .photo-caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(26, 19, 14, 0.9);
+            color: #ffffff;
+            padding: 8px;
+            font-size: 0.75rem;
             text-align: center;
-            border-radius: 4px;
-            margin: 10px 0;
+            font-family: var(--font-wayang);
+            border-top: 1px solid var(--accent-gold);
+            letter-spacing: 0.5px;
         }
-        .aksara-box {
-            font-size: 36px;
-            font-weight: bold;
-            color: var(--aksen-keraton);
-            margin: 8px 0;
-            letter-spacing: 4px;
-            background: rgba(255,255,255,0.7);
-            padding: 5px;
-            border-radius: 4px;
-            border: 1px solid rgba(0,0,0,0.05);
-        }
-        .game-options {
+
+        /* PHOTO GRID GALLERY */
+        .photo-grid-2 {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 8px;
-            margin-top: 10px;
-        }
-        .btn-option {
-            background: var(--paper-ivory);
-            border: 1px solid var(--aksen-keraton);
-            color: var(--text-utama);
-            padding: 8px;
-            font-size: 12px;
-            cursor: pointer;
-            font-family: 'Poppins', sans-serif;
-            font-weight: 500;
-            border-radius: 4px;
-            transition: all 0.2s;
-        }
-        .btn-option:hover {
-            background: var(--aksen-keraton);
-            color: #fff;
-        }
-        .game-feedback {
-            font-size: 12px; font-weight: 600; margin-top: 8px; min-height: 18px;
+            gap: 12px;
+            margin-bottom: 15px;
         }
 
-        .tabs-jawa { display: flex; gap: 6px; margin: 8px 0; }
-        .tab-btn {
-            background: rgba(140, 32, 32, 0.05); border: 1px solid var(--aksen-keraton);
-            color: var(--aksen-keraton); font-size: 11px; padding: 5px 12px; cursor: pointer;
-            border-radius: 4px; font-weight: 500;
+        .photo-grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-bottom: 15px;
         }
-        .tab-btn.active { background: var(--aksen-keraton); color: #fff; }
-        .tab-content { font-style: italic; min-height: 50px; font-size: 12.5px; display: flex; align-items: center; color: #403531; }
+
+        .grid-photo-box {
+            position: relative;
+            border: 1px solid var(--accent-gold);
+            border-radius: 4px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+            background-color: #f1ebd9;
+        }
+
+        .grid-photo-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: var(--transition);
+        }
+
+        .grid-photo-box:hover img {
+            transform: scale(1.08);
+        }
+
+        .h-120 { height: 120px; }
+        .h-140 { height: 140px; }
+        .h-180 { height: 180px; }
+        .h-260 { height: 260px; }
+
+        /* ================= HOLOGRAM PEPPER'S GHOST ================= */
+        .hologram-box {
+            width: 260px;
+            height: 320px;
+            margin: 15px auto 10px;
+            position: relative;
+            perspective: 1200px;
+        }
+
+        .hologram-stage {
+            position: absolute;
+            bottom: 28px;
+            left: 50%;
+            width: 180px;
+            height: 240px;
+            transform: translateX(-50%);
+            transform-style: preserve-3d;
+            animation: holoRotate 14s linear infinite;
+        }
+
+        @keyframes holoRotate {
+            from { transform: translateX(-50%) rotateY(0deg); }
+            to   { transform: translateX(-50%) rotateY(360deg); }
+        }
+
+        .holo-face {
+            position: absolute;
+            width: 180px;
+            height: 240px;
+            top: 0;
+            left: 0;
+            backface-visibility: hidden;
+            border: 1px solid rgba(0, 229, 255, 0.6);
+            box-shadow: 0 0 25px rgba(0, 229, 255, 0.45), inset 0 0 25px rgba(0, 229, 255, 0.2);
+            overflow: hidden;
+            border-radius: 4px;
+        }
+
+        .holo-face:nth-child(1) { transform: rotateY(0deg) translateZ(90px); }
+        .holo-face:nth-child(2) { transform: rotateY(90deg) translateZ(90px); }
+        .holo-face:nth-child(3) { transform: rotateY(180deg) translateZ(90px); }
+        .holo-face:nth-child(4) { transform: rotateY(270deg) translateZ(90px); }
+
+        .holo-face img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: brightness(1.15) contrast(1.1) saturate(1.3);
+            opacity: 0.92;
+        }
+
+        .holo-tint {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(0, 229, 255, 0.28), rgba(0, 100, 255, 0.14));
+            mix-blend-mode: screen;
+            pointer-events: none;
+        }
+
+        .holo-scan {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: repeating-linear-gradient(0deg, rgba(255,255,255,0.08) 0px, rgba(255,255,255,0.08) 1px, transparent 2px, transparent 4px);
+            animation: scanMove 3s linear infinite;
+            pointer-events: none;
+        }
+
+        @keyframes scanMove {
+            from { background-position-y: 0; }
+            to   { background-position-y: 40px; }
+        }
+
+        .hologram-platform {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 220px;
+            height: 26px;
+            background: radial-gradient(ellipse at center, rgba(0,229,255,0.65) 0%, rgba(0,229,255,0.18) 45%, transparent 75%);
+            border-radius: 50%;
+            filter: blur(2px);
+            animation: platformPulse 2.5s ease-in-out infinite;
+        }
+
+        @keyframes platformPulse {
+            0%, 100% { opacity: 0.6; transform: translateX(-50%) scale(1); }
+            50% { opacity: 1; transform: translateX(-50%) scale(1.08); }
+        }
+
+        .holo-particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--accent-holo);
+            border-radius: 50%;
+            box-shadow: 0 0 8px 2px rgba(0, 229, 255, 0.8);
+            animation: particleFloat 3s ease-in-out infinite;
+            opacity: 0.8;
+        }
+
+        @keyframes particleFloat {
+            0%, 100% { transform: translateY(0); opacity: 0.2; }
+            50% { transform: translateY(-35px); opacity: 1; }
+        }
+
+        .hologram-caption-text {
+            font-family: var(--font-wayang);
+            color: var(--accent-holo);
+            text-shadow: 0 0 10px rgba(0, 229, 255, 0.8);
+            letter-spacing: 2px;
+            font-size: 0.8rem;
+            margin-top: 5px;
+            animation: textFlicker 4s infinite;
+        }
+
+        @keyframes textFlicker {
+            0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% { opacity: 1; }
+            20%, 24%, 55% { opacity: 0.4; }
+        }
+
+        .hologram-note {
+            font-size: 0.8rem;
+            opacity: 0.75;
+            line-height: 1.6;
+            margin-top: 20px;
+            font-style: italic;
+        }
+
+        /* ================= PROGRESS INDICATOR ================= */
+        .progress-indicator {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 12px;
+            font-family: var(--font-wayang);
+            color: var(--accent-gold);
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+        }
+
+        .progress-dots {
+            display: flex;
+            gap: 6px;
+        }
+
+        .progress-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: rgba(197, 168, 128, 0.25);
+            transition: var(--transition);
+        }
+
+        .progress-dot.active {
+            background-color: var(--accent-gold);
+            box-shadow: 0 0 8px var(--shadow-gold);
+            transform: scale(1.3);
+        }
+
+        /* CONTROLLER / NAVIGASI */
+        .controls {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            margin-top: 15px;
+            z-index: 100;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 20px;
+        }
+
+        .btn-nav {
+            background-color: #241911;
+            color: var(--accent-gold);
+            border: 1px solid var(--accent-gold);
+            padding: 12px 24px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-family: var(--font-wayang);
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.4);
+        }
+
+        .btn-nav:hover:not(:disabled) {
+            background-color: var(--accent-gold);
+            color: #120b07;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(197, 168, 128, 0.4);
+        }
+
+        .btn-nav:disabled {
+            opacity: 0.25;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .cert-box {
+            border: 2px double var(--accent-gold);
+            background-color: #fcfaf2;
+            padding: 15px;
+            text-align: center;
+            margin: 10px 0;
+            border-radius: 6px;
+        }
+
+        .cert-title {
+            font-family: var(--font-wayang);
+            font-size: 0.95rem;
+            color: var(--text-dark);
+            font-weight: bold;
+        }
+
+        .cert-name {
+            font-family: var(--font-wayang);
+            font-size: 1.25rem;
+            color: var(--accent-red);
+            font-weight: bold;
+            margin-top: 5px;
+        }
+
+        .btn-surprise {
+            background-color: var(--accent-red);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-family: var(--font-sans);
+            font-size: 0.85rem;
+            font-weight: bold;
+            margin-top: 5px;
+            transition: var(--transition);
+            box-shadow: 0 4px 10px rgba(138, 28, 28, 0.4);
+        }
+
+        .btn-surprise:hover {
+            background-color: #5c1212;
+            transform: translateY(-2px);
+        }
+
+        /* SURPRISE MODAL */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2500;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.85);
+            backdrop-filter: blur(5px);
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background-color: var(--paper-color);
+            padding: 35px;
+            border-radius: 8px;
+            max-width: 480px;
+            width: 90%;
+            text-align: center;
+            border: 2px solid var(--accent-gold);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.5);
+        }
+
+        .modal-title {
+            font-family: var(--font-wayang);
+            font-size: 1.4rem;
+            color: var(--accent-red);
+            margin-bottom: 15px;
+        }
+
+        .btn-close {
+            background-color: var(--text-dark);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 15px;
+            font-family: var(--font-wayang);
+            font-size: 0.8rem;
+        }
+
+        /* ================= EASTER EGG MINI TOAST ================= */
+        .mini-toast {
+            position: fixed;
+            bottom: 80px;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: rgba(26, 19, 14, 0.95);
+            color: var(--accent-gold);
+            padding: 12px 20px;
+            border-radius: 30px;
+            border: 1px solid var(--accent-gold);
+            font-family: var(--font-wayang);
+            font-size: 0.85rem;
+            z-index: 3000;
+            opacity: 0;
+            transition: var(--transition);
+            pointer-events: none;
+            max-width: 90%;
+            text-align: center;
+        }
+        .mini-toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .easter-egg-icon {
+            cursor: pointer;
+            opacity: 0.5;
+            font-size: 0.9rem;
+            float: right;
+            transition: var(--transition);
+        }
+        .easter-egg-icon:hover {
+            opacity: 1;
+            transform: scale(1.2);
+        }
+
+        @media (max-width: 768px) {
+            body { overflow-y: auto; }
+            .book { min-height: auto; border: 5px solid #201610; }
+            .spine { display: none; }
+            .page-spread { grid-template-columns: 1fr; }
+            .page { padding: 30px 20px; min-height: 550px; }
+            .page-left { border-right: none; border-bottom: 1px dashed rgba(0, 0, 0, 0.1); }
+            .h-260, .h-180 { height: 160px; }
+            .hologram-box { width: 220px; height: 280px; }
+            .hologram-stage { width: 150px; height: 200px; }
+            .holo-face { width: 150px; height: 200px; }
+            .holo-face:nth-child(1) { transform: rotateY(0deg) translateZ(75px); }
+            .holo-face:nth-child(2) { transform: rotateY(90deg) translateZ(75px); }
+            .holo-face:nth-child(3) { transform: rotateY(180deg) translateZ(75px); }
+            .holo-face:nth-child(4) { transform: rotateY(270deg) translateZ(75px); }
+        }
     </style>
 </head>
 <body>
 
-<div class="book-container">
-    <div class="book" id="scrapbook">
-        
-        <!-- ==========================================
-             LEMBAR 1: COVER & PURWAKA (PROLOGUE)
-             ========================================== -->
-        <div class="page" id="p1" style="z-index: 20;">
-            <div class="front" onclick="nextPage(1)">
-                <span class="italic-phrase" style="text-align: center;">— Serat Kidung Kaulan —</span>
-                <div class="gunungan-kuno">📜</div>
-                <div style="text-align: center;">
-                    <h1 class="title-kejawen" style="font-size: 22px;">A FREQUENCY<br>CALLED PURPOSE</h1>
-                    <p style="font-size: 10px; color: var(--text-muted); letter-spacing: 2px; margin-top: 8px; font-weight: 500;">PRILAKU UTAMA</p>
-                </div>
-                <div class="nav-hint" style="text-align: center; margin-top: 35px;">Nawiti Lembaran ➔</div>
-            </div>
-            <div class="back" onclick="prevPage(1)">
-                <span class="italic-phrase">Purwaka (Prologue)</span>
-                <p class="handwritten" style="margin: auto 0; font-size: 20px; text-align: center; color: var(--aksen-keraton);">
-                    "Sebelum riuh toga merayakan namamu,<br>
-                    ada sunyi panjang yang merawat mimpimu.<br>
-                    Mari melihat kembali langkah awal itu..."
-                </p>
-                <div class="page-footer"><span>Bebuka</span><span>I</span></div>
+    <!-- ================= KOTAK SURAT WAYANG (OVERLAY) ================= -->
+    <div class="welcome-overlay" id="welcomeOverlay">
+        <svg class="gunungan-logo" viewBox="0 0 100 130">
+            <path d="M50 5 L90 100 L75 100 L70 120 L30 120 L25 100 L10 100 Z" stroke="#c5a880" stroke-width="1.5" fill="none"/>
+            <path d="M50 15 L80 90 L65 90 L60 115 L40 115 L35 90 L20 90 Z" stroke="#c5a880" stroke-width="0.8" fill="none"/>
+            <path d="M50 5 L50 120" stroke="#c5a880" stroke-width="1.5"/>
+            <path d="M50 40 Q65 30 75 45 M50 60 Q70 50 80 70 M50 80 Q65 75 70 95" stroke="#c5a880" stroke-width="1" fill="none"/>
+            <path d="M50 40 Q35 30 25 45 M50 60 Q30 50 20 70 M50 80 Q35 75 30 95" stroke="#c5a880" stroke-width="1" fill="none"/>
+        </svg>
+
+        <div class="envelope-container" id="envelope" onclick="openEnvelope()">
+            <div class="envelope-flap"></div>
+            <div class="envelope-paper">
+                <p>Serat Kekancingan ✉️</p>
+                <span>Wajib dibuka dening Raden S.Sos</span>
             </div>
         </div>
-
-        <!-- ==========================================
-             LEMBAR 2: BABAK 1 (MABA)
-             ========================================== -->
-        <div class="page" id="p2" style="z-index: 19;">
-            <div class="front" onclick="nextPage(2)">
-                <div>
-                    <span class="italic-phrase">Babak I — Wiwitan Sinyal</span>
-                    <div style="height: 1px; background: var(--aksen-emas); margin: 5px 0;"></div>
-                </div>
-                
-                <div class="photo-frame-kuno">
-                    <img src="https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=400" alt="Foto Maba">
-                </div>
-
-                <p class="paragraph-story">
-                    Sebelum panggung hari ini berdiri megah, ada hari di mana langkah kakimu bergetar memasuki gerbang candi wiyata kampus. Mengemban sekeranjang mimpi, rasa penasaran yang bergejolak, serta kabut ketidaktahuan.
-                </p>
-                <div class="page-footer"><span class="nav-hint">Lajengaken ➔</span><span>II</span></div>
-            </div>
-            <div class="back" onclick="prevPage(2)">
-                <span class="italic-phrase">Sasmita Babak I</span>
-                <p class="handwritten" style="margin: auto 0; text-align: center; color: var(--aksen-keraton); font-size: 19px;">
-                    "Laksana wayang kulit yang baru keluar kotak,<br>
-                    suaramu yang lamat-lamat mulai mencari<br>
-                    di mana ketukan gending hidupmu berada."
-                </p>
-                <div class="page-footer"><span>Babak I</span><span>III</span></div>
-            </div>
-        </div>
-
-        <!-- ==========================================
-             LEMBAR 3: BABAK 2 (EKSPRESI / STUDIO)
-             ========================================== -->
-        <div class="page" id="p3" style="z-index: 18;">
-            <div class="front" onclick="nextPage(3)">
-                <div>
-                    <span class="italic-phrase">Babak II — Ngrumat Swara</span>
-                    <div style="height: 1px; background: var(--aksen-emas); margin: 5px 0;"></div>
-                </div>
-
-                <p class="paragraph-story">
-                    Medan olah wicara dan panggung ekspresi menjadi kawah candradimuka bagimu. Mengasah rasa, melatih cipta, hingga tersadar bahwa bertukar wacana bukan sekadar memoles bibir, melainkan memahat jiwa.
-                </p>
-
-                <div>
-                    <div class="tabs-jawa">
-                        <button class="tab-btn" onclick="switchVoice('speaking', this, event)">🎙️ Wicara</button>
-                        <button class="tab-btn" onclick="switchVoice('visual', this, event)">📷 Netra</button>
-                        <button class="tab-btn" onclick="switchVoice('writing', this, event)">📝 Aksara</button>
-                    </div>
-                    <div id="voiceDisplay" class="tab-content">
-                        *Ketuk salah satu unsur warisan memori di atas.
-                    </div>
-                </div>
-
-                <div class="page-footer"><span class="nav-hint">Lajengaken ➔</span><span>IV</span></div>
-            </div>
-            <div class="back" onclick="prevPage(3)">
-                <span class="italic-phrase">Sasmita Babak II</span>
-                <p class="handwritten" style="margin: auto 0; text-align: center; color: var(--aksen-keraton); font-size: 19px;">
-                    "Setiap ukiran karya dan rekam visualmu,<br>
-                    adalah goresan tapak yang abadi,<br>
-                    menolak tunduk pada pusaran waktu."
-                </p>
-                <div class="page-footer"><span>Babak II</span><span>V</span></div>
-            </div>
-        </div>
-
-        <!-- ==========================================
-             LEMBAR 4: BABAK 3 (GAME TEBAK GAMBAR AKSARA)
-             ========================================== -->
-        <div class="page" id="p4" style="z-index: 17;">
-            <div class="front" onclick="event.stopPropagation();">
-                <div>
-                    <span class="italic-phrase">Babak III — Ujian Prabawa (Skripsi)</span>
-                    <div style="height: 1px; background: var(--aksen-emas); margin: 5px 0;"></div>
-                </div>
-
-                <p class="paragraph-story">
-                    Ujian tersulit menjelang pungkasan. Sang ksatria wajib memecahkan sandi prasasti kuno untuk menuntaskan babak skripsi ini!
-                </p>
-
-                <div class="game-zone" id="gameZone">
-                    <p style="font-size: 12px; font-weight: 500;">Tebak makna dari Aksara Jawa kuno ini:</p>
-                    <div class="aksara-box">ꦭꦏꦾꦤꦸ</div>
-                    <div class="game-options">
-                        <button class="btn-option" onclick="checkAnswer('salah', this)">A. Kamulyan</button>
-                        <button class="btn-option" onclick="checkAnswer('benar', this)">B. Kelulusan</button>
-                        <button class="btn-option" onclick="checkAnswer('salah', this)">C. Kasampurnan</button>
-                        <button class="btn-option" onclick="checkAnswer('salah', this)">D. Kadigdayan</button>
-                    </div>
-                    <div id="gameFeedback" class="game-feedback"></div>
-                </div>
-
-                <div id="graduationZone" style="display: none; animation: fadeIn 0.6s ease-out forwards;">
-                    <div class="photo-frame-kuno" style="height:120px; margin: 5px 0;">
-                        <img src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=400" alt="Foto Sidang">
-                    </div>
-                    <p class="handwritten" style="text-align: center; color: var(--aksen-keraton); font-size: 18px; font-weight: 600;">
-                        Prasasti terpecahkan. Lakon sidang paripurna!
-                    </p>
-                </div>
-
-                <div class="page-footer">
-                    <span id="nextTrigger" class="nav-hint" style="visibility: hidden;" onclick="nextPage(4)">Menuju Kemenangan ➔</span>
-                    <span>VI</span>
-                </div>
-            </div>
-            <div class="back" onclick="prevPage(4)">
-                <span class="italic-phrase">Sasmita Pungkasan</span>
-                <p class="handwritten" style="margin: auto 0; text-align: center; color: var(--aksen-keraton); font-size: 19px;">
-                    "Malam tapa brata yang sunyi parah,<br>
-                    kini lebur runtuh digantikan<br>
-                    fajar kemenangan yang benderang."
-                </p>
-                <div class="page-footer"><span>Babak III</span><span>VII</span></div>
-            </div>
-        </div>
-
-        <!-- ==========================================
-             LEMBAR 5: SAM SAMPUL MBURI (WISUDA)
-             ========================================== -->
-        <div class="page" id="p5" style="z-index: 16;">
-            <div class="front" onclick="event.stopPropagation();">
-                <div>
-                    <span class="italic-phrase">Babak IV — Toga Kamulyan</span>
-                    <div style="height: 1px; background: var(--aksen-emas); margin: 5px 0;"></div>
-                </div>
-
-                <div class="photo-frame-kuno" style="height: 180px;">
-                    <img src="https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=400" alt="Wisuda">
-                </div>
-
-                <p class="paragraph-story" style="font-size: 11.5px;">
-                    Hari agung pun tiba. Namamu digemakan bersama sematan gelar luhur. Seluruh laku prihatin yang kamu pupuk kini menjelma senyum mahardika.
-                </p>
-                
-                <div style="border-top: 1px dashed var(--aksen-keraton); margin-top: 5px; padding-top: 5px;">
-                    <p class="handwritten" style="font-size: 18px; text-align: center; color: var(--aksen-keraton);">
-                        "Matur nuwun atas segala teguh jiwamu.<br>Rahayu ing tembe buri!"
-                    </p>
-                </div>
-
-                <div class="page-footer">
-                    <span class="nav-hint" onclick="closeBook()">➔ Pungkasan (Tutup Serat)</span>
-                    <span>VIII</span>
-                </div>
-            </div>
-            <div class="back"></div>
-        </div>
-
+        <div class="click-hint" id="hintText">Tarih canthas... Tutuk amplop kagem miwiti lakon.</div>
     </div>
-</div>
 
-<script>
-    const book = document.getElementById("scrapbook");
+    <!-- AUDIO PLAYER -->
+    <audio id="bgMusic" loop>
+        <source src="musik.mp3" type="audio/mpeg">
+    </audio>
 
-    function nextPage(pageNumber) {
-        const page = document.getElementById(`p${pageNumber}`);
-        page.classList.add("flipped");
-        
-        setTimeout(() => {
-            page.style.zIndex = pageNumber;
-        }, 300);
+    <!-- KONTROL MUSIK -->
+    <div class="audio-control" id="audioControl" onclick="toggleMusic()" style="display: none;">
+        <span id="audioIcon">🎵</span> <span id="audioStatus">Gamelan: Mengalun</span>
+    </div>
 
-        if (pageNumber === 1) {
-            book.style.transform = "translateX(0%)";
-        }
-    }
+    <!-- ================= MAIN BOOK INTERACTIVE ================= -->
+    <div class="book-wrapper" id="bookWrapper">
+        <div class="book">
+            <div class="spine"></div>
 
-    function prevPage(pageNumber) {
-        const page = document.getElementById(`p${pageNumber}`);
-        page.classList.remove("flipped");
-        
-        page.style.zIndex = 20 - pageNumber + 1;
+            <!-- COVER -->
+            <div class="cover-spread active" id="spread-0">
+                <div class="cover-content">
+                    <span class="chapter-badge">Lakon Wisuda Agung</span>
+                    <h1 class="cover-title">Tiang Rumah yang Gengsinya Setinggi Monas 👑</h1>
+                    <p class="cover-subtitle">
+                        Sebuah babad tulisan penuh canda dan doa untuk anak ke-4 dari 5 bersaudara. Si pengagum drakor kupu-kupu, pembaca setianya Dan Brown, dan kolektor sifat sedingin es se-kabupaten.<br><br>
+                        <b style="color: var(--accent-gold); font-size: 1.05rem;">🚨 BUKA MENAWI SAMPUN NGANGGE TOGA! 🚨</b><br><br>
+                        <i>Ketuk tombol di bawah untuk membuka lembaran rahasia... 👇</i>
+                    </p>
+                    <button class="btn-surprise" style="background-color: var(--accent-gold); color: #120b07;" onclick="nextPage()">Miwiti Lakon! 📖</button>
+                </div>
+            </div>
 
-        if (pageNumber === 1) {
-            book.style.transform = "translateX(50%)";
-        }
-    }
+            <!-- SPREAD 1 (BAB I) -->
+            <div class="page-spread" id="spread-1">
+                <div class="page page-left">
+                    <div>
+                        <span class="chapter-badge">Lakon I: Mula Bukane Bocil</span>
+                        <h2 class="page-title">Maba Lucu nan Polos 👶</h2>
+                        <div class="book-photo">
+                            <img src="arsip1.png" alt="Zaman Maba" onerror="this.src='https://via.placeholder.com/400x300/f1ebd9/8a1c1c?text=Foto+Belum+Diupload'">
+                            <div class="photo-caption">Waktu masih polos dan belum dendam sama tugas kuliah</div>
+                        </div>
+                        <p class="page-text">
+                            Inget gak pas pertama kali menginjakkan kaki di kampus? Masih jadi anak ke-4 kesayangan yang kalau jalan masih celingak-celinguk nyari gedung kuliah. Mukanya masih penuh harapan, belum ternoda oleh revisian bab demi bab. Gemes banget pokoknya!
+                        </p>
+                    </div>
+                    <div class="page-number">Halaman 1</div>
+                </div>
+                <div class="page page-right">
+                    <div>
+                        <span class="chapter-badge">Lakon I: Mula Bukane Bocil</span>
+                        <h2 class="page-title">Sumpah, Sibuk Banget! 📢</h2>
+                        <div class="book-photo">
+                            <img src="arsip2.png" alt="Organisasi" onerror="this.src='https://via.placeholder.com/400x300/f1ebd9/8a1c1c?text=Foto+Belum+Diupload'">
+                            <div class="photo-caption">Gaya elit, capek sulit. Tapi tetep lanjut organisasi!</div>
+                        </div>
+                        <p class="page-text">
+                            Masuk Komunikasi dan Penyiaran Islam (KPI) langsung deh jiwa sosialnya meronta-ronta. Ikut organisasi sana-sini biar dibilang aktif berguna bagi nusa, bangsa, dan gebetan. Padahal aslinya kalau rapat malam kadang udah pengen senderan sambil nonton drakor, kan? Ngaku!
+                        </p>
+                    </div>
+                    <div class="page-number">Halaman 2</div>
+                </div>
+            </div>
 
-    function closeBook() {
-        for (let i = 4; i >= 1; i--) {
+            <!-- SPREAD 2 (BAB II) -->
+            <div class="page-spread" id="spread-2">
+                <div class="page page-left">
+                    <div>
+                        <span class="chapter-badge">Lakon II: Sambat neng Ngarep Laptop</span>
+                        <h2 class="page-title">Drama Bab 4 & 5 💻☠️</h2>
+                        <div class="book-photo">
+                            <img src="arsip3.png" alt="Ngerjain Tugas" onerror="this.src='https://via.placeholder.com/400x300/f1ebd9/8a1c1c?text=Foto+Belum+Diupload'">
+                            <div class="photo-caption">Muka begadang ditemani secangkir kopi dan sejuta kepasrahan</div>
+                        </div>
+                        <p class="page-text">
+                            Momen-momen di mana laptop rasanya pengen dilempar ke rawa-rawa karena revisian draf skripsi numpuk kayak cucian kotor. Tiap ditanya "gimana skripsinya?" balesnya cuma "aman," padahal di dalam hati udah teriak sekencang konser rock. Keras kepala nomor satu emang!
+                        </p>
+                    </div>
+                    <div class="page-number">Halaman 3</div>
+                </div>
+                <div class="page page-right">
+                    <div>
+                        <span class="chapter-badge">Lakon II: Sambat neng Ngarep Laptop</span>
+                        <h2 class="page-title">Cie, Sarjana Sosial! 🎓</h2>
+                        <div class="book-photo">
+                            <img src="arsip4.png" alt="Sidang Akhir" onerror="this.src='https://via.placeholder.com/400x300/f1ebd9/8a1c1c?text=Foto+Belum+Diupload'">
+                            <div class="photo-caption">Sah jadi S.Sos! Dosen pengujinya aja sampai sungkem</div>
+                        </div>
+                        <p class="page-text">
+                            Tapi namanya juga si tangguh, akhirnya kelar juga tuh sidang maut! Pas keluar ruangan langsung pasang muka lempeng ala-ala "halah gampang banget," padahal dengkul gemeteran pas ditanya dosen. Dan lihat hari ini, baju toganya cocok banget di badanmu!
+                        </p>
+                    </div>
+                    <div class="page-number">Halaman 4</div>
+                </div>
+            </div>
+
+            <!-- SPREAD 3 (BAB III) -->
+            <div class="page-spread" id="spread-3">
+                <div class="page page-left">
+                    <div>
+                        <span class="chapter-badge">Lakon III: Satria Kulkas 2 Pintu</span>
+                        <h2 class="page-title">"Gak Butuh Disemangatin" 😒</h2>
+                        <div class="book-photo">
+                            <img src="arsip5.png" alt="Mode Cuek" onerror="this.src='https://via.placeholder.com/400x300/f1ebd9/8a1c1c?text=Foto+Belum+Diupload'">
+                            <div class="photo-caption">Muka jutek andalan kalau dichat sok manis</div>
+                        </div>
+                        <p class="page-text">
+                            "Halah apaan sih semangat-semangat, gak butuh!" - sebuah kalimat legenda dari manusia tergengsi abad ini. Gayanya mirip Park Jae-eon pas lagi tebar pesona kupu-kupu tapi pas dibalas malah menghilang. Balas chat singkat, padat, dan bikin orang istigfar.
+                        </p>
+                    </div>
+                    <div class="page-number">Halaman 5</div>
+                </div>
+                <div class="page page-right">
+                    <div>
+                        <span class="chapter-badge">Lakon III: Satria Kulkas 2 Pintu</span>
+                        <h2 class="page-title">Aslinya Lembut nan Manis 🤗 <span class="easter-egg-icon" onclick="showEasterEgg()" title="???">🧊</span></h2>
+                        <div class="book-photo">
+                            <img src="arsip6.png" alt="Mode Warm" onerror="this.src='https://via.placeholder.com/400x300/f1ebd9/8a1c1c?text=Foto+Belum+Diupload'">
+                            <div class="photo-caption">Biar cuek, aslinya kalau ngeliat orang kesusahan langsung gercep</div>
+                        </div>
+                        <p class="page-text">
+                            Halah bohong banget sok cuek! Aslinya mah hatinya selembut bubur sumsum bayi. Paling peka kalau ada orang terdekat yang murung, diem-diem bantuin tanpa pamrih biar gak ketahuan berhati malaikat. Iya deh, si paling misterius tapi penyayang!
+                        </p>
+                    </div>
+                    <div class="page-number">Halaman 6</div>
+                </div>
+            </div>
+
+            <!-- SPREAD 4 (GALERI FOTO PART 1) -->
+            <div class="page-spread" id="spread-4">
+                <div class="page page-left">
+                    <div>
+                        <span class="chapter-badge">Arsip Memori: Reronce Jagat</span>
+                        <h2 class="page-title">Kilas Balik & Tawa 📸</h2>
+                        <div class="photo-grid-2">
+                            <div class="grid-photo-box h-180">
+                                <img src="slide2.png" alt="Foto Kenangan 1" onerror="this.src='https://via.placeholder.com/300x300/f1ebd9/8a1c1c?text=Foto'">
+                                <div class="photo-caption">Edisi nongkrong habis kelas</div>
+                            </div>
+                            <div class="grid-photo-box h-180">
+                                <img src="slide3.png" alt="Foto Kenangan 2" onerror="this.src='https://via.placeholder.com/300x300/f1ebd9/8a1c1c?text=Foto'">
+                                <div class="photo-caption">Tim hore pendukung setia</div>
+                            </div>
+                        </div>
+                        <div class="grid-photo-box h-120">
+                            <img src="slide4.png" alt="Foto Kenangan 3" onerror="this.src='https://via.placeholder.com/600x200/f1ebd9/8a1c1c?text=Foto'">
+                            <div class="photo-caption">Momen random pas kumpul bareng, rusuh abis!</div>
+                        </div>
+                    </div>
+                    <div class="page-number">Halaman 7</div>
+                </div>
+                <div class="page page-right">
+                    <div>
+                        <span class="chapter-badge">Arsip Memori: Reronce Jagat</span>
+                        <h2 class="page-title">Yang Ga Boleh Dilupain 🎞️</h2>
+                        <div class="photo-grid-3">
+                            <div class="grid-photo-box h-140">
+                                <img src="slide4.png" alt="Grid 1" onerror="this.src='https://via.placeholder.com/200x200/f1ebd9/8a1c1c?text=Foto'">
+                                <div class="photo-caption">Pose andalan</div>
+                            </div>
+                            <div class="grid-photo-box h-140">
+                                <img src="slide5.png" alt="Grid 2" onerror="this.src='https://via.placeholder.com/200x200/f1ebd9/8a1c1c?text=Foto'">
+                                <div class="photo-caption">Muka ngantuk</div>
+                            </div>
+                            <div class="grid-photo-box h-140">
+                                <img src="arsip1.png" alt="Grid 3" onerror="this.src='https://via.placeholder.com/200x200/f1ebd9/8a1c1c?text=Foto'">
+                                <div class="photo-caption">Ketawa lepas</div>
+                            </div>
+                        </div>
+                        <div class="grid-photo-box h-180">
+                            <img src="arsip2.png" alt="Foto Portrait" onerror="this.src='https://via.placeholder.com/600x300/f1ebd9/8a1c1c?text=Foto'">
+                            <div class="photo-caption">Si paling estetik kalau difoto candid</div>
+                        </div>
+                    </div>
+                    <div class="page-number">Halaman 8</div>
+                </div>
+            </div>
+
+            <!-- SPREAD 5 (GALERI FOTO PART 2) -->
+            <div class="page-spread" id="spread-5">
+                <div class="page page-left">
+                    <div>
+                        <span class="chapter-badge">Arsip Memori: Candi Perjuangan</span>
+                        <h2 class="page-title">Saksi Bisu Perjuangan ☕</h2>
+                        <div class="grid-photo-box h-260" style="margin-bottom: 12px;">
+                            <img src="arsip3.png" alt="Meja Kerja Skripsi" onerror="this.src='https://via.placeholder.com/600x400/f1ebd9/8a1c1c?text=Foto'">
+                            <div class="photo-caption">Penampakan meja tempur waktu dikejar deadline kualitatif</div>
+                        </div>
+                        <p class="page-text" style="font-size: 0.85rem; text-align: center; font-style: italic;">
+                            "Setiap sudut foto di sini adalah bukti kalau kamu berhasil ngelewatin hari-hari yang kamu pikir kamu ga bakal sanggup."
+                        </p>
+                    </div>
+                    <div class="page-number">Halaman 9</div>
+                </div>
+                <div class="page page-right">
+                    <div>
+                        <span class="chapter-badge">Arsip Memori: Konco Kuliah</span>
+                        <h2 class="page-title">Keluarga Kedua di Kampus 🫶</h2>
+                        <div class="photo-grid-2">
+                            <div class="grid-photo-box h-120">
+                                <img src="arsip4.png" alt="Teman 1" onerror="this.src='https://via.placeholder.com/300x200/f1ebd9/8a1c1c?text=Foto'">
+                                <div class="photo-caption">Rapat ormawa</div>
+                            </div>
+                            <div class="grid-photo-box h-120">
+                                <img src="arsip5.png" alt="Teman 2" onerror="this.src='https://via.placeholder.com/300x200/f1ebd9/8a1c1c?text=Foto'">
+                                <div class="photo-caption">Keluarga KPI</div>
+                            </div>
+                            <div class="grid-photo-box h-120">
+                                <img src="arsip6.png" alt="Teman 3" onerror="this.src='https://via.placeholder.com/300x200/f1ebd9/8a1c1c?text=Foto'">
+                                <div class="photo-caption">Nangis bareng</div>
+                            </div>
+                            <div class="grid-photo-box h-120">
+                                <img src="slide3.png" alt="Teman 4" onerror="this.src='https://via.placeholder.com/300x200/f1ebd9/8a1c1c?text=Foto'">
+                                <div class="photo-caption">LULUS BARENG!</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="page-number">Halaman 10</div>
+                </div>
+            </div>
+
+            <!-- SPREAD 6 (BAB IV) -->
+            <div class="page-spread" id="spread-6">
+                <div class="page page-left">
+                    <div>
+                        <span class="chapter-badge">Lakon IV: Sandi Dan Brown</span>
+                        <h2 class="page-title">Angels & Demons Real Life 👿😇</h2>
+                        <p class="page-text" style="font-family: var(--font-serif); font-style: italic; font-size: 1.05rem; border-left: 3px solid var(--accent-gold); padding-left: 15px; margin-bottom: 15px;">
+                            "Kamu itu kayak buku Dan Brown. Penuh teka-teki, bikin pusing, tapi kalau udah dibaca bikin ketagihan setengah mati."
+                        </p>
+                        <p class="page-text">
+                            Sebagai anak keempat dari 5 bersaudara, kamu emang terlatih jadi tameng pelindung yang kuat luar biasa. Selalu dengerin keluh kesah orang, tapi giliran kamu yang lelah malah disembunyani rapat-rapat kayak kode rahasia Illuminati. Tapi hari ini, lepasin dulu semua topeng misteriusmu itu! Saatnya selebrasi!
+                        </p>
+                    </div>
+                    <div class="page-number">Halaman 11</div>
+                </div>
+                <div class="page page-right">
+                    <div>
+                        <span class="chapter-badge">Lakon IV: Pungkasaning Lakon</span>
+                        <h2 class="page-title">Happy Graduation Day! 🎉🎓</h2>
+                        <div class="cert-box">
+                            <div class="cert-title">Selamat Atas Kelulusan Resmi</div>
+                            <div class="cert-name">Si Kulkas Kesayangan, S.Sos</div>
+                            <div style="font-size: 0.75rem; margin-top: 8px; color: #6d5f54;">
+                                Ditetapkan pada Hari H Wisuda dengan predikat "Si Paling Gengsi tapi Paling Hebat".
+                            </div>
+                        </div>
+                        <p class="page-text" style="font-size: 0.85rem; text-align: center; margin-bottom: 10px;">
+                            Hari ini talinya udah dipindah ke kanan. Gak ada lagi alasan buat billing "ah biasa aja." Kamu berhak bangga sama dirimu sendiri hari ini!
+                        </p>
+                    </div>
+                    <div class="page-number">Halaman 12</div>
+                </div>
+            </div>
+
+            <!-- SPREAD 7 (BONUS: BILIK HOLOGRAM) -->
+            <div class="cover-spread" id="spread-7">
+                <div class="cover-content">
+                    <span class="chapter-badge">Lakon Pungkasan: Bilik Cahya</span>
+                    <h1 class="cover-title" style="font-size: 1.6rem;">Proyeksi Hologram Kenangan ✨</h1>
+                    <p class="cover-subtitle" style="font-size: 0.85rem;">
+                        Harusnya di sini ada hologram Pepper's Ghost fisik buatan tangan sendiri. Karena satu dan lain hal rencana itu belum kesampaian — jadi wujudnya ganti jadi versi digital. Beda bentuk, sama niatnya.
+                    </p>
+
+                    <div class="hologram-box">
+                        <div class="holo-particle" style="left: 15%; bottom: 40px; animation-delay: 0s;"></div>
+                        <div class="holo-particle" style="left: 80%; bottom: 60px; animation-delay: 0.7s;"></div>
+                        <div class="holo-particle" style="left: 30%; bottom: 90px; animation-delay: 1.4s;"></div>
+                        <div class="holo-particle" style="left: 65%; bottom: 30px; animation-delay: 2.1s;"></div>
+                        <div class="holo-particle" style="left: 45%; bottom: 110px; animation-delay: 0.4s;"></div>
+
+                        <div class="hologram-stage" id="holoStage">
+                            <div class="holo-face">
+                                <img src="slide2.png" alt="Hologram 1" onerror="this.src='https://via.placeholder.com/300x400/002233/00e5ff?text=Foto+1'">
+                                <div class="holo-tint"></div>
+                                <div class="holo-scan"></div>
+                            </div>
+                            <div class="holo-face">
+                                <img src="slide3.png" alt="Hologram 2" onerror="this.src='https://via.placeholder.com/300x400/002233/00e5ff?text=Foto+2'">
+                                <div class="holo-tint"></div>
+                                <div class="holo-scan"></div>
+                            </div>
+                            <div class="holo-face">
+                                <img src="slide4.png" alt="Hologram 3" onerror="this.src='https://via.placeholder.com/300x400/002233/00e5ff?text=Foto+3'">
+                                <div class="holo-tint"></div>
+                                <div class="holo-scan"></div>
+                            </div>
+                            <div class="holo-face">
+                                <img src="slide5.png" alt="Hologram 4" onerror="this.src='https://via.placeholder.com/300x400/002233/00e5ff?text=Foto+4'">
+                                <div class="holo-tint"></div>
+                                <div class="holo-scan"></div>
+                            </div>
+                        </div>
+
+                        <div class="hologram-platform"></div>
+                    </div>
+
+                    <div class="hologram-caption-text">— MEMORY PROJECTION ACTIVE —</div>
+
+                    <p class="hologram-note">
+                        Anggap aja ini gladi resik. Suatu saat, kotak kacanya bakal beneran ada di depan matamu. Untuk sekarang, cukup puter-puter foto ini sambil senyum, ya. 🤍
+                    </p>
+
+                    <div style="margin-top: 20px;">
+                        <button class="btn-surprise" onclick="openModal()">Tombol Rahasia (Gak Usah Diklik!)</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="controls">
+            <div class="progress-indicator">
+                <span id="progressLabel">Babak I / VIII</span>
+                <div class="progress-dots" id="progressDots"></div>
+            </div>
+            <div class="nav-buttons">
+                <button class="btn-nav" id="btn-prev" onclick="prevPage()" disabled>
+                    ⬅️ Sadurunge
+                </button>
+                <button class="btn-nav" id="btn-next" onclick="nextPage()">
+                    Sabanjure ➡️
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- SURPRISE MODAL -->
+    <div id="surpriseModal" class="modal">
+        <div class="modal-content">
+            <h3 class="modal-title">Tuh kan, tetep ngeyel diklik! 😜</h3>
+            <p style="font-size: 0.95rem; line-height: 1.7; text-align: justify; color: var(--text-dark);">
+                Katanya kulkas 2 pintu, katanya gak butuh disemangatin... Tapi pas dibilang jangan diklik, tetep aja jarinya gercep nyenggol tombol merah ini, wkwkwk. Sifat penasaran ala Dan Brown-nya emang gak bisa bohong!<br><br>
+                Bercanda ding! Hari ini kamu bener-bener keren banget pake toga. Makasih ya udah mau berjuang keras, ngelewati begadang, laptop lemot, dan drama kampus sampai akhirnya bisa berdiri di hari wisuda ini tanpa banyak mengeluh. <br><br>
+                Selamat atas gelar S.Sos-nya ya! Tolong ya, pas difoto nanti senyumnya yang lebar, jangan pasang muka lempeng cuek andalanmu itu! Nikmati harimu, kamu hebat banget hari ini! 🤍✨
+            </p>
+            <button class="btn-close" onclick="closeModal()">Tutup & Kembali Senyum</button>
+        </div>
+    </div>
+
+    <!-- EASTER EGG TOAST -->
+    <div class="mini-toast" id="miniToast">Ketahuan buka kulkasnya! 🧊 Isinya cuma es batu doang, dingin kayak sikapmu 😏</div>
+
+    <script>
+        let currentSpread = 0;
+        const totalSpreads = 8;
+        const romanNumerals = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII"];
+        const bgMusic = document.getElementById('bgMusic');
+        const audioControl = document.getElementById('audioControl');
+        const audioIcon = document.getElementById('audioIcon');
+        const audioStatus = document.getElementById('audioStatus');
+
+        function openEnvelope() {
+            const envelope = document.getElementById('envelope');
+            const welcomeOverlay = document.getElementById('welcomeOverlay');
+            const bookWrapper = document.getElementById('bookWrapper');
+            const hintText = document.getElementById('hintText');
+
+            envelope.classList.add('open');
+            hintText.innerText = "Ngelir lakon anyar...";
+
+            bgMusic.play().then(() => {
+                audioControl.style.display = 'flex';
+            }).catch(error => {
+                console.log("Autoplay dicegah.");
+            });
+
             setTimeout(() => {
-                prevPage(i);
-            }, (4 - i) * 180);
+                welcomeOverlay.classList.add('fade-out');
+                bookWrapper.classList.add('show');
+                document.body.style.overflow = 'auto';
+            }, 1600);
         }
-    }
 
-    const quotes = {
-        speaking: "🎙️ [Wicara]: Lantang nan wibawa menyuarakan visi pencerah di tengah riuh khalayak.",
-        visual: "📷 [Netra]: Membaca rahasia alam maya dan memotret rasa lewat keheningan bidikan lensa.",
-        writing: "📝 [Aksara]: Mengikat ilmu dan pemikiran ke dalam goresan artikel ilmiah terstruktur."
-    };
-
-    function switchVoice(key, element, event) {
-        event.stopPropagation();
-        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-        element.classList.add('active');
-        document.getElementById("voiceDisplay").innerText = quotes[key];
-    }
-
-    function checkAnswer(status, btn) {
-        const feedback = document.getElementById("gameFeedback");
-        if(status === 'benar') {
-            feedback.style.color = "green";
-            feedback.innerText = "Leres! Jawaban Anda Benar (Kelulusan).";
-            
-            setTimeout(() => {
-                document.getElementById("gameZone").style.display = "none";
-                document.getElementById("graduationZone").style.display = "block";
-                document.getElementById("nextTrigger").style.visibility = "visible";
-            }, 800);
-        } else {
-            feedback.style.color = "var(--aksen-keraton)";
-            feedback.innerText = "Meleset, coba renungkan kembali aksaranya...";
-            btn.style.backgroundColor = "rgba(140, 32, 32, 0.1)";
+        function toggleMusic() {
+            if (bgMusic.paused) {
+                bgMusic.play();
+                audioIcon.innerText = "🎵";
+                audioStatus.innerText = "Gamelan: Mengalun";
+            } else {
+                bgMusic.pause();
+                audioIcon.innerText = "🔇";
+                audioStatus.innerText = "Gamelan: Sunyi";
+            }
         }
-    }
-</script>
 
+        function renderDots() {
+            const container = document.getElementById('progressDots');
+            container.innerHTML = '';
+            for (let i = 0; i < totalSpreads; i++) {
+                const dot = document.createElement('div');
+                dot.className = 'progress-dot';
+                container.appendChild(dot);
+            }
+        }
+
+        function updateBook() {
+            for (let i = 0; i < totalSpreads; i++) {
+                const spread = document.getElementById(`spread-${i}`);
+                if (i === currentSpread) {
+                    spread.classList.add('active');
+                } else {
+                    spread.classList.remove('active');
+                }
+            }
+            document.getElementById('btn-prev').disabled = currentSpread === 0;
+            document.getElementById('btn-next').disabled = currentSpread === totalSpreads - 1;
+
+            document.getElementById('progressLabel').innerText = `Babak ${romanNumerals[currentSpread]} / VIII`;
+            document.querySelectorAll('.progress-dot').forEach((dot, i) => {
+                dot.classList.toggle('active', i === currentSpread);
+            });
+        }
+
+        function nextPage() {
+            if (currentSpread < totalSpreads - 1) {
+                currentSpread++;
+                updateBook();
+            }
+        }
+
+        function prevPage() {
+            if (currentSpread > 0) {
+                currentSpread--;
+                updateBook();
+            }
+        }
+
+        function openModal() {
+            const modal = document.getElementById('surpriseModal');
+            modal.style.display = 'flex';
+            setTimeout(() => { modal.classList.add('show'); }, 10);
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('surpriseModal');
+            modal.classList.remove('show');
+            setTimeout(() => { modal.style.display = 'none'; }, 300);
+        }
+
+        function showEasterEgg() {
+            const toast = document.getElementById('miniToast');
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+
+        // Navigasi keyboard
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') nextPage();
+            if (e.key === 'ArrowLeft') prevPage();
+        });
+
+        // Navigasi swipe (mobile)
+        let touchStartX = 0;
+        document.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        });
+        document.addEventListener('touchend', (e) => {
+            const touchEndX = e.changedTouches[0].screenX;
+            const diff = touchEndX - touchStartX;
+            if (Math.abs(diff) > 50) {
+                if (diff < 0) nextPage(); else prevPage();
+            }
+        });
+
+        // Inisialisasi
+        renderDots();
+        updateBook();
+    </script>
 </body>
 </html>
