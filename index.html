@@ -1,1426 +1,497 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Maha Karya Wayang: Wisuda S.Sos Si Paling Sok Cuek</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&family=Cinzel:wght@400..900&display=swap" rel="stylesheet">
-
-    <style>
-        *, *::before, *::after {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        :root {
-            --paper-color: #fcfaf2;
-            --paper-dark: #1e1e24;
-            --text-dark: #2c2520;
-            --text-light: #f4f1ea;
-            --accent-gold: #c5a880;
-            --accent-red: #8a1c1c;
-            --accent-holo: #00e5ff;
-            --shadow-gold: rgba(197, 168, 128, 0.3);
-            --font-serif: 'Playfair Display', Georgia, serif;
-            --font-sans: 'Plus Jakarta Sans', sans-serif;
-            --font-wayang: 'Cinzel', serif;
-            --transition: all 0.5s cubic-bezier(0.645, 0.045, 0.355, 1);
-        }
-
-        body {
-            background: radial-gradient(circle, #221a15 0%, #0d0a08 100%);
-            color: var(--text-dark);
-            font-family: var(--font-sans);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            padding: 20px;
-            overflow: hidden;
-            perspective: 1500px;
-        }
-
-        /* ================= WAYANG WELCOME OVERLAY ================= */
-        .welcome-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle, #1a130e 0%, #050403 100%);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            z-index: 2000;
-            transition: opacity 1s ease, visibility 1s ease;
-        }
-
-        .welcome-overlay.fade-out {
-            opacity: 0;
-            visibility: hidden;
-            pointer-events: none;
-        }
-
-        .gunungan-logo {
-            width: 160px;
-            height: auto;
-            margin-bottom: 20px;
-            fill: var(--accent-gold);
-            filter: drop-shadow(0 0 10px var(--shadow-gold));
-            opacity: 0.8;
-            animation: glow 3s ease-in-out infinite alternate;
-        }
-
-        @keyframes glow {
-            0% { filter: drop-shadow(0 0 5px var(--shadow-gold)); opacity: 0.7; }
-            100% { filter: drop-shadow(0 0 20px rgba(197, 168, 128, 0.6)); opacity: 1; }
-        }
-
-        .envelope-container {
-            cursor: pointer;
-            position: relative;
-            width: 280px;
-            height: 180px;
-            background-color: #3d2f24;
-            border: 2px solid var(--accent-gold);
-            border-radius: 6px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.6);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            transition: transform 0.3s ease;
-            z-index: 5;
-        }
-
-        .envelope-container:hover {
-            transform: scale(1.05) translateY(-5px);
-        }
-
-        .envelope-flap {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 0;
-            height: 0;
-            border-left: 138px solid transparent;
-            border-right: 138px solid transparent;
-            border-top: 100px solid #291e16;
-            transform-origin: top;
-            transition: transform 0.4s ease-in-out;
-            z-index: 3;
-        }
-
-        .envelope-container.open .envelope-flap {
-            transform: rotateX(180deg);
-            z-index: 1;
-        }
-
-        .envelope-paper {
-            position: absolute;
-            bottom: 10px;
-            width: 252px;
-            height: 140px;
-            background-color: var(--paper-color);
-            border-radius: 4px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 15px;
-            text-align: center;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-            z-index: 2;
-            transition: transform 0.5s ease-in-out;
-            border: 1px solid var(--accent-gold);
-        }
-
-        .envelope-container.open .envelope-paper {
-            transform: translateY(-60px);
-        }
-
-        .envelope-paper p {
-            font-family: var(--font-wayang);
-            font-size: 0.9rem;
-            color: var(--text-dark);
-            font-weight: bold;
-            letter-spacing: 1px;
-        }
-
-        .envelope-paper span {
-            font-size: 0.7rem;
-            color: var(--accent-red);
-            margin-top: 8px;
-            font-weight: bold;
-            font-family: var(--font-sans);
-        }
-
-        .click-hint {
-            color: var(--accent-gold);
-            font-size: 0.95rem;
-            margin-top: 25px;
-            font-family: var(--font-serif);
-            font-style: italic;
-            animation: bounce 1.5s infinite;
-            letter-spacing: 1px;
-        }
-
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-8px); }
-        }
-
-        /* ================= AUDIO CONTROLLER ================= */
-        .audio-control {
-            position: fixed;
-            bottom: 20px;
-            left: 20px;
-            background-color: rgba(26, 19, 14, 0.95);
-            border: 1px solid var(--accent-gold);
-            padding: 8px 15px;
-            border-radius: 30px;
-            color: var(--accent-gold);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            z-index: 1500;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-            font-size: 0.8rem;
-            cursor: pointer;
-            transition: var(--transition);
-            font-family: var(--font-sans);
-        }
-
-        .audio-control:hover {
-            background-color: var(--accent-gold);
-            color: #000;
-        }
-
-        /* ================= ANIMATED BOOK 3D FLIP ================= */
-        .book-wrapper {
-            width: 100%;
-            max-width: 980px;
-            position: relative;
-            z-index: 10;
-            opacity: 0;
-            transform: rotateY(-35deg) rotateX(15deg) scale(0.7) translateZ(-500px);
-            transition: opacity 1.5s cubic-bezier(0.19, 1, 0.22, 1),
-                        transform 1.8s cubic-bezier(0.19, 1, 0.22, 1);
-            transform-style: preserve-3d;
-        }
-
-        .book-wrapper.show {
-            opacity: 1;
-            transform: rotateY(0deg) rotateX(0deg) scale(1) translateZ(0);
-        }
-
-        .book {
-            background-color: var(--paper-color);
-            border-radius: 8px;
-            box-shadow: 0 35px 75px rgba(0,0,0,0.6),
-                        inset 0 0 40px rgba(0, 0, 0, 0.05);
-            min-height: 650px;
-            position: relative;
-            display: flex;
-            overflow: hidden;
-            border: 10px solid #201610;
-        }
-
-        .spine {
-            position: absolute;
-            top: 0;
-            bottom: 0;
-            left: 50%;
-            width: 4px;
-            background: linear-gradient(to right, rgba(0,0,0,0.3), rgba(0,0,0,0.05) 20%, rgba(255,255,255,0.15) 50%, rgba(0,0,0,0.05) 80%, rgba(0,0,0,0.3));
-            box-shadow: 0 0 15px rgba(0,0,0,0.3);
-            z-index: 10;
-            transform: translateX(-50%);
-        }
-
-        .page-spread {
-            display: none;
-            width: 100%;
-            grid-template-columns: 1fr 1fr;
-            min-height: 630px;
-            opacity: 0;
-            transform: scale(0.98);
-            transition: opacity 0.6s ease, transform 0.6s ease;
-        }
-
-        .page-spread.active {
-            display: grid;
-            opacity: 1;
-            transform: scale(1);
-        }
-
-        .page {
-            padding: 45px 40px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            position: relative;
-            overflow-y: auto;
-            background-image:
-                linear-gradient(to right, rgba(0, 0, 0, 0.02) 1px, transparent 1px),
-                linear-gradient(to bottom, rgba(0, 0, 0, 0.02) 1px, transparent 1px);
-            background-size: 20px 20px;
-        }
-
-        .page::before, .page::after {
-            content: "✦";
-            position: absolute;
-            top: 15px;
-            color: var(--accent-gold);
-            font-size: 1.2rem;
-            opacity: 0.6;
-            font-family: var(--font-wayang);
-        }
-        .page::before { left: 15px; }
-        .page::after { right: 15px; }
-
-        .page-left {
-            border-right: 1px solid rgba(0, 0, 0, 0.08);
-            background: linear-gradient(to right, var(--paper-color) 92%, #eae4d3 100%);
-        }
-
-        .page-right {
-            background: linear-gradient(to left, var(--paper-color) 92%, #eae4d3 100%);
-        }
-
-        /* ================= COVER DESAIN WAYANG (dipakai juga untuk hologram) ================= */
-        .cover-spread {
-            background: radial-gradient(circle at center, #2e1f16 0%, #120b07 100%);
-            color: var(--text-light);
-            border-right: none;
-            width: 100%;
-            display: none;
-            grid-template-columns: 1fr;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            padding: 60px 40px;
-            min-height: 630px;
-            position: relative;
-        }
-
-        .cover-spread.active {
-            display: flex;
-        }
-
-        .cover-content {
-            max-width: 600px;
-            border: 2px solid var(--accent-gold);
-            padding: 50px 30px;
-            background-color: rgba(0,0,0,0.5);
-            border-radius: 8px;
-            position: relative;
-            box-shadow: inset 0 0 30px rgba(0,0,0,0.8);
-        }
-
-        .cover-title {
-            font-family: var(--font-wayang);
-            font-size: 2rem;
-            color: #ffffff;
-            line-height: 1.3;
-            margin-bottom: 20px;
-            letter-spacing: 2px;
-            text-shadow: 0 4px 8px rgba(0,0,0,0.6);
-        }
-
-        .cover-subtitle {
-            font-size: 0.95rem;
-            opacity: 0.9;
-            font-weight: 300;
-            line-height: 1.6;
-            margin-bottom: 30px;
-        }
-
-        .chapter-badge {
-            font-family: var(--font-wayang);
-            color: var(--accent-gold);
-            font-size: 0.8rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-bottom: 15px;
-            display: block;
-        }
-
-        .page-title {
-            font-family: var(--font-wayang);
-            font-size: 1.4rem;
-            color: var(--text-dark);
-            margin-bottom: 15px;
-            line-height: 1.3;
-            border-bottom: 1px double var(--accent-gold);
-            padding-bottom: 5px;
-        }
-
-        .page-text {
-            font-size: 0.9rem;
-            color: #3e352e;
-            line-height: 1.7;
-            text-align: justify;
-            margin-bottom: 15px;
-        }
-
-        .page-number {
-            font-family: var(--font-wayang);
-            font-size: 0.8rem;
-            color: var(--accent-gold);
-            text-align: center;
-            margin-top: auto;
-            padding-top: 10px;
-            border-top: 1px solid rgba(0, 0, 0, 0.05);
-            letter-spacing: 1px;
-        }
-
-        .book-photo {
-            width: 100%;
-            height: 200px;
-            background-color: #f1ebd9;
-            border: 2px solid var(--accent-gold);
-            border-radius: 4px;
-            margin-bottom: 15px;
-            overflow: hidden;
-            position: relative;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        }
-
-        .book-photo img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            filter: sepia(0.2) contrast(1.05);
-            transition: var(--transition);
-        }
-
-        .book-photo:hover img {
-            transform: scale(1.05);
-        }
-
-        .photo-caption {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: rgba(26, 19, 14, 0.9);
-            color: #ffffff;
-            padding: 8px;
-            font-size: 0.75rem;
-            text-align: center;
-            font-family: var(--font-wayang);
-            border-top: 1px solid var(--accent-gold);
-            letter-spacing: 0.5px;
-        }
-
-        /* PHOTO GRID GALLERY */
-        .photo-grid-2 {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            margin-bottom: 15px;
-        }
-
-        .photo-grid-3 {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 8px;
-            margin-bottom: 15px;
-        }
-
-        .grid-photo-box {
-            position: relative;
-            border: 1px solid var(--accent-gold);
-            border-radius: 4px;
-            overflow: hidden;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
-            background-color: #f1ebd9;
-        }
-
-        .grid-photo-box img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-            transition: var(--transition);
-        }
-
-        .grid-photo-box:hover img {
-            transform: scale(1.08);
-        }
-
-        .h-120 { height: 120px; }
-        .h-140 { height: 140px; }
-        .h-180 { height: 180px; }
-        .h-260 { height: 260px; }
-
-        /* ================= HOLOGRAM PEPPER'S GHOST ================= */
-        .hologram-box {
-            width: 260px;
-            height: 320px;
-            margin: 15px auto 10px;
-            position: relative;
-            perspective: 1200px;
-        }
-
-        .hologram-stage {
-            position: absolute;
-            bottom: 28px;
-            left: 50%;
-            width: 180px;
-            height: 240px;
-            transform: translateX(-50%);
-            transform-style: preserve-3d;
-            animation: holoRotate 14s linear infinite;
-        }
-
-        @keyframes holoRotate {
-            from { transform: translateX(-50%) rotateY(0deg); }
-            to   { transform: translateX(-50%) rotateY(360deg); }
-        }
-
-        .holo-face {
-            position: absolute;
-            width: 180px;
-            height: 240px;
-            top: 0;
-            left: 0;
-            backface-visibility: hidden;
-            border: 1px solid rgba(0, 229, 255, 0.6);
-            box-shadow: 0 0 25px rgba(0, 229, 255, 0.45), inset 0 0 25px rgba(0, 229, 255, 0.2);
-            overflow: hidden;
-            border-radius: 4px;
-        }
-
-        .holo-face:nth-child(1) { transform: rotateY(0deg) translateZ(90px); }
-        .holo-face:nth-child(2) { transform: rotateY(90deg) translateZ(90px); }
-        .holo-face:nth-child(3) { transform: rotateY(180deg) translateZ(90px); }
-        .holo-face:nth-child(4) { transform: rotateY(270deg) translateZ(90px); }
-
-        .holo-face img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            filter: brightness(1.15) contrast(1.1) saturate(1.3);
-            opacity: 0.92;
-        }
-
-        .holo-tint {
-            content: "";
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(180deg, rgba(0, 229, 255, 0.28), rgba(0, 100, 255, 0.14));
-            mix-blend-mode: screen;
-            pointer-events: none;
-        }
-
-        .holo-scan {
-            content: "";
-            position: absolute;
-            inset: 0;
-            background: repeating-linear-gradient(0deg, rgba(255,255,255,0.08) 0px, rgba(255,255,255,0.08) 1px, transparent 2px, transparent 4px);
-            animation: scanMove 3s linear infinite;
-            pointer-events: none;
-        }
-
-        @keyframes scanMove {
-            from { background-position-y: 0; }
-            to   { background-position-y: 40px; }
-        }
-
-        .hologram-platform {
-            position: absolute;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 220px;
-            height: 26px;
-            background: radial-gradient(ellipse at center, rgba(0,229,255,0.65) 0%, rgba(0,229,255,0.18) 45%, transparent 75%);
-            border-radius: 50%;
-            filter: blur(2px);
-            animation: platformPulse 2.5s ease-in-out infinite;
-        }
-
-        @keyframes platformPulse {
-            0%, 100% { opacity: 0.6; transform: translateX(-50%) scale(1); }
-            50% { opacity: 1; transform: translateX(-50%) scale(1.08); }
-        }
-
-        .holo-particle {
-            position: absolute;
-            width: 4px;
-            height: 4px;
-            background: var(--accent-holo);
-            border-radius: 50%;
-            box-shadow: 0 0 8px 2px rgba(0, 229, 255, 0.8);
-            animation: particleFloat 3s ease-in-out infinite;
-            opacity: 0.8;
-        }
-
-        @keyframes particleFloat {
-            0%, 100% { transform: translateY(0); opacity: 0.2; }
-            50% { transform: translateY(-35px); opacity: 1; }
-        }
-
-        .hologram-caption-text {
-            font-family: var(--font-wayang);
-            color: var(--accent-holo);
-            text-shadow: 0 0 10px rgba(0, 229, 255, 0.8);
-            letter-spacing: 2px;
-            font-size: 0.8rem;
-            margin-top: 5px;
-            animation: textFlicker 4s infinite;
-        }
-
-        @keyframes textFlicker {
-            0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% { opacity: 1; }
-            20%, 24%, 55% { opacity: 0.4; }
-        }
-
-        .hologram-note {
-            font-size: 0.8rem;
-            opacity: 0.75;
-            line-height: 1.6;
-            margin-top: 20px;
-            font-style: italic;
-        }
-
-        /* ================= PROGRESS INDICATOR ================= */
-        .progress-indicator {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 12px;
-            font-family: var(--font-wayang);
-            color: var(--accent-gold);
-            font-size: 0.8rem;
-            letter-spacing: 1px;
-        }
-
-        .progress-dots {
-            display: flex;
-            gap: 6px;
-        }
-
-        .progress-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background-color: rgba(197, 168, 128, 0.25);
-            transition: var(--transition);
-        }
-
-        .progress-dot.active {
-            background-color: var(--accent-gold);
-            box-shadow: 0 0 8px var(--shadow-gold);
-            transform: scale(1.3);
-        }
-
-        /* CONTROLLER / NAVIGASI */
-        .controls {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 12px;
-            margin-top: 15px;
-            z-index: 100;
-        }
-
-        .nav-buttons {
-            display: flex;
-            gap: 20px;
-        }
-
-        .btn-nav {
-            background-color: #241911;
-            color: var(--accent-gold);
-            border: 1px solid var(--accent-gold);
-            padding: 12px 24px;
-            border-radius: 30px;
-            cursor: pointer;
-            font-family: var(--font-wayang);
-            font-size: 0.85rem;
-            letter-spacing: 1px;
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            box-shadow: 0 6px 15px rgba(0,0,0,0.4);
-        }
-
-        .btn-nav:hover:not(:disabled) {
-            background-color: var(--accent-gold);
-            color: #120b07;
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(197, 168, 128, 0.4);
-        }
-
-        .btn-nav:disabled {
-            opacity: 0.25;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .cert-box {
-            border: 2px double var(--accent-gold);
-            background-color: #fcfaf2;
-            padding: 15px;
-            text-align: center;
-            margin: 10px 0;
-            border-radius: 6px;
-        }
-
-        .cert-title {
-            font-family: var(--font-wayang);
-            font-size: 0.95rem;
-            color: var(--text-dark);
-            font-weight: bold;
-        }
-
-        .cert-name {
-            font-family: var(--font-wayang);
-            font-size: 1.25rem;
-            color: var(--accent-red);
-            font-weight: bold;
-            margin-top: 5px;
-        }
-
-        .btn-surprise {
-            background-color: var(--accent-red);
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-family: var(--font-sans);
-            font-size: 0.85rem;
-            font-weight: bold;
-            margin-top: 5px;
-            transition: var(--transition);
-            box-shadow: 0 4px 10px rgba(138, 28, 28, 0.4);
-        }
-
-        .btn-surprise:hover {
-            background-color: #5c1212;
-            transform: translateY(-2px);
-        }
-
-        /* SURPRISE MODAL */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 2500;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.85);
-            backdrop-filter: blur(5px);
-            align-items: center;
-            justify-content: center;
-        }
-
-        .modal.show {
-            display: flex;
-        }
-
-        .modal-content {
-            background-color: var(--paper-color);
-            padding: 35px;
-            border-radius: 8px;
-            max-width: 480px;
-            width: 90%;
-            text-align: center;
-            border: 2px solid var(--accent-gold);
-            box-shadow: 0 15px 40px rgba(0,0,0,0.5);
-        }
-
-        .modal-title {
-            font-family: var(--font-wayang);
-            font-size: 1.4rem;
-            color: var(--accent-red);
-            margin-bottom: 15px;
-        }
-
-        .btn-close {
-            background-color: var(--text-dark);
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 4px;
-            cursor: pointer;
-            margin-top: 15px;
-            font-family: var(--font-wayang);
-            font-size: 0.8rem;
-        }
-
-        /* ================= LIGHTBOX FOTO ================= */
-        .book-photo img,
-        .grid-photo-box img {
-            cursor: zoom-in;
-        }
-
-        .lightbox-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(5, 4, 3, 0.92);
-            backdrop-filter: blur(6px);
-            z-index: 3500;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-            padding: 30px;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .lightbox-modal.show {
-            display: flex;
-            opacity: 1;
-        }
-
-        .lightbox-img-wrap {
-            max-width: 90vw;
-            max-height: 78vh;
-            border: 2px solid var(--accent-gold);
-            border-radius: 6px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.7);
-            overflow: hidden;
-            background-color: #000;
-        }
-
-        .lightbox-img-wrap img {
-            display: block;
-            max-width: 90vw;
-            max-height: 78vh;
-            width: auto;
-            height: auto;
-            object-fit: contain;
-        }
-
-        .lightbox-caption {
-            font-family: var(--font-wayang);
-            color: var(--accent-gold);
-            font-size: 0.85rem;
-            letter-spacing: 1px;
-            text-align: center;
-            margin-top: 15px;
-            max-width: 90vw;
-        }
-
-        .lightbox-close {
-            position: absolute;
-            top: 25px;
-            right: 30px;
-            background-color: transparent;
-            color: var(--accent-gold);
-            border: 1px solid var(--accent-gold);
-            width: 42px;
-            height: 42px;
-            border-radius: 50%;
-            font-size: 1.3rem;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: var(--transition);
-        }
-
-        .lightbox-close:hover {
-            background-color: var(--accent-gold);
-            color: #120b07;
-            transform: rotate(90deg);
-        }
-
-        /* ================= EASTER EGG MINI TOAST ================= */
-        .mini-toast {
-            position: fixed;
-            bottom: 80px;
-            left: 50%;
-            transform: translateX(-50%) translateY(20px);
-            background: rgba(26, 19, 14, 0.95);
-            color: var(--accent-gold);
-            padding: 12px 20px;
-            border-radius: 30px;
-            border: 1px solid var(--accent-gold);
-            font-family: var(--font-wayang);
-            font-size: 0.85rem;
-            z-index: 3000;
-            opacity: 0;
-            transition: var(--transition);
-            pointer-events: none;
-            max-width: 90%;
-            text-align: center;
-        }
-        .mini-toast.show {
-            opacity: 1;
-            transform: translateX(-50%) translateY(0);
-        }
-
-        .easter-egg-icon {
-            cursor: pointer;
-            opacity: 0.5;
-            font-size: 0.9rem;
-            float: right;
-            transition: var(--transition);
-        }
-        .easter-egg-icon:hover {
-            opacity: 1;
-            transform: scale(1.2);
-        }
-
-        @media (max-width: 768px) {
-            body { overflow-y: auto; }
-            .book { min-height: auto; border: 5px solid #201610; }
-            .spine { display: none; }
-            .page-spread { grid-template-columns: 1fr; }
-            .page { padding: 30px 20px; min-height: 550px; }
-            .page-left { border-right: none; border-bottom: 1px dashed rgba(0, 0, 0, 0.1); }
-            .h-260, .h-180 { height: 160px; }
-            .hologram-box { width: 220px; height: 280px; }
-            .hologram-stage { width: 150px; height: 200px; }
-            .holo-face { width: 150px; height: 200px; }
-            .holo-face:nth-child(1) { transform: rotateY(0deg) translateZ(75px); }
-            .holo-face:nth-child(2) { transform: rotateY(90deg) translateZ(75px); }
-            .holo-face:nth-child(3) { transform: rotateY(180deg) translateZ(75px); }
-            .holo-face:nth-child(4) { transform: rotateY(270deg) translateZ(75px); }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Selamat Wisuda, Pak Ilham</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Orbitron:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --cyan: #00f0ff;
+      --magenta: #ff00aa;
+      --gold: #ffd700;
+      --dark: #0a0a12;
+      --glass: rgba(0, 240, 255, 0.05);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: var(--dark);
+      font-family: 'Cormorant Garamond', serif;
+      overflow-x: hidden;
+    }
+
+    .holo-container {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
+      padding: 2rem;
+    }
+
+    .particles {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .particle {
+      position: absolute;
+      width: 2px;
+      height: 2px;
+      background: var(--cyan);
+      border-radius: 50%;
+      opacity: 0.6;
+      animation: float 8s infinite ease-in-out;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0) translateX(0); opacity: 0; }
+      10% { opacity: 0.6; }
+      90% { opacity: 0.6; }
+      100% { transform: translateY(-100vh) translateX(20px); opacity: 0; }
+    }
+
+    .grid-floor {
+      position: absolute;
+      bottom: 0;
+      left: -50%;
+      width: 200%;
+      height: 50%;
+      background: 
+        linear-gradient(transparent 0%, rgba(0,240,255,0.03) 100%),
+        repeating-linear-gradient(0deg, transparent, transparent 49px, rgba(0,240,255,0.08) 50px),
+        repeating-linear-gradient(90deg, transparent, transparent 49px, rgba(0,240,255,0.08) 50px);
+      transform: perspective(500px) rotateX(60deg);
+      transform-origin: bottom center;
+      animation: gridMove 4s linear infinite;
+      pointer-events: none;
+    }
+
+    @keyframes gridMove {
+      0% { background-position: 0 0, 0 0, 0 0; }
+      100% { background-position: 0 0, 0 50px, 50px 0; }
+    }
+
+    .holo-stage {
+      position: relative;
+      width: 300px;
+      height: 300px;
+      margin-bottom: 3rem;
+      perspective: 1200px;
+    }
+
+    .pyramid {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transform-style: preserve-3d;
+      animation: pyramidSpin 12s linear infinite;
+    }
+
+    @keyframes pyramidSpin {
+      0% { transform: rotateY(0deg) rotateX(10deg); }
+      100% { transform: rotateY(360deg) rotateX(10deg); }
+    }
+
+    .pyramid-face {
+      position: absolute;
+      width: 200px;
+      height: 200px;
+      left: 50px;
+      top: 50px;
+      border: 1px solid rgba(0, 240, 255, 0.3);
+      background: var(--glass);
+      backdrop-filter: blur(2px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 20px rgba(0, 240, 255, 0.1), inset 0 0 20px rgba(0, 240, 255, 0.05);
+      overflow: hidden;
+    }
+
+    .pyramid-face::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, transparent 40%, rgba(0,240,255,0.15) 50%, transparent 60%);
+      animation: hologramScan 3s ease-in-out infinite;
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    @keyframes hologramScan {
+      0%, 100% { transform: translateY(-100%); }
+      50% { transform: translateY(100%); }
+    }
+
+    .face-front  { transform: translateZ(100px); }
+    .face-back   { transform: rotateY(180deg) translateZ(100px); }
+    .face-right  { transform: rotateY(90deg) translateZ(100px); }
+    .face-left   { transform: rotateY(-90deg) translateZ(100px); }
+    .face-top    { transform: rotateX(90deg) translateZ(100px); }
+    .face-bottom { transform: rotateX(-90deg) translateZ(100px); }
+
+    .photo-slot {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      z-index: 1;
+      overflow: hidden;
+    }
+
+    .photo-slot img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.9;
+      filter: grayscale(20%) brightness(1.05) contrast(1.05) drop-shadow(0 0 8px rgba(0,240,255,0.3));
+      transition: opacity 0.3s;
+    }
+
+    .center-glow {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      z-index: 10;
+      pointer-events: none;
+    }
+
+    .center-glow h1 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.2rem;
+      color: var(--cyan);
+      text-shadow: 0 0 20px var(--cyan), 0 0 40px var(--cyan);
+      letter-spacing: 8px;
+      margin: 0;
+      animation: pulseGlow 2s ease-in-out infinite;
+    }
+
+    @keyframes pulseGlow {
+      0%, 100% { opacity: 0.8; text-shadow: 0 0 20px var(--cyan); }
+      50% { opacity: 1; text-shadow: 0 0 40px var(--cyan), 0 0 60px var(--cyan); }
+    }
+
+    .poem-section {
+      max-width: 600px;
+      text-align: center;
+      z-index: 10;
+      position: relative;
+      padding: 2rem;
+      border: 1px solid rgba(0, 240, 255, 0.15);
+      background: rgba(10, 10, 18, 0.6);
+      backdrop-filter: blur(10px);
+      border-radius: 4px;
+      margin-bottom: 2rem;
+    }
+
+    .poem-section::before,
+    .poem-section::after {
+      content: '◆';
+      display: block;
+      color: var(--cyan);
+      opacity: 0.4;
+      font-size: 0.8rem;
+      margin: 0.5rem 0;
+    }
+
+    .poem-text {
+      font-size: 1.15rem;
+      line-height: 2.2;
+      color: rgba(255, 255, 255, 0.85);
+      font-weight: 300;
+      letter-spacing: 0.5px;
+    }
+
+    .poem-text .highlight {
+      color: var(--gold);
+      font-style: italic;
+      text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+    }
+
+    .poem-text .cyan {
+      color: var(--cyan);
+      font-style: italic;
+    }
+
+    .scanlines {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0, 0, 0, 0.15) 2px,
+        rgba(0, 0, 0, 0.15) 4px
+      );
+      z-index: 100;
+      opacity: 0.3;
+    }
+
+    .orb {
+      position: absolute;
+      border-radius: 50%;
+      background: radial-gradient(circle, var(--cyan), transparent 70%);
+      opacity: 0.3;
+      animation: orbFloat 6s ease-in-out infinite;
+    }
+
+    @keyframes orbFloat {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      33% { transform: translate(20px, -30px) scale(1.2); }
+      66% { transform: translate(-15px, 20px) scale(0.8); }
+    }
+
+    /* Music Player Button */
+    .music-btn {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 200;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      border: 1px solid rgba(0, 240, 255, 0.4);
+      background: rgba(10, 10, 18, 0.8);
+      backdrop-filter: blur(10px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 0 15px rgba(0, 240, 255, 0.2);
+    }
+
+    .music-btn:hover {
+      box-shadow: 0 0 25px rgba(0, 240, 255, 0.5);
+      border-color: var(--cyan);
+      transform: scale(1.1);
+    }
+
+    .music-btn svg {
+      width: 20px;
+      height: 20px;
+      fill: var(--cyan);
+      filter: drop-shadow(0 0 5px var(--cyan));
+    }
+
+    .music-btn.playing {
+      animation: musicPulse 2s ease-in-out infinite;
+      border-color: var(--gold);
+      box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+    }
+
+    .music-btn.playing svg {
+      fill: var(--gold);
+      filter: drop-shadow(0 0 5px var(--gold));
+    }
+
+    @keyframes musicPulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.08); }
+    }
+
+    /* Sound wave bars */
+    .sound-wave {
+      position: fixed;
+      bottom: 24px;
+      right: 80px;
+      z-index: 200;
+      display: flex;
+      align-items: flex-end;
+      gap: 3px;
+      height: 24px;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .sound-wave.active {
+      opacity: 1;
+    }
+
+    .wave-bar {
+      width: 3px;
+      background: var(--cyan);
+      border-radius: 2px;
+      animation: wave 1s ease-in-out infinite;
+      box-shadow: 0 0 5px var(--cyan);
+    }
+
+    .wave-bar:nth-child(1) { height: 8px; animation-delay: 0s; }
+    .wave-bar:nth-child(2) { height: 16px; animation-delay: 0.1s; }
+    .wave-bar:nth-child(3) { height: 12px; animation-delay: 0.2s; }
+    .wave-bar:nth-child(4) { height: 20px; animation-delay: 0.3s; }
+    .wave-bar:nth-child(5) { height: 10px; animation-delay: 0.15s; }
+
+    @keyframes wave {
+      0%, 100% { transform: scaleY(0.5); }
+      50% { transform: scaleY(1); }
+    }
+
+    @media (max-width: 600px) {
+      .holo-stage { width: 220px; height: 220px; }
+      .pyramid-face { width: 140px; height: 140px; left: 40px; top: 40px; }
+      .face-front  { transform: translateZ(70px); }
+      .face-back   { transform: rotateY(180deg) translateZ(70px); }
+      .face-right  { transform: rotateY(90deg) translateZ(70px); }
+      .face-left   { transform: rotateY(-90deg) translateZ(70px); }
+      .face-top    { transform: rotateX(90deg) translateZ(70px); }
+      .face-bottom { transform: rotateX(-90deg) translateZ(70px); }
+      .poem-text { font-size: 1rem; line-height: 2; }
+      .center-glow h1 { font-size: 0.9rem; letter-spacing: 4px; }
+      .music-btn { width: 40px; height: 40px; bottom: 16px; right: 16px; }
+      .sound-wave { bottom: 16px; right: 64px; }
+    }
+  </style>
+<base target="_blank">
 </head>
 <body>
 
-    <!-- ================= KOTAK SURAT WAYANG (OVERLAY) ================= -->
-    <div class="welcome-overlay" id="welcomeOverlay">
-        <svg class="gunungan-logo" viewBox="0 0 100 130">
-            <path d="M50 5 L90 100 L75 100 L70 120 L30 120 L25 100 L10 100 Z" stroke="#c5a880" stroke-width="1.5" fill="none"/>
-            <path d="M50 15 L80 90 L65 90 L60 115 L40 115 L35 90 L20 90 Z" stroke="#c5a880" stroke-width="0.8" fill="none"/>
-            <path d="M50 5 L50 120" stroke="#c5a880" stroke-width="1.5"/>
-            <path d="M50 40 Q65 30 75 45 M50 60 Q70 50 80 70 M50 80 Q65 75 70 95" stroke="#c5a880" stroke-width="1" fill="none"/>
-            <path d="M50 40 Q35 30 25 45 M50 60 Q30 50 20 70 M50 80 Q35 75 30 95" stroke="#c5a880" stroke-width="1" fill="none"/>
-        </svg>
+<div class="holo-container">
+  <div class="particles" id="particles"></div>
+  <div class="grid-floor"></div>
+  <div class="scanlines"></div>
 
-        <div class="envelope-container" id="envelope" onclick="openEnvelope()">
-            <div class="envelope-flap"></div>
-            <div class="envelope-paper">
-                <p>Serat Kekancingan ✉️</p>
-                <span>Wajib dibuka dening Raden S.Sos</span>
-            </div>
+  <div class="orb" style="width:60px;height:60px;top:15%;left:10%;animation-delay:0s;"></div>
+  <div class="orb" style="width:40px;height:40px;top:20%;right:15%;animation-delay:2s;background:radial-gradient(circle,var(--magenta),transparent 70%);"></div>
+  <div class="orb" style="width:50px;height:50px;bottom:25%;left:20%;animation-delay:4s;"></div>
+
+  <div class="holo-stage">
+    <div class="pyramid">
+      <div class="pyramid-face face-front">
+        <div class="photo-slot">
+          <img src="https://i.postimg.cc/fTp89YZm/habis-sempro.png" alt="Habis Sempro">
         </div>
-        <div class="click-hint" id="hintText">Tarih canthas... Tutuk amplop kagem miwiti lakon.</div>
-    </div>
-
-    <!-- AUDIO PLAYER -->
-    <audio id="bgMusic" loop>
-        <source src="musik.mp3" type="audio/mpeg">
-    </audio>
-
-    <!-- KONTROL MUSIK -->
-    <div class="audio-control" id="audioControl" onclick="toggleMusic()" style="display: none;">
-        <span id="audioIcon">🎵</span> <span id="audioStatus">Gamelan: Mengalun</span>
-    </div>
-
-    <!-- ================= MAIN BOOK INTERACTIVE ================= -->
-    <div class="book-wrapper" id="bookWrapper">
-        <div class="book">
-            <div class="spine"></div>
-
-            <!-- COVER -->
-            <div class="cover-spread active" id="spread-0">
-                <div class="cover-content">
-                    <span class="chapter-badge">Lakon Wisuda Agung</span>
-                    <h1 class="cover-title">Tiang Rumah yang Gengsinya Setinggi Monas 👑</h1>
-                    <p class="cover-subtitle">
-                        Sebuah babad tulisan penuh canda dan doa untuk anak ke-4 dari 5 bersaudara. Si pengagum drakor kupu-kupu, pembaca setianya Dan Brown, dan kolektor sifat sedingin es se-kabupaten.<br><br>
-                        <b style="color: var(--accent-gold); font-size: 1.05rem;">🚨 BUKA MENAWI SAMPUN NGANGGE TOGA! 🚨</b><br><br>
-                        <i>Ketuk tombol di bawah untuk membuka lembaran rahasia... 👇</i>
-                    </p>
-                    <button class="btn-surprise" style="background-color: var(--accent-gold); color: #120b07;" onclick="nextPage()">Miwiti Lakon! 📖</button>
-                </div>
-            </div>
-
-            <!-- SPREAD 1 (BAB I) -->
-            <div class="page-spread" id="spread-1">
-                <div class="page page-left">
-                    <div>
-                        <span class="chapter-badge">Lakon I: Mula Bukane Bocil</span>
-                        <h2 class="page-title">Maba Lucu nan Polos 👶</h2>
-                        <div class="book-photo">
-                            <img src="foto/maba.jpg" alt="Zaman Maba" onerror="this.src='https://via.placeholder.com/400x300/f1ebd9/8a1c1c?text=Foto+Belum+Diupload'">
-                            <div class="photo-caption">Waktu masih polos dan belum dendam sama tugas kuliah</div>
-                        </div>
-                        <p class="page-text">
-                            Inget gak pas pertama kali menginjakkan kaki di kampus? Masih jadi anak ke-4 kesayangan yang kalau jalan masih celingak-celinguk nyari gedung kuliah. Mukanya masih penuh harapan, belum ternoda revisian bab demi bab. Siapa sangka masa polos itu cuma tahan sampai semester tiga.
-                        </p>
-                    </div>
-                    <div class="page-number">Halaman 1</div>
-                </div>
-                <div class="page page-right">
-                    <div>
-                        <span class="chapter-badge">Lakon I: Mula Bukane Bocil</span>
-                        <h2 class="page-title">Sumpah, Sibuk Banget! 📢</h2>
-                        <div class="book-photo">
-                            <img src="foto/organisasi.jpg" alt="Organisasi" onerror="this.src='https://via.placeholder.com/400x300/f1ebd9/8a1c1c?text=Foto+Belum+Diupload'">
-                            <div class="photo-caption">Gaya elit, capek sulit. Tapi tetep lanjut organisasi!</div>
-                        </div>
-                        <p class="page-text">
-                            Masuk Komunikasi dan Penyiaran Islam (KPI) langsung deh jiwa sosialnya meronta-ronta. Ikut organisasi sana-sini biar dibilang aktif, kritis, dan berguna bagi nusa dan bangsa. Padahal kalau rapat malam kadang udah pengen senderan sambil nonton drakor doang, kan? Ngaku aja.
-                        </p>
-                    </div>
-                    <div class="page-number">Halaman 2</div>
-                </div>
-            </div>
-
-            <!-- SPREAD 2 (BAB II) -->
-            <div class="page-spread" id="spread-2">
-                <div class="page page-left">
-                    <div>
-                        <span class="chapter-badge">Lakon II: Sambat neng Ngarep Laptop</span>
-                        <h2 class="page-title">Drama Bab 4 & 5 💻☠️</h2>
-                        <div class="book-photo">
-                            <img src="foto/drama_skripsi.jpg" alt="Ngerjain Tugas" onerror="this.src='https://via.placeholder.com/400x300/f1ebd9/8a1c1c?text=Foto+Belum+Diupload'">
-                            <div class="photo-caption">Muka begadang ditemani secangkir kopi dan sejuta kepasrahan</div>
-                        </div>
-                        <p class="page-text">
-                            Momen-momen di mana laptop rasanya pengen dilempar ke rawa-rawa karena revisian draf skripsi numpuk kayak cucian kotor. Tiap ditanya "gimana skripsinya?" balesnya cuma "aman," padahal di dalam hati udah teriak sekencang konser rock. Gengsi emang penyakit turunan kayaknya.
-                        </p>
-                    </div>
-                    <div class="page-number">Halaman 3</div>
-                </div>
-                <div class="page page-right">
-                    <div>
-                        <span class="chapter-badge">Lakon II: Sambat neng Ngarep Laptop</span>
-                        <h2 class="page-title">Cie, Sarjana Sosial! 🎓</h2>
-                        <div class="book-photo">
-                            <img src="foto/sidang_akhir.jpg" alt="Sidang Akhir" onerror="this.src='https://via.placeholder.com/400x300/f1ebd9/8a1c1c?text=Foto+Belum+Diupload'">
-                            <div class="photo-caption">Sah jadi S.Sos! Dosen pengujinya aja sampai sungkem</div>
-                        </div>
-                        <p class="page-text">
-                            Tapi namanya juga si tangguh, akhirnya kelar juga tuh sidang maut! Pas keluar ruangan langsung pasang muka lempeng ala-ala "halah gampang banget," padahal dengkul gemeteran pas ditanya dosen. Ternyata toga juga ada jasanya. Lumayan bikin aura "mahasiswa deadline" berubah jadi "sarjana beneran".
-                        </p>
-                    </div>
-                    <div class="page-number">Halaman 4</div>
-                </div>
-            </div>
-
-            <!-- SPREAD 3 (BAB III) -->
-            <div class="page-spread" id="spread-3">
-                <div class="page page-left">
-                    <div>
-                        <span class="chapter-badge">Lakon III: Satria Kulkas 2 Pintu</span>
-                        <h2 class="page-title">"Gak Butuh Disemangatin" 😒</h2>
-                        <div class="book-photo">
-                            <img src="foto/cuek.jpg" alt="Mode Cuek" onerror="this.src='https://via.placeholder.com/400x300/f1ebd9/8a1c1c?text=Foto+Belum+Diupload'">
-                            <div class="photo-caption">Muka jutek andalan kalau dichat sok manis</div>
-                        </div>
-                        <p class="page-text">
-                            "Halah apaan sih semangat-semangat, gak butuh!" - sebuah kalimat legenda dari manusia tergengsi abad ini. Gayanya mirip Park Jae-eon pas lagi tebar pesona kupu-kupu tapi pas dibalas malah menghilang. Balas chat singkat, padat, dan bikin orang istigfar.
-                        </p>
-                    </div>
-                    <div class="page-number">Halaman 5</div>
-                </div>
-                <div class="page page-right">
-                    <div>
-                        <span class="chapter-badge">Lakon III: Satria Kulkas 2 Pintu</span>
-                        <h2 class="page-title">Sok Cuek Doang, Ketahuan Kok 🫡 <span class="easter-egg-icon" onclick="showEasterEgg()" title="???">🧊</span></h2>
-                        <div class="book-photo">
-                            <img src="foto/hangat.jpg" alt="Mode Warm" onerror="this.src='https://via.placeholder.com/400x300/f1ebd9/8a1c1c?text=Foto+Belum+Diupload'">
-                            <div class="photo-caption">Biar cuek, aslinya kalau ngeliat orang kesusahan langsung gercep</div>
-                        </div>
-                        <p class="page-text">
-                            Meski hobi pasang mode hemat ekspresi, ya tetap aja keliatan kok kalau sebenarnya gak setega itu. Cuma gengsinya aja yang kadang kebesaran. Tapi jangan dibiasain dipuji juga, nanti kepedean.
-                        </p>
-                    </div>
-                    <div class="page-number">Halaman 6</div>
-                </div>
-            </div>
-
-            <!-- SPREAD 4 (GALERI FOTO PART 1) -->
-            <div class="page-spread" id="spread-4">
-                <div class="page page-left">
-                    <div>
-                        <span class="chapter-badge">Arsip Memori: Reronce Jagat</span>
-                        <h2 class="page-title">Kilas Balik & Tawa 📸</h2>
-                        <div class="photo-grid-2">
-                            <div class="grid-photo-box h-180">
-                                <img src="foto/nongkrong.jpg" alt="Foto Kenangan 1" onerror="this.src='https://via.placeholder.com/300x300/f1ebd9/8a1c1c?text=Foto'">
-                                <div class="photo-caption">Edisi nongkrong habis kelas</div>
-                            </div>
-                            <div class="grid-photo-box h-180">
-                                <img src="foto/pendukung.jpg" alt="Foto Kenangan 2" onerror="this.src='https://via.placeholder.com/300x300/f1ebd9/8a1c1c?text=Foto'">
-                                <div class="photo-caption">Tim hore pendukung setia</div>
-                            </div>
-                        </div>
-                        <div class="grid-photo-box h-120">
-                            <img src="foto/rusuh.jpg" alt="Foto Kenangan 3" onerror="this.src='https://via.placeholder.com/600x200/f1ebd9/8a1c1c?text=Foto'">
-                            <div class="photo-caption">Momen random pas kumpul bareng, rusuh abis!</div>
-                        </div>
-                    </div>
-                    <div class="page-number">Halaman 7</div>
-                </div>
-                <div class="page page-right">
-                    <div>
-                        <span class="chapter-badge">Arsip Memori: Reronce Jagat</span>
-                        <h2 class="page-title">Yang Ga Boleh Dilupain 🎞️</h2>
-                        <div class="photo-grid-3">
-                            <div class="grid-photo-box h-140">
-                                <img src="foto/pose.jpg" alt="Grid 1" onerror="this.src='https://via.placeholder.com/200x200/f1ebd9/8a1c1c?text=Foto'">
-                                <div class="photo-caption">Pose andalan</div>
-                            </div>
-                            <div class="grid-photo-box h-140">
-                                <img src="foto/ngantuk.jpg" alt="Grid 2" onerror="this.src='https://via.placeholder.com/200x200/f1ebd9/8a1c1c?text=Foto'">
-                                <div class="photo-caption">Muka ngantuk</div>
-                            </div>
-                            <div class="grid-photo-box h-140">
-                                <img src="foto/ketawa.jpg" alt="Grid 3" onerror="this.src='https://via.placeholder.com/200x200/f1ebd9/8a1c1c?text=Foto'">
-                                <div class="photo-caption">Ketawa lepas</div>
-                            </div>
-                        </div>
-                        <div class="grid-photo-box h-180">
-                            <img src="foto/estetik.jpg" alt="Foto Portrait" onerror="this.src='https://via.placeholder.com/600x300/f1ebd9/8a1c1c?text=Foto'">
-                            <div class="photo-caption">Si paling estetik kalau difoto candid</div>
-                        </div>
-                    </div>
-                    <div class="page-number">Halaman 8</div>
-                </div>
-            </div>
-
-            <!-- SPREAD 5 (GALERI FOTO PART 2) -->
-            <div class="page-spread" id="spread-5">
-                <div class="page page-left">
-                    <div>
-                        <span class="chapter-badge">Arsip Memori: Candi Perjuangan</span>
-                        <h2 class="page-title">Saksi Bisu Perjuangan ☕</h2>
-                        <div class="grid-photo-box h-260" style="margin-bottom: 12px;">
-                            <img src="foto/meja_tempur.jpg" alt="Meja Kerja Skripsi" onerror="this.src='https://via.placeholder.com/600x400/f1ebd9/8a1c1c?text=Foto'">
-                            <div class="photo-caption">Penampakan meja tempur waktu dikejar deadline kualitatif</div>
-                        </div>
-                        <p class="page-text" style="font-size: 0.85rem; text-align: center; font-style: italic;">
-                            "Setiap sudut foto di sini adalah bukti kalau kamu berhasil ngelewatin hari-hari yang kamu pikir kamu ga bakal sanggup."
-                        </p>
-                    </div>
-                    <div class="page-number">Halaman 9</div>
-                </div>
-                <div class="page page-right">
-                    <div>
-                        <span class="chapter-badge">Arsip Memori: Konco Kuliah</span>
-                        <h2 class="page-title">Keluarga Kedua di Kampus 🫶</h2>
-                        <div class="photo-grid-2">
-                            <div class="grid-photo-box h-120">
-                                <img src="foto/rapat.jpg" alt="Teman 1" onerror="this.src='https://via.placeholder.com/300x200/f1ebd9/8a1c1c?text=Foto'">
-                                <div class="photo-caption">Rapat ormawa</div>
-                            </div>
-                            <div class="grid-photo-box h-120">
-                                <img src="foto/keluarga_kpi.jpg" alt="Teman 2" onerror="this.src='https://via.placeholder.com/300x200/f1ebd9/8a1c1c?text=Foto'">
-                                <div class="photo-caption">Keluarga KPI</div>
-                            </div>
-                            <div class="grid-photo-box h-120">
-                                <img src="foto/nangis.jpg" alt="Teman 3" onerror="this.src='https://via.placeholder.com/300x200/f1ebd9/8a1c1c?text=Foto'">
-                                <div class="photo-caption">Nangis bareng</div>
-                            </div>
-                            <div class="grid-photo-box h-120">
-                                <img src="foto/lulus_bareng.jpg" alt="Teman 4" onerror="this.src='https://via.placeholder.com/300x200/f1ebd9/8a1c1c?text=Foto'">
-                                <div class="photo-caption">LULUS BARENG!</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="page-number">Halaman 10</div>
-                </div>
-            </div>
-
-            <!-- SPREAD 6 (BAB IV) -->
-            <div class="page-spread" id="spread-6">
-                <div class="page page-left">
-                    <div>
-                        <span class="chapter-badge">Lakon IV: Sandi Dan Brown</span>
-                        <h2 class="page-title">Angels & Demons Real Life 👿😇</h2>
-                        <p class="page-text" style="font-family: var(--font-serif); font-style: italic; font-size: 1.05rem; border-left: 3px solid var(--accent-gold); padding-left: 15px; margin-bottom: 15px;">
-                            "Kalau hidupmu dijadiin novel Dan Brown, mungkin pembacanya nyerah di bab tiga gara-gara tokoh utamanya terlalu susah dipahami."
-                        </p>
-                        <p class="page-text">
-                            Sebagai anak keempat dari 5 bersaudara, kamu emang terlatih jadi tameng pelindung yang kuat luar biasa. Selalu dengerin keluh kesah orang, tapi giliran kamu yang lelah malah disembunyani rapat-rapat kayak kode rahasia Illuminati. Tapi hari ini terpaksa buka topeng dulu ya, soalnya toga nggak ada mode menyamarnya.
-                        </p>
-                    </div>
-                    <div class="page-number">Halaman 11</div>
-                </div>
-                <div class="page page-right">
-                    <div>
-                        <span class="chapter-badge">Lakon IV: Pungkasaning Lakon</span>
-                        <h2 class="page-title">Happy Graduation Day! 🎉🎓</h2>
-                        <div class="cert-box">
-                            <div class="cert-title">Selamat Atas Kelulusan Resmi</div>
-                            <div class="cert-name">Si Kulkas Menyebalkan, S.Sos</div>
-                            <div style="font-size: 0.75rem; margin-top: 8px; color: #6d5f54;">
-                                Ditetapkan pada Hari H Wisuda dengan predikat "Si Paling Gengsi tapi Paling Hebat".
-                            </div>
-                        </div>
-                        <p class="page-text" style="font-size: 0.85rem; text-align: center; margin-bottom: 10px;">
-                            Hari ini talinya udah dipindah ke kanan. Gak ada lagi alasan buat bilang "ah biasa aja." Sekali-kali boleh lah bangga sama diri sendiri. Tenang aja, gak bakal langsung jadi orang sombong kok.
-                        </p>
-                    </div>
-                    <div class="page-number">Halaman 12</div>
-                </div>
-            </div>
-
-            <!-- SPREAD 7 (BONUS: BILIK HOLOGRAM) -->
-            <div class="cover-spread" id="spread-7">
-                <div class="cover-content">
-                    <span class="chapter-badge">Lakon Pungkasan: Bilik Cahya</span>
-                    <h1 class="cover-title" style="font-size: 1.6rem;">Proyeksi Hologram Kenangan ✨</h1>
-                    <p class="cover-subtitle" style="font-size: 0.85rem;">
-                        Harusnya di sini ada hologram Pepper's Ghost fisik buatan tangan sendiri. Karena satu dan lain hal rencana itu belum kesampaian — jadi wujudnya ganti jadi versi digital. Beda bentuk, sama niatnya.
-                    </p>
-
-                    <div class="hologram-box">
-                        <div class="holo-particle" style="left: 15%; bottom: 40px; animation-delay: 0s;"></div>
-                        <div class="holo-particle" style="left: 80%; bottom: 60px; animation-delay: 0.7s;"></div>
-                        <div class="holo-particle" style="left: 30%; bottom: 90px; animation-delay: 1.4s;"></div>
-                        <div class="holo-particle" style="left: 65%; bottom: 30px; animation-delay: 2.1s;"></div>
-                        <div class="holo-particle" style="left: 45%; bottom: 110px; animation-delay: 0.4s;"></div>
-
-                        <div class="hologram-stage" id="holoStage">
-                            <div class="holo-face">
-                                <img src="foto/holo1.jpg" alt="Hologram 1" onerror="this.src='https://via.placeholder.com/300x400/002233/00e5ff?text=Foto+1'">
-                                <div class="holo-tint"></div>
-                                <div class="holo-scan"></div>
-                            </div>
-                            <div class="holo-face">
-                                <img src="foto/holo2.jpg" alt="Hologram 2" onerror="this.src='https://via.placeholder.com/300x400/002233/00e5ff?text=Foto+2'">
-                                <div class="holo-tint"></div>
-                                <div class="holo-scan"></div>
-                            </div>
-                            <div class="holo-face">
-                                <img src="foto/holo3.jpg" alt="Hologram 3" onerror="this.src='https://via.placeholder.com/300x400/002233/00e5ff?text=Foto+3'">
-                                <div class="holo-tint"></div>
-                                <div class="holo-scan"></div>
-                            </div>
-                            <div class="holo-face">
-                                <img src="foto/holo4.jpg" alt="Hologram 4" onerror="this.src='https://via.placeholder.com/300x400/002233/00e5ff?text=Foto+4'">
-                                <div class="holo-tint"></div>
-                                <div class="holo-scan"></div>
-                            </div>
-                        </div>
-
-                        <div class="hologram-platform"></div>
-                    </div>
-
-                    <div class="hologram-caption-text">— MEMORY PROJECTION ACTIVE —</div>
-
-                    <p class="hologram-note">
-                        Anggap aja ini versi demo. Nanti kalau proyek hologram fisiknya jadi kesampaian, baru deh dapet yang beneran. Untuk sekarang nikmatin dulu yang versi digitalnya, gratis kok.
-                    </p>
-
-                    <div style="margin-top: 20px;">
-                        <button class="btn-surprise" onclick="openModal()">Tombol Rahasia (Gak Usah Diklik!)</button>
-                    </div>
-                </div>
-            </div>
-
+      </div>
+      <div class="pyramid-face face-back">
+        <div class="photo-slot">
+          <img src="https://i.postimg.cc/1tFqbV2D/maba.jpg" alt="Maba">
         </div>
-
-        <div class="controls">
-            <div class="progress-indicator">
-                <span id="progressLabel">Babak I / VIII</span>
-                <div class="progress-dots" id="progressDots"></div>
-            </div>
-            <div class="nav-buttons">
-                <button class="btn-nav" id="btn-prev" onclick="prevPage()" disabled>
-                    ⬅️ Sadurunge
-                </button>
-                <button class="btn-nav" id="btn-next" onclick="nextPage()">
-                    Sabanjure ➡️
-                </button>
-            </div>
+      </div>
+      <div class="pyramid-face face-right">
+        <div class="photo-slot">
+          <img src="https://i.postimg.cc/tJyYfShV/kkn.png" alt="KKN">
         </div>
-    </div>
-
-    <!-- SURPRISE MODAL -->
-    <div id="surpriseModal" class="modal">
-        <div class="modal-content">
-            <h3 class="modal-title">Tuh kan, tetep ngeyel diklik! 😜</h3>
-            <p style="font-size: 0.95rem; line-height: 1.7; text-align: justify; color: var(--text-dark);">
-                Katanya kulkas 2 pintu, katanya gak butuh disemangatin... Tapi pas dibilang jangan diklik, tetep aja jarinya gercep nyenggol tombol merah ini, wkwkwk. Sifat penasaran ala Dan Brown-nya emang gak bisa bohong.<br><br>
-                Yaudah deh, bercandanya selesai dulu. Selamat ya. Akhirnya semua begadang, revisi, drama kampus, sama laptop yang suka ngambek itu ada ujungnya juga. Nikmatin hari wisudamu. Soal besok pusing lagi, itu urusan besok.<br><br>
-                Selamat atas gelar S.Sos-nya. Kalau hari ini ada yang boleh sok keren, ya kamu. Besok balik lagi jadi manusia biasa. 🤍
-            </p>
-            <button class="btn-close" onclick="closeModal()">Tutup & Kembali Senyum</button>
+      </div>
+      <div class="pyramid-face face-left">
+        <div class="photo-slot">
+          <img src="https://i.postimg.cc/wTjBms2n/Screenshot-(893).png" alt="Screenshot 893">
         </div>
-    </div>
-
-    <!-- EASTER EGG TOAST -->
-    <div class="mini-toast" id="miniToast">Ketahuan buka kulkasnya! 🧊 Isinya cuma es batu doang, dingin kayak sikapmu 😏</div>
-
-    <!-- LIGHTBOX FOTO -->
-    <div class="lightbox-modal" id="lightboxModal" onclick="closeLightboxOnBackdrop(event)">
-        <button class="lightbox-close" onclick="closeLightbox()">✕</button>
-        <div class="lightbox-img-wrap">
-            <img id="lightboxImg" src="" alt="Foto diperbesar">
+      </div>
+      <div class="pyramid-face face-top">
+        <div class="photo-slot">
+          <img src="https://i.postimg.cc/1zHTw4JJ/seminar-proposal.jpg" alt="Seminar Proposal">
         </div>
-        <div class="lightbox-caption" id="lightboxCaption"></div>
+      </div>
+      <div class="pyramid-face face-bottom">
+        <div class="photo-slot">
+          <img src="https://i.postimg.cc/ydGLyR9L/wakil-sema.png" alt="Wakil Sema">
+        </div>
+      </div>
     </div>
+    <div class="center-glow">
+      <h1>S.SOS.</h1>
+    </div>
+  </div>
 
-    <script>
-        let currentSpread = 0;
-        const totalSpreads = 8;
-        const romanNumerals = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII"];
-        const bgMusic = document.getElementById('bgMusic');
-        const audioControl = document.getElementById('audioControl');
-        const audioIcon = document.getElementById('audioIcon');
-        const audioStatus = document.getElementById('audioStatus');
+  <div class="poem-section">
+    <p class="poem-text">
+      Ada orang yang datang bukan untuk tinggal,<br>
+      tapi untuk menunjukkan arah —<br>
+      seperti <span class="cyan">kompas yang tak pernah meminta dipeluk</span>,<br>
+      hanya menunjuk utara saat kabut turun.<br><br>
 
-        function openEnvelope() {
-            const envelope = document.getElementById('envelope');
-            const welcomeOverlay = document.getElementById('welcomeOverlay');
-            const bookWrapper = document.getElementById('bookWrapper');
-            const hintText = document.getElementById('hintText');
+      Kamu adalah <span class="highlight">catatan kaki di buku pelajaranku</span>;<br>
+      bukan judul utamanya, tapi cukup berarti<br>
+      untuk mengubah cara aku membaca seluruh bab.<br><br>
 
-            envelope.classList.add('open');
-            hintText.innerText = "Ngelir lakon anyar...";
+      Seperti musim hujan yang pernah mengguyur,<br>
+      lalu pergi meninggalkan tanah subur —<br>
+      aku tak perlu menunggu hujan datang lagi,<br>
+      cukup bersyukur pernah basah kuyup dan tumbuh.<br><br>
 
-            bgMusic.play().then(() => {
-                audioControl.style.display = 'flex';
-            }).catch(error => {
-                console.log("Autoplay dicegah.");
-            });
+      <span class="highlight">Selamat wisuda, Pak Ilham.</span><br>
+      Semoga gelar barumu jadi peta yang lebih besar,<br>
+      untukmu menavigasi hidupmu sendiri,<br>
+      dan untuk orang-orang yang kebetulan butuh arah.<br><br>
 
-            setTimeout(() => {
-                welcomeOverlay.classList.add('fade-out');
-                bookWrapper.classList.add('show');
-                document.body.style.overflow = 'auto';
-            }, 1600);
-        }
+      <em>— aku hanya salah satu kapal yang pernah kamu bantu arahkan ke pelabuhan.</em>
+    </p>
+  </div>
 
-        function toggleMusic() {
-            if (bgMusic.paused) {
-                bgMusic.play();
-                audioIcon.innerText = "🎵";
-                audioStatus.innerText = "Gamelan: Mengalun";
-            } else {
-                bgMusic.pause();
-                audioIcon.innerText = "🔇";
-                audioStatus.innerText = "Gamelan: Sunyi";
-            }
-        }
+  <!-- Audio Element -->
+  <audio id="bgMusic" loop>
+    <source src="lagu.mp3" type="audio/mpeg">
+  </audio>
 
-        function renderDots() {
-            const container = document.getElementById('progressDots');
-            container.innerHTML = '';
-            for (let i = 0; i < totalSpreads; i++) {
-                const dot = document.createElement('div');
-                dot.className = 'progress-dot';
-                container.appendChild(dot);
-            }
-        }
+  <!-- Music Button -->
+  <button class="music-btn" id="musicBtn" title="Play/Pause Music">
+    <!-- Play Icon -->
+    <svg id="playIcon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+    <!-- Pause Icon (hidden by default) -->
+    <svg id="pauseIcon" viewBox="0 0 24 24" style="display:none;"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+  </button>
 
-        function updateBook() {
-            for (let i = 0; i < totalSpreads; i++) {
-                const spread = document.getElementById(`spread-${i}`);
-                if (i === currentSpread) {
-                    spread.classList.add('active');
-                } else {
-                    spread.classList.remove('active');
-                }
-            }
-            document.getElementById('btn-prev').disabled = currentSpread === 0;
-            document.getElementById('btn-next').disabled = currentSpread === totalSpreads - 1;
+  <!-- Sound Wave Animation -->
+  <div class="sound-wave" id="soundWave">
+    <div class="wave-bar"></div>
+    <div class="wave-bar"></div>
+    <div class="wave-bar"></div>
+    <div class="wave-bar"></div>
+    <div class="wave-bar"></div>
+  </div>
+</div>
 
-            document.getElementById('progressLabel').innerText = `Babak ${romanNumerals[currentSpread]} / VIII`;
-            document.querySelectorAll('.progress-dot').forEach((dot, i) => {
-                dot.classList.toggle('active', i === currentSpread);
-            });
-        }
+<script>
+  // Particles
+  const particlesContainer = document.getElementById('particles');
+  for (let i = 0; i < 50; i++) {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    p.style.left = Math.random() * 100 + '%';
+    p.style.top = Math.random() * 100 + '%';
+    p.style.animationDelay = Math.random() * 8 + 's';
+    p.style.animationDuration = (6 + Math.random() * 6) + 's';
+    const size = 1 + Math.random() * 3;
+    p.style.width = size + 'px';
+    p.style.height = size + 'px';
+    particlesContainer.appendChild(p);
+  }
 
-        function nextPage() {
-            if (currentSpread < totalSpreads - 1) {
-                currentSpread++;
-                updateBook();
-            }
-        }
+  // Music Player
+  const musicBtn = document.getElementById('musicBtn');
+  const bgMusic = document.getElementById('bgMusic');
+  const playIcon = document.getElementById('playIcon');
+  const pauseIcon = document.getElementById('pauseIcon');
+  const soundWave = document.getElementById('soundWave');
 
-        function prevPage() {
-            if (currentSpread > 0) {
-                currentSpread--;
-                updateBook();
-            }
-        }
+  musicBtn.addEventListener('click', () => {
+    if (bgMusic.paused) {
+      bgMusic.play();
+      playIcon.style.display = 'none';
+      pauseIcon.style.display = 'block';
+      musicBtn.classList.add('playing');
+      soundWave.classList.add('active');
+    } else {
+      bgMusic.pause();
+      playIcon.style.display = 'block';
+      pauseIcon.style.display = 'none';
+      musicBtn.classList.remove('playing');
+      soundWave.classList.remove('active');
+    }
+  });
+</script>
 
-        function openModal() {
-            const modal = document.getElementById('surpriseModal');
-            modal.style.display = 'flex';
-            setTimeout(() => { modal.classList.add('show'); }, 10);
-        }
-
-        function closeModal() {
-            const modal = document.getElementById('surpriseModal');
-            modal.classList.remove('show');
-            setTimeout(() => { modal.style.display = 'none'; }, 300);
-        }
-
-        function showEasterEgg() {
-            const toast = document.getElementById('miniToast');
-            toast.classList.add('show');
-            setTimeout(() => toast.classList.remove('show'), 3000);
-        }
-
-        // ================= LIGHTBOX FOTO =================
-        function openLightbox(src, caption) {
-            document.getElementById('lightboxImg').src = src;
-            document.getElementById('lightboxCaption').innerText = caption || '';
-            document.getElementById('lightboxModal').classList.add('show');
-        }
-
-        function closeLightbox() {
-            document.getElementById('lightboxModal').classList.remove('show');
-        }
-
-        function closeLightboxOnBackdrop(e) {
-            if (e.target.id === 'lightboxModal') closeLightbox();
-        }
-
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') closeLightbox();
-        });
-
-        // Pasang lightbox otomatis ke semua foto di lembaran buku
-        document.querySelectorAll('.book-photo img, .grid-photo-box img').forEach((img) => {
-            img.addEventListener('click', (e) => {
-                e.stopPropagation();
-                const wrapper = img.closest('.book-photo, .grid-photo-box');
-                const captionEl = wrapper ? wrapper.querySelector('.photo-caption') : null;
-                openLightbox(img.src, captionEl ? captionEl.textContent : '');
-            });
-        });
-
-        // Navigasi keyboard
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowRight') nextPage();
-            if (e.key === 'ArrowLeft') prevPage();
-        });
-
-        // Navigasi swipe (mobile)
-        let touchStartX = 0;
-        document.addEventListener('touchstart', (e) => {
-            touchStartX = e.changedTouches[0].screenX;
-        });
-        document.addEventListener('touchend', (e) => {
-            const touchEndX = e.changedTouches[0].screenX;
-            const diff = touchEndX - touchStartX;
-            if (Math.abs(diff) > 50) {
-                if (diff < 0) nextPage(); else prevPage();
-            }
-        });
-
-        // Inisialisasi
-        renderDots();
-        updateBook();
-    </script>
 </body>
 </html>
